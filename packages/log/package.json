@@ -3,7 +3,7 @@
     "version": "2.0.0",
     "description": "A simple logging utility.",
     "main": "./src/index.js",
-    "repository": "git@github.com:jakehamilton/littlelog.git",
+    "repository": "git@github.com:jakehamilton/littlethings.git",
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "license": "GPL-3.0-only",
     "publishConfig": {
