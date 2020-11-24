@@ -29,9 +29,9 @@ jobs:
           git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY
       - name: Update History and Tags
         run: |
+          git checkout "${GITHUB_REF:11}"
           git pull --ff-only
-          git pull --tags
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git fetch origin +refs/tags/*:refs/tags/*
       - name: Configure Node
         uses: actions/setup-node@v1
         with:
