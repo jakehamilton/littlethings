@@ -7,7 +7,8 @@
         "bootstrap:changed": "titan bootstrap --changed",
         "build": "titan run build",
         "build:changed": "titan run build --changed",
-        "publish": "titan publish"
+        "publish": "titan publish",
+        "version": "titan version"
     },
     "titan": {
         "packages": [
