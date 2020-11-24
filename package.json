@@ -1,6 +1,6 @@
 {
     "name": "littlethings",
-    "author": "Jake Hamilton <jake.hamilton@sureprep.com>",
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "private": true,
     "scripts": {
         "bootstrap": "titan bootstrap",

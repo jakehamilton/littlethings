@@ -4,7 +4,7 @@
     "description": "A simple logging utility.",
     "main": "./src/index.js",
     "repository": "git@github.com:jakehamilton/littlelog.git",
-    "author": "Jake Hamilton <jake@intergalactic.email>",
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "license": "GPL-3.0-only",
     "publishConfig": {
         "access": "public"
