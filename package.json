@@ -3,8 +3,8 @@
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "private": true,
     "scripts": {
-        "bootstrap": "titan bootstrap",
-        "bootstrap:changed": "titan bootstrap --changed",
+        "bootstrap": "titan bootstrap --no-save",
+        "bootstrap:changed": "titan bootstrap --changed --no-save",
         "build": "titan run build",
         "build:changed": "titan run build --changed",
         "publish": "titan publish",
