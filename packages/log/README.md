@@ -19,7 +19,7 @@ yarn add littlelog
 To configure the logging verbosity (defaults to `process.env.LOG_LEVEL`):
 
 ```js
-const log = require('littlelog');
+const log = require("littlelog");
 
 /*
  * Possible values are:
@@ -28,17 +28,34 @@ const log = require('littlelog');
  * - DEBUG
  * - TRACE
  */
-log.setVerbosity('INFO');
+log.setVerbosity("INFO");
 ```
 
 To log messages:
 
 ```js
-const log = require('littlelog');
+const log = require("littlelog");
 
-log.info('This is an info log.');
+log.info("This is an info log.");
 
-log.debug('This is a debug log.');
+log.debug("This is a debug log.");
 
-log.trace('This is a trace log.');
+log.trace("This is a trace log.");
+
+log.warn("This is a warn log.");
+
+log.error("This is an error log.");
+```
+
+LittleLog can be configured using environment variables:
+
+```shell
+# Set the log level
+LOG_LEVEL=INFO
+
+# Don't log prefixes
+LOG_PREFIX=false
+
+# Filter logs based on prefix regex
+DEBUG="^my-app$"
 ```

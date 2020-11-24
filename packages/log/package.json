@@ -1,27 +1,26 @@
 {
-  "name": "@littlethings/log",
-  "version": "1.2.1",
-  "description": "A simple logging utility.",
-  "main": "./src/index.js",
-  "repository": "git@github.com:jakehamilton/littlelog.git",
-  "author": "Jake Hamilton <jake@intergalactic.email>",
-  "license": "GPL-3.0-only",
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "src",
-    "LICENSE",
-    "README.md"
-  ],
-  "scripts": {
-    "test": "node test/index.js"
-  },
-  "dependencies": {
-    "chalk": "^4.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^13.13.5",
-    "prettier": "^2.0.5"
-  }
+    "name": "@littlethings/log",
+    "version": "2.0.0",
+    "description": "A simple logging utility.",
+    "main": "./src/index.js",
+    "repository": "git@github.com:jakehamilton/littlelog.git",
+    "author": "Jake Hamilton <jake@intergalactic.email>",
+    "license": "GPL-3.0-only",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "src",
+        "LICENSE",
+        "README.md"
+    ],
+    "scripts": {
+        "test": "node test/index.js"
+    },
+    "dependencies": {
+        "chalk": "^4.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^13.13.32"
+    }
 }
