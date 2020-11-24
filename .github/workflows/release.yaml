@@ -53,4 +53,6 @@ jobs:
       - name: Publish Packages
         run: npm run publish
       - name: Push
-        run: git push
+        run: |
+          git push
+          git push --tags
