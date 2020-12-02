@@ -173,6 +173,10 @@ const warnLogger = (prefix = "") => {
      * @param {string} message
      */
     const logger = (message) => {
+        if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+            return;
+        }
+
         console.log(
             chalk`${getLogPrefix("WARN", prefix)} ${getLogMessage(message)}`
         );
@@ -193,6 +197,10 @@ const errorLogger = (prefix = "") => {
      * @param {string} message
      */
     const logger = (message) => {
+        if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+            return;
+        }
+
         console.error(
             chalk`${getLogPrefix("ERROR", prefix)} ${getLogMessage(message)}`
         );
