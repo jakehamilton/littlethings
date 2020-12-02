@@ -1,7 +1,9 @@
 const log = require("../src");
 
 try {
-    log.setVerbosity(process.env.LOG_LEVEL.toUpperCase() || "TRACE");
+    log.setVerbosity(
+        process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : "TRACE"
+    );
     log.info({
         name: "littlelog",
         likes: ["logging", "javascript"],
