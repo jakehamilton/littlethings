@@ -13,11 +13,6 @@ try {
                 getsTreats: true,
                 traits: ["gray", "small", "curly"],
             },
-            {
-                name: "fluffles",
-                getsTreats: true,
-                traits: ["white", "big", "fluffy"],
-            },
         ],
     });
     log.info("This is an info log.");

@@ -21,6 +21,11 @@ const util = require("./util");
 const NO_PREFIX = process.env.LOG_PREFIX === "false";
 
 /**
+ * Whether or not to log timestamps.
+ */
+const TIMESTAMP = process.env.LOG_TIMESTAMP === "true";
+
+/**
  * Whether or not the `DEBUG` environment variable has been set.
  */
 const HAS_DEBUG = Boolean(process.env.DEBUG);
@@ -29,6 +34,18 @@ const HAS_DEBUG = Boolean(process.env.DEBUG);
  * A `RegExp` created from the `DEBUG` environment variable.
  */
 const DEBUG = HAS_DEBUG ? new RegExp(process.env.DEBUG) : null;
+
+/**
+ * Returns the timestamp portion of the log message if enabled.
+ * @returns {string}
+ */
+const getTimestamp = () => {
+    if (TIMESTAMP) {
+        return chalk`{dim ${new Date().toISOString()}} `;
+    } else {
+        return "";
+    }
+};
 
 /**
  * Get the prefix for a log.
@@ -43,23 +60,25 @@ const getLogPrefix = (name, prefix) => {
 
     const userPrefix = prefix ? `[${prefix}]` : "";
 
+    const timestamp = getTimestamp();
+
     switch (name) {
         case "SILENT":
             if (userPrefix === "") {
                 return "";
             } else {
-                return chalk`{white.bold ${userPrefix}}`;
+                return chalk`${timestamp}{white.bold ${userPrefix}}`;
             }
         case "INFO":
-            return chalk`{blue.bold ${userPrefix}[INFO]} `;
+            return chalk`${timestamp}{blue.bold ${userPrefix}[INFO]} `;
         case "WARN":
-            return chalk`{yellow.bold ${userPrefix}[WARN]} `;
+            return chalk`${timestamp}{yellow.bold ${userPrefix}[WARN]} `;
         case "DEBUG":
-            return chalk`{magenta.bold ${userPrefix}[DEBUG]} `;
+            return chalk`${timestamp}{magenta.bold ${userPrefix}[DEBUG]} `;
         case "TRACE":
-            return chalk`{dim.bold ${userPrefix}[TRACE]} `;
+            return chalk`${timestamp}{dim.bold ${userPrefix}[TRACE]} `;
         case "ERROR":
-            return chalk`{red.bold ${userPrefix}[ERROR]}`;
+            return chalk`${timestamp}{red.bold ${userPrefix}[ERROR]}`;
     }
 };
 
@@ -100,9 +119,9 @@ const setVerbosity = (name) => {
 /**
  * Render a message with rich formatting.
  * @param {string} message
- * @param {boolean} [wrapObject]
+ * @param {boolean} [wrap]
  */
-const getLogMessage = (message, wrapObject = false) => {
+const getLogMessage = (message, wrap = false) => {
     if (Array.isArray(message)) {
         const output = message.map((item) => {
             return getLogMessage(item, true);
@@ -113,8 +132,6 @@ const getLogMessage = (message, wrapObject = false) => {
         let output = [];
 
         for (const key of Object.keys(message)) {
-            const value = message[key];
-
             output.push(
                 chalk`{white.bold ${key}=}{gray ${getLogMessage(
                     message[key],
@@ -123,7 +140,7 @@ const getLogMessage = (message, wrapObject = false) => {
             );
         }
 
-        if (wrapObject) {
+        if (wrap) {
             return chalk`{white.bold \{} ${output.join(" ")} {white.bold \}}`;
         } else {
             return output.join(" ");
