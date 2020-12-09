@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/log",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "A simple logging utility.",
     "main": "./src/index.js",
     "repository": "git@github.com:jakehamilton/littlethings.git",
