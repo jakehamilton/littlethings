@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.1.0
+
+### Features
+
+- support timestamp logging
+
+
 ## 2.0.2
 
 ### Fixes
