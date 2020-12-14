@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.1.4
+
+### Other
+
+- _(readme)_: update install instructions
+
+
 ## 2.1.3
 
 ### Chores
