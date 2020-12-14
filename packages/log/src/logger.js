@@ -1,5 +1,5 @@
 // @ts-check
-const chalk = require("chalk");
+const kleur = require("kleur");
 
 const util = require("./util");
 
@@ -41,7 +41,7 @@ const DEBUG = HAS_DEBUG ? new RegExp(process.env.DEBUG) : null;
  */
 const getTimestamp = () => {
     if (TIMESTAMP) {
-        return chalk`{dim ${new Date().toISOString()}} `;
+        return kleur.dim(new Date().toISOString());
     } else {
         return "";
     }
@@ -67,18 +67,20 @@ const getLogPrefix = (name, prefix) => {
             if (userPrefix === "") {
                 return "";
             } else {
-                return chalk`${timestamp}{white.bold ${userPrefix}}`;
+                return `${timestamp}${kleur.bold().white(userPrefix)}`;
             }
         case "INFO":
-            return chalk`${timestamp}{blue.bold ${userPrefix}[INFO]} `;
+            return `${timestamp}${kleur.bold().blue(`${userPrefix}[INFO]`)} `;
         case "WARN":
-            return chalk`${timestamp}{yellow.bold ${userPrefix}[WARN]} `;
+            return `${timestamp}${kleur.bold().yellow(`${userPrefix}[WARN]`)} `;
         case "DEBUG":
-            return chalk`${timestamp}{magenta.bold ${userPrefix}[DEBUG]} `;
+            return `${timestamp}${kleur
+                .bold()
+                .magenta(`${userPrefix}[DEBUG]`)} `;
         case "TRACE":
-            return chalk`${timestamp}{dim.bold ${userPrefix}[TRACE]} `;
+            return `${timestamp}${kleur.bold().dim(`${userPrefix}[TRACE]`)} `;
         case "ERROR":
-            return chalk`${timestamp}{red.bold ${userPrefix}[ERROR]}`;
+            return `${timestamp}${kleur.bold().red(`${userPrefix}[ERROR]`)} `;
     }
 };
 
@@ -127,21 +129,22 @@ const getLogMessage = (message, wrap = false) => {
             return getLogMessage(item, true);
         });
 
-        return output.join(chalk`{white ,}`);
+        return output.join(kleur.white(","));
     } else if (typeof message === "object") {
         let output = [];
 
         for (const key of Object.keys(message)) {
             output.push(
-                chalk`{white.bold ${key}=}{gray ${getLogMessage(
-                    message[key],
-                    true
-                )}}`
+                `${kleur.bold().white(`${key}=`)}${kleur.gray(
+                    getLogMessage(message[key], true)
+                )}`
             );
         }
 
         if (wrap) {
-            return chalk`{white.bold \{} ${output.join(" ")} {white.bold \}}`;
+            return `${kleur.bold().white("{")} ${output.join(
+                " "
+            )} ${kleur.bold().white("}")}`;
         } else {
             return output.join(" ");
         }
@@ -170,7 +173,7 @@ const logger = (name, prefix = "") => {
             }
 
             console.log(
-                chalk`${getLogPrefix(name, prefix)}${getLogMessage(message)}`
+                `${getLogPrefix(name, prefix)}${getLogMessage(message)}`
             );
         }
     };
@@ -194,9 +197,7 @@ const warnLogger = (prefix = "") => {
             return;
         }
 
-        console.log(
-            chalk`${getLogPrefix("WARN", prefix)} ${getLogMessage(message)}`
-        );
+        console.log(`${getLogPrefix("WARN", prefix)}${getLogMessage(message)}`);
     };
 
     return logger;
@@ -219,7 +220,7 @@ const errorLogger = (prefix = "") => {
         }
 
         console.error(
-            chalk`${getLogPrefix("ERROR", prefix)} ${getLogMessage(message)}`
+            `${getLogPrefix("ERROR", prefix)}${getLogMessage(message)}`
         );
     };
 
