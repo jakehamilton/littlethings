@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.1.2
+
+### Other
+
+- _(readme)_: use absolute url for logo
+
+
 ## 2.1.1
 
 ### Other
