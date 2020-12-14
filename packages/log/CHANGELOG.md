@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.0
+
+### Features
+
+- _(colors)_: upgrade to kleur
+
+
 ## 2.1.4
 
 ### Other
