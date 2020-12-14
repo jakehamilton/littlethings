@@ -12,10 +12,10 @@ Install using your favorite package manager:
 
 ```shell
 # using npm
-npm install --save littlelog
+npm install --save @littlethings/log
 
 # using yarn
-yarn add littlelog
+yarn add @littlethings/log
 ```
 
 ## Usage
