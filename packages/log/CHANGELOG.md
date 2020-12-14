@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.1.3
+
+### Chores
+
+- _(license)_: update license to apache-2.0
+
+
 ## 2.1.2
 
 ### Other
