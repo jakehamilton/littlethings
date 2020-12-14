@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.1
+
+### Fixes
+
+- remove assets from being published to npm
+
+
 ## 2.2.0
 
 ### Features
