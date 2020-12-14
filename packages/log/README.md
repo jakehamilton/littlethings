@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/littlelog.png" width="400">
+  <img src="https://raw.githubusercontent.com/jakehamilton/littlethings/main/packages/log/assets/littlelog.png" width="400">
 </p>
 
 # LittleLog
