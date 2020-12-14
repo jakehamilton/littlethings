@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/littlelog.png" width="400">
+</p>
+
 # LittleLog
 
 > A simple logging utility.
@@ -50,11 +54,14 @@ log.error("This is an error log.");
 LittleLog can be configured using environment variables:
 
 ```shell
-# Set the log level
+# Set the log level (options are: SILENT, INFO, DEBUG, TRACE)
 LOG_LEVEL=INFO
 
 # Don't log prefixes
 LOG_PREFIX=false
+
+# Enable timestamps
+LOG_TIMESTAMP=true
 
 # Filter logs based on prefix regex
 DEBUG="^my-app$"

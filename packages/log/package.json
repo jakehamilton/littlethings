@@ -11,6 +11,7 @@
     },
     "files": [
         "src",
+        "assets",
         "LICENSE",
         "README.md"
     ],
