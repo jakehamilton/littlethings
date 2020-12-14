@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.1.1
+
+### Other
+
+- _(readme)_: add timestamp config and logo
+
+
 ## 2.1.0
 
 ### Features
