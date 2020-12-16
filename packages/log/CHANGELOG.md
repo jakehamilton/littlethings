@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.3
+
+### Fixes
+
+- _(message formatting)_: support null and undefined values
+
+
 ## 2.2.2
 
 ### Fixes
