@@ -172,8 +172,8 @@ const logger = (name, prefix = "") => {
                 return;
             }
 
-            console.log(
-                `${getLogPrefix(name, prefix)}${getLogMessage(message)}`
+            process.stdout.write(
+                `${getLogPrefix(name, prefix)}${getLogMessage(message)}\n`
             );
         }
     };
@@ -197,7 +197,9 @@ const warnLogger = (prefix = "") => {
             return;
         }
 
-        console.log(`${getLogPrefix("WARN", prefix)}${getLogMessage(message)}`);
+        process.stdout.write(
+            `${getLogPrefix("WARN", prefix)}${getLogMessage(message)}\n`
+        );
     };
 
     return logger;
@@ -219,8 +221,8 @@ const errorLogger = (prefix = "") => {
             return;
         }
 
-        console.error(
-            `${getLogPrefix("ERROR", prefix)}${getLogMessage(message)}`
+        process.stderr.write(
+            `${getLogPrefix("ERROR", prefix)}${getLogMessage(message)}\n`
         );
     };
 
