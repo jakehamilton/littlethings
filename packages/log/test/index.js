@@ -14,6 +14,8 @@ try {
                 traits: ["gray", "small", "curly"],
             },
         ],
+        null: null,
+        undefined: undefined,
     });
     log.info("This is an info log.");
     log.warn("This is an warn log.");

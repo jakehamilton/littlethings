@@ -124,7 +124,11 @@ const setVerbosity = (name) => {
  * @param {boolean} [wrap]
  */
 const getLogMessage = (message, wrap = false) => {
-    if (Array.isArray(message)) {
+    if (message === undefined) {
+        return "undefined";
+    } else if (message === null) {
+        return "null";
+    } else if (Array.isArray(message)) {
         const output = message.map((item) => {
             return getLogMessage(item, true);
         });
