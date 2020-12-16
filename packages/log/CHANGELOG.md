@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.2
+
+### Fixes
+
+- use stdio streams directly
+
+
 ## 2.2.1
 
 ### Fixes
