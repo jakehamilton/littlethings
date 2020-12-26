@@ -1,5 +1,5 @@
 // @ts-check
-const { LEVEL_TO_NUMBER, NUMBER_TO_LEVEL } = require('./config');
+const { LEVEL_TO_NUMBER, NUMBER_TO_LEVEL } = require("./config");
 
 /**
  * @typedef {import('./config')} Config
@@ -30,7 +30,7 @@ const getLevelFromNumber = (level = 0) => {
     if (NUMBER_TO_LEVEL.hasOwnProperty(level)) {
         return NUMBER_TO_LEVEL[level];
     } else {
-        return NUMBER_TO_LEVEL[0];
+        return NUMBER_TO_LEVEL[1];
     }
 };
 
@@ -39,11 +39,11 @@ const getLevelFromNumber = (level = 0) => {
  * @param {LogLevelName} name
  * @returns {LogLevelNumber}
  */
-const getNumberFromLevel = (name = 'SILENT') => {
+const getNumberFromLevel = (name = "SILENT") => {
     if (name && LEVEL_TO_NUMBER.hasOwnProperty(name)) {
         return LEVEL_TO_NUMBER[name];
     } else {
-        return LEVEL_TO_NUMBER[0];
+        return LEVEL_TO_NUMBER[1];
     }
 };
 
