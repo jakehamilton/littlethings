@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.4
+
+### Fixes
+
+- _(util)_: default to info verbosity
+
+
 ## 2.2.3
 
 ### Fixes
