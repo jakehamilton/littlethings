@@ -116,6 +116,7 @@ if (process && process.env) {
  */
 const setVerbosity = (name) => {
     verbosity = util.getNumberFromLevel(name);
+    process.env.LOG_LEVEL = name;
 };
 
 /**
