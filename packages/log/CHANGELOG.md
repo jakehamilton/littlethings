@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.3.0
+
+### Features
+
+- _(verbosity)_: support multiple instances of logger
+
+
 ## 2.2.5
 
 ### Fixes
