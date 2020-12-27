@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.5
+
+### Fixes
+
+- _(verbosity)_: default to info
+
+
 ## 2.2.4
 
 ### Fixes
