@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.4.1
+
+### Fixes
+
+- _(child)_: use original prefix when creating child logger
+
+
 ## 2.4.0
 
 ### Features
