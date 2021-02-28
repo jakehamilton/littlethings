@@ -50,7 +50,7 @@ const getTimestamp = () => {
 /**
  * Get the prefix for a log.
  *
- * @param {LogLevelName | 'WARN' | 'ERROR'} name
+ * @param {LogLevelName | 'WARN' | 'ERROR' | 'FATAL'} name
  * @returns {string} prefix
  */
 const getLogPrefix = (name, prefix) => {
@@ -81,6 +81,11 @@ const getLogPrefix = (name, prefix) => {
             return `${timestamp}${kleur.bold().dim(`${userPrefix}[TRACE]`)} `;
         case "ERROR":
             return `${timestamp}${kleur.bold().red(`${userPrefix}[ERROR]`)} `;
+        case "FATAL":
+            return `${timestamp}${kleur
+                .bold()
+                .bgRed()
+                .white(`${userPrefix}[FATAL]`)} `;
     }
 };
 
@@ -234,16 +239,47 @@ const errorLogger = (prefix = "") => {
 };
 
 /**
+ * Create an info logger for a log level.
+ *
+ * @param {string} prefix
+ */
+const fatalLogger = (prefix = "") => {
+    /**
+     * Log a message to stdout.
+     *
+     * @param {string} message
+     */
+    const logger = (message) => {
+        if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+            return;
+        }
+
+        process.stderr.write(
+            `${getLogPrefix("FATAL", prefix)}${getLogMessage(message)}\n`
+        );
+    };
+
+    return logger;
+};
+
+/**
  * Create logging functions with a prefix.
  * @param {string} prefix
  */
-const create = (prefix = "") => {
+const create = (prefix) => {
+    if (typeof prefix !== "string") {
+        prefix = "";
+    }
+
     return {
         info: logger("INFO", prefix),
         debug: logger("DEBUG", prefix),
         trace: logger("TRACE", prefix),
         warn: warnLogger(prefix),
         error: errorLogger(prefix),
+        fatal: fatalLogger(prefix),
+        create,
+        child: create,
     };
 };
 
@@ -255,5 +291,7 @@ module.exports = {
     trace: logger("TRACE"),
     warn: warnLogger(),
     error: errorLogger(),
-    create: create,
+    fatal: fatalLogger(),
+    create,
+    child: create,
 };
