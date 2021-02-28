@@ -105,7 +105,7 @@ if (process && process.env) {
     // Expecting node environment.
     // @ts-ignore
     verbosity = util.getNumberFromLevel(
-        process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : undefined
+        process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : "INFO"
     );
 } else if (window) {
     // Expecting browser environment.
@@ -121,6 +121,7 @@ if (process && process.env) {
  */
 const setVerbosity = (name) => {
     verbosity = util.getNumberFromLevel(name);
+    process.env.LOG_LEVEL = name;
 };
 
 /**

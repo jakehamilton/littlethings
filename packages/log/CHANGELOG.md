@@ -1,5 +1,33 @@
 # Change Log
 
+## 2.3.0
+
+### Features
+
+- _(verbosity)_: support multiple instances of logger
+
+
+## 2.2.5
+
+### Fixes
+
+- _(verbosity)_: default to info
+
+
+## 2.2.4
+
+### Fixes
+
+- _(util)_: default to info verbosity
+
+
+## 2.2.3
+
+### Fixes
+
+- _(message formatting)_: support null and undefined values
+
+
 ## 2.2.2
 
 ### Fixes
