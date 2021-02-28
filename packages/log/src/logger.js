@@ -280,7 +280,7 @@ const create = (prefix) => {
         error: errorLogger(prefix),
         fatal: fatalLogger(prefix),
         create,
-        child: create,
+        child: () => create(prefix),
     };
 };
 
