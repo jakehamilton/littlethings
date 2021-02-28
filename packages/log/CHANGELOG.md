@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.4.0
+
+### Features
+
+- add support for fatal and child loggers
+
+
 ## 2.3.0
 
 ### Features
