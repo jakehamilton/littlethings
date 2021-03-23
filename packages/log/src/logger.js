@@ -158,6 +158,8 @@ const getLogMessage = (message, wrap = false) => {
         } else {
             return output.join(" ");
         }
+    } else if (typeof message === "string" && wrap) {
+        return `"${message.replace('"', '\\"')}"`;
     } else {
         return message;
     }
