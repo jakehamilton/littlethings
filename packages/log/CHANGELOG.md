@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.4.2
+
+### Fixes
+
+- _(tlogger)_: add space between timestamp and message
+
+
 ## 2.4.1
 
 ### Fixes
