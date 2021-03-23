@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.5.0
+
+### Features
+
+- _(logger)_: wrap strings in objects with quotes
+
+
 ## 2.4.2
 
 ### Fixes
