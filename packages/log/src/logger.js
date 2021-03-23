@@ -41,7 +41,7 @@ const DEBUG = HAS_DEBUG ? new RegExp(process.env.DEBUG) : null;
  */
 const getTimestamp = () => {
     if (TIMESTAMP) {
-        return kleur.dim(new Date().toISOString());
+        return `${kleur.dim(new Date().toISOString())} `;
     } else {
         return "";
     }
