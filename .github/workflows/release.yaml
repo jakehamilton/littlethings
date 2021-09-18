@@ -24,8 +24,8 @@ jobs:
           fetch-depth: 0
       - name: Configure Git
         run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY
       - name: Update History and Tags
         run: |
@@ -38,6 +38,7 @@ jobs:
           node-version: "12.x"
       - name: Configure NPM
         run: |
+          npm i -g npm@7
           npm config set registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken=\${NPM_TOKEN}
       - name: Check Authentication with Registry
@@ -46,8 +47,8 @@ jobs:
         run: npm install --no-save
       - name: Bootstrap
         run: |
-          npm run bootstrap
-          npm run build
+          npm run bootstrap:changed
+          npm run build:changed
       - name: Version Packages
         run: npm run version
       - name: Publish Packages
