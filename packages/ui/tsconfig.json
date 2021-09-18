@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"strict": true,
+		"allowSyntheticDefaultImports": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact",
+		"declaration": true,
+		"lib": ["ESNext"],
+		"target": "ES2015"
+	}
+}

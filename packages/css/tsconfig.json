@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist",
+		"moduleResolution": "node",
+		"strict": true,
+		"allowSyntheticDefaultImports": true,
+		"declaration": true,
+		"lib": ["ESNext", "DOM"],
+		"target": "ES2015",
+		"typeRoots": ["./src/types"]
+	},
+	"include": ["src/**/*"]
+}

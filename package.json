@@ -30,15 +30,16 @@
         "*.{md,json,ts,tsx,js,jsx,mjs}": "prettier --write"
     },
     "prettier": {
+        "useTabs": true,
         "tabWidth": 4
     },
     "devDependencies": {
         "@commitlint/cli": "^9.1.2",
         "@commitlint/config-conventional": "^9.1.2",
-        "@jakehamilton/titan": "^1.26.0",
+        "@jakehamilton/titan": "^5.5.4",
         "husky": "^4.3.0",
         "lint-staged": "^10.3.0",
-        "prettier": "^2.1.1"
+        "prettier": "^2.3.2"
     },
     "license": "Apache-2.0"
 }
