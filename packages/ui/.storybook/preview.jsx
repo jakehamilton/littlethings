@@ -1,5 +1,5 @@
 import CSSBase from "../src/components/CSSBase";
-import { ThemeProvider } from "../src/contexts/ThemeProvider";
+import { ThemeProvider } from "../src/contexts/Theme";
 import useCSS from "../src/hooks/useCSS";
 
 export const parameters = {

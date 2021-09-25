@@ -6,7 +6,7 @@ export type AsyncStateUpdater<State> = (
 	callback?: (() => void) | null
 ) => void;
 
-const useAsyncState = <State extends any>(
+const useAsyncState = <State extends unknown>(
 	initialState: State | (() => State)
 ): [State, AsyncStateUpdater<State>] => {
 	const [state, setState] = useState(initialState);

@@ -1,6 +1,6 @@
 import { css, keyframes, glob } from "@littlethings/css";
-import { useMemo } from "preact/hooks";
-import { ThemeUtil } from "../contexts/ThemeProvider";
+import { Inputs, useMemo } from "preact/hooks";
+import { ThemeUtil } from "../contexts/Theme";
 import { CSSClasses } from "../types/css";
 import { Theme, ThemeMode } from "../types/theme";
 import useTheme from "./useTheme";
@@ -20,7 +20,7 @@ export type CSSFactory<Classes extends CSSClasses> = (
 
 const useCSS = <Classes extends CSSClasses>(
 	factory: CSSFactory<Classes>,
-	dependencies: Array<any> = []
+	inputs: Inputs = []
 ): Classes => {
 	const { mode, theme, util } = useTheme();
 
@@ -33,7 +33,7 @@ const useCSS = <Classes extends CSSClasses>(
 			theme,
 			util,
 		});
-	}, [mode, theme, ...dependencies]);
+	}, [mode, theme, ...inputs]);
 
 	return classes;
 };

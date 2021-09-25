@@ -22,25 +22,25 @@ export interface ClsxContext {
 
 function clsx(
 	this: ClsxContext | void,
-	...inputClassNames: Array<string | undefined | null | false>
+	...classes: Array<string | undefined | null | false>
 ) {
-	const classNames: Array<string> = inputClassNames.filter(
+	const input: Array<string> = classes.filter(
 		(className): className is string => Boolean(className)
 	);
 
 	const context = this || {};
 
-	const classes = new Set<string>();
+	const classNames = new Set<string>();
 
-	for (const className of classNames) {
+	for (const className of input) {
 		for (const singleClass of className.split(" ")) {
-			classes.add(singleClass);
+			classNames.add(singleClass);
 		}
 	}
 
-	const id = toHash(classNames.join(HASH_NAME_SEPARATOR));
+	const id = toHash(input.join(HASH_NAME_SEPARATOR));
 
-	const scopedClasses = Array.from(classes).map((className: string) => {
+	const scopedClasses = Array.from(classNames).map((className: string) => {
 		const scopedClass = className + SCOPED_NAME_SEPARATOR + id;
 
 		if (cache.has(className)) {

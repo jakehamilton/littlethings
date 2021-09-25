@@ -1,16 +1,18 @@
 import { Ref, useMemo, useRef } from "preact/hooks";
-import { RippleEvent, RippleHandle } from "../components/Ripple/index.old";
+import {
+	RippleEvent,
+	RippleEventOptions,
+	RippleHandle,
+} from "../components/Ripple/index.old";
 import throttle from "../util/throttle";
 
 export type RippleAction = "start" | "stop";
 
-export type RippleOptions = {};
-
 const useRippleEvent = (
 	ref: Ref<RippleHandle | null>,
 	type: RippleAction,
-	options: RippleOptions,
-	callback: (event: RippleEvent) => void,
+	options?: RippleEventOptions,
+	callback?: (event: RippleEvent) => void,
 	duration: number = 50
 ) => {
 	const handler = useMemo(() => {
@@ -20,9 +22,9 @@ const useRippleEvent = (
 			}
 
 			if (type === "start") {
-				ref.current.start(event, options, () => callback(event));
+				ref.current.start(event, options, callback);
 			} else if (type === "stop") {
-				ref.current.stop(event, () => callback(event));
+				ref.current.stop(event, callback);
 			}
 		};
 

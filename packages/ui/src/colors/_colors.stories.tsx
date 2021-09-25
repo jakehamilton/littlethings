@@ -1,5 +1,5 @@
 import { FunctionComponent } from "preact";
-import { ThemeProvider } from "../contexts/ThemeProvider";
+import { ThemeProvider } from "../contexts/Theme";
 import useCSS from "../hooks/useCSS";
 import useTheme from "../hooks/useTheme";
 import { Color } from "../types/color";
@@ -74,7 +74,9 @@ const Swatches: FunctionComponent<{ color: Color; name: string }> = ({
 				{Object.keys(color).map((intensity) => (
 					<Swatch
 						intensity={intensity}
-						background={color[intensity as unknown as keyof Color]}
+						background={
+							color[(intensity as unknown) as keyof Color]
+						}
 					/>
 				))}
 			</div>

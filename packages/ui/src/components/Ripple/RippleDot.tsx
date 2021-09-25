@@ -1,57 +1,33 @@
 import { clsx } from "@littlethings/css";
 import { FunctionComponent } from "preact";
+import { useEffect } from "preact/hooks";
+import fadeOut from "../../animations/fadeOut";
+import grow from "../../animations/grow";
 import useCSS from "../../hooks/useCSS";
+import { TransitionGroupChildProps } from "../TransitionGroup/util";
 
-export interface RippleDotProps {
+export interface RippleDotProps extends TransitionGroupChildProps {
 	x: number;
 	y: number;
 	size: number;
 	duration: number;
-	exit: boolean;
 	color?: string;
 }
 
-const RippleDot: FunctionComponent<RippleDotProps> = ({
-	x,
-	y,
-	size,
-	duration,
-	exit,
-	color,
-}) => {
+const RippleDot: FunctionComponent<RippleDotProps> = (props) => {
 	const classes = useCSS(
-		({ css, keyframes }) => {
-			const grow = keyframes`
-				from {
-					transform: scale(0);
-					opacity: 0.1;
-				}
-				to {
-					transform: scale(1);
-					opacity: 0.3;
-				}
-			`;
-
-			const fadeOut = keyframes`
-				from {
-					opacity: 1;
-				}
-				to {
-					opacity: 0;
-				}
-			`;
-
-			const radius = size / 2;
+		({ css }) => {
+			const radius = props.size / 2;
 
 			return {
 				root: css`
 					display: block;
 					position: absolute;
 
-					width: ${size}px;
-					height: ${size}px;
-					top: ${-radius + y}px;
-					left: ${-radius + x}px;
+					width: ${props.size}px;
+					height: ${props.size}px;
+					top: ${-radius + props.y}px;
+					left: ${-radius + props.x}px;
 					opacity: 1;
 				`,
 				child: css`
@@ -59,26 +35,34 @@ const RippleDot: FunctionComponent<RippleDotProps> = ({
 					width: 100%;
 					height: 100%;
 					border-radius: 50%;
-					background-color: ${color ?? "currentColor"};
+					background-color: ${props.color ?? "currentColor"};
 					opacity: 0.3;
 					transform: scale(1);
 				`,
 				enter: css`
-					animation: ${grow} ${duration}ms ease-in-out;
+					animation: ${grow} ${props.duration}ms ease-in-out;
 					opacity: 0.3;
 					transform: scale(1);
 				`,
 				exit: css`
-					animation: ${fadeOut} ${duration}ms ease-in-out;
+					animation: ${fadeOut} ${props.duration}ms ease-in-out;
 					opacity: 0;
 				`,
 			};
 		},
-		[x, y, size]
+		[props.x, props.y, props.size, props.duration]
 	);
 
+	useEffect(() => {
+		return () => {
+			if (props.in === true) {
+				setTimeout(props.onExited, props.duration);
+			}
+		};
+	}, [props.in]);
+
 	return (
-		<span class={clsx(classes.root, exit && classes.exit)}>
+		<span class={clsx(classes.root, !props.in && classes.exit)}>
 			<span class={clsx(classes.child, classes.enter)} />
 		</span>
 	);

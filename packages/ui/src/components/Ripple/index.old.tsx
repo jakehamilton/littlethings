@@ -14,6 +14,9 @@ import {
 	useRef,
 } from "preact/hooks";
 import useCSS from "../../hooks/useCSS";
+import useLatest from "../../hooks/useLatest";
+import { AnyFunction } from "../../types/fn";
+import TransitionGroup from "../TransitionGroup";
 import RippleDot, { RippleDotProps } from "./RippleDot";
 
 const DEFAULT_BOUNDING_RECT = {
@@ -27,9 +30,17 @@ const ANIMATION_DURATION = 350;
 
 export type RippleEvent = MouseEvent | TouchEvent | KeyboardEvent;
 
+export interface RippleEventOptions {
+	center: boolean;
+}
+
 export interface RippleHandle {
-	start: (event: RippleEvent, options: object, cb: Function) => void;
-	stop: (event: RippleEvent, cb: Function) => void;
+	start: (
+		event: RippleEvent,
+		options?: RippleEventOptions,
+		callback?: AnyFunction
+	) => void;
+	stop: (event: RippleEvent, callback?: AnyFunction) => void;
 }
 
 export interface RippleProps {
@@ -53,7 +64,7 @@ const isKeyboardEvent = (event: any): event is KeyboardEvent =>
 
 interface StartCommitOptions {
 	props: RippleDotProps;
-	cb: Function;
+	callback?: Function;
 }
 
 const Ripple: FunctionComponent<RippleProps> = ({
@@ -64,37 +75,53 @@ const Ripple: FunctionComponent<RippleProps> = ({
 }) => {
 	const rootRef = useRef<HTMLSpanElement>(null);
 	const [ripples, setRipples] = useState<Array<ComponentChild>>([]);
+	const ripplesRef = useLatest(ripples);
 	const rippleKeyRef = useRef(0);
 	const rippleCallback = useRef<Function | null>(null);
 	const startTimerCommit = useRef<Function | null>(null);
 	const startTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+	console.log("render", ripples);
+
 	useEffect(() => {
+		console.log("rippleCallback()", rippleCallback.current);
 		rippleCallback.current?.();
 		rippleCallback.current = null;
 	}, [ripples]);
 
 	const startCommit = useCallback(
-		({ props, cb }: StartCommitOptions) => {
-			setRipples((prevRipples) => [
-				...prevRipples,
-				<RippleDot
-					{...props}
-					key={rippleKeyRef.current}
-					duration={ANIMATION_DURATION}
-					exit={false}
-					color={color}
-				/>,
-			]);
+		({ props, callback }: StartCommitOptions) => {
+			console.log("startCommit()");
+			console.log("startCommit: setRipples()");
+			setRipples((prevRipples) => {
+				const ripples = [
+					...prevRipples,
+					<RippleDot
+						{...props}
+						key={rippleKeyRef.current}
+						duration={ANIMATION_DURATION}
+						color={color}
+					/>,
+				];
+
+				console.log({ prevRipples, ripples });
+
+				return ripples;
+			});
 
 			rippleKeyRef.current += 1;
-			rippleCallback.current = cb;
+			rippleCallback.current = callback ?? null;
 		},
 		[props.classes]
 	);
 
 	const start = useCallback(
-		(event: RippleEvent, options = {}, cb: Function) => {
+		(
+			event: RippleEvent,
+			options: RippleEventOptions = { center: false },
+			callback?: AnyFunction
+		) => {
+			console.log("start()");
 			const isTouch = isTouchEvent(event);
 			const isMouse = isMouseEvent(event);
 			const isKeyboard = isKeyboardEvent(event);
@@ -111,6 +138,7 @@ const Ripple: FunctionComponent<RippleProps> = ({
 
 			if (
 				center ||
+				options.center ||
 				isKeyboard ||
 				(isMouse && event.clientX === 0 && event.clientY === 0)
 			) {
@@ -152,7 +180,7 @@ const Ripple: FunctionComponent<RippleProps> = ({
 			if (isTouch) {
 				if (startTimerCommit.current === null) {
 					startTimerCommit.current = () => {
-						startCommit({ props, cb });
+						startCommit({ props, callback: callback });
 					};
 
 					startTimer.current = setTimeout(() => {
@@ -165,14 +193,15 @@ const Ripple: FunctionComponent<RippleProps> = ({
 			} else {
 				startCommit({
 					props,
-					cb,
+					callback: callback,
 				});
 			}
 		},
 		[center, startCommit]
 	);
 
-	const stop = useCallback((event: RippleEvent, cb: Function) => {
+	const stop = useCallback((event: RippleEvent, callback?: AnyFunction) => {
+		console.log("stop()", callback);
 		if (startTimer.current) {
 			clearTimeout(startTimer.current);
 		}
@@ -183,40 +212,29 @@ const Ripple: FunctionComponent<RippleProps> = ({
 			startTimerCommit.current();
 			startTimerCommit.current = null;
 			startTimer.current = setTimeout(() => {
-				stop(event, cb);
+				stop(event, callback);
 			});
 
 			return;
 		}
 
-		// setRipples(([firstRipple, ...otherRipples]) => {
-		// 	if (firstRipple) {
-		// 		return [
-		// 			isValidElement(firstRipple)
-		// 				? cloneElement(firstRipple, {
-		// 						exit: true,
-		// 				  })
-		// 				: firstRipple,
-		// 			...otherRipples,
-		// 		];
-		// 	}
-
-		// 	return otherRipples;
-		// });
-
-		// setTimeout(() => {
 		startTimerCommit.current = null;
 
+		console.log("stop: setRipples()");
 		setRipples((prevRipples) => {
 			if (prevRipples.length > 0) {
+				console.log({ prevRipples, nextRipples: prevRipples.slice(1) });
 				return prevRipples.slice(1);
+			} else {
+				return prevRipples;
 			}
-
-			return prevRipples;
 		});
 
-		rippleCallback.current = cb;
-		// }, ANIMATION_DURATION + 25);
+		if (ripplesRef.current.length === 0) {
+			callback?.();
+		} else {
+			rippleCallback.current = callback ?? null;
+		}
 	}, []);
 
 	useImperativeHandle(
@@ -251,7 +269,9 @@ const Ripple: FunctionComponent<RippleProps> = ({
 
 	return (
 		<span ref={rootRef} class={clsx(classes.root, props.classes?.root)}>
-			{ripples}
+			<TransitionGroup enter exit>
+				{ripples}
+			</TransitionGroup>
 		</span>
 	);
 };

@@ -11,6 +11,7 @@ export interface ButtonBaseStylesOptions {
 	color?: ThemePaletteColorNames | ThemePaletteColor;
 	size: Size;
 	loading: boolean;
+	disabled: boolean;
 }
 
 const getPadding = (size: Size): { x: number; y: number } => {
@@ -134,10 +135,6 @@ const useButtonBaseStyles = ({
 					&::before {
 						opacity: 1;
 						visibility: visible;
-					}
-
-					&:active {
-						background: pink;
 					}
 				}
 			`,
