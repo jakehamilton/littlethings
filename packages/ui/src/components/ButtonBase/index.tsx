@@ -4,7 +4,7 @@ import { useRef, useEffect, useCallback } from "preact/hooks";
 import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
 import Dynamic, { DynamicComponent } from "../Dynamic";
-import Ripple, { RippleHandle } from "../Ripple/index.old";
+import Ripple, { RippleHandle } from "../Ripple";
 import useButtonBaseStyles, {
 	ButtonBaseStylesOptions,
 } from "./useButtonBaseStyles";
@@ -40,9 +40,9 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	const rippleRef = useRippleRef();
 	const classes = useButtonBaseStyles({ color, size, loading, disabled });
 
-	const handleRippleMouseDown = useRippleEvent(rippleRef, "start");
-	const handleRippleMouseUp = useRippleEvent(rippleRef, "stop");
-	const handleRippleMouseLeave = useRippleEvent(rippleRef, "stop");
+	const handleRippleMouseDown = useRippleEvent(rippleRef, "add");
+	const handleRippleMouseUp = useRippleEvent(rippleRef, "remove");
+	const handleRippleMouseLeave = useRippleEvent(rippleRef, "remove");
 
 	const handleMouseDown = useCallback(
 		(event: MouseEvent) => {
@@ -72,8 +72,6 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 		(event: KeyboardEvent) => {
 			event.preventDefault();
 
-			console.log(event);
-
 			onKeyDown?.(event);
 
 			if (
@@ -81,8 +79,8 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 				!disabled &&
 				(event.key === "Enter" || event.key === " ")
 			) {
-				rippleRef.current!.stop(event, () => {
-					rippleRef.current!.start(event);
+				rippleRef.current!.remove(event, () => {
+					rippleRef.current!.add(event);
 				});
 				onClick?.(event);
 			}
@@ -101,7 +99,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 				!disabled &&
 				(event.key === "Enter" || event.key === " ")
 			) {
-				rippleRef.current!.stop(event);
+				rippleRef.current!.remove(event);
 			}
 		},
 		[disabled]
@@ -120,7 +118,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 		>
 			{/* @TODO(jakehamilton): Add a loading spinner */}
 			{loading ? null : children}
-			<Ripple handle={rippleRef} />
+			<Ripple handleRef={rippleRef} />
 		</Dynamic>
 	);
 };
