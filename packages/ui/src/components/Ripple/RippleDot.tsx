@@ -4,6 +4,7 @@ import { useEffect } from "preact/hooks";
 import fadeOut from "../../animations/fadeOut";
 import grow from "../../animations/grow";
 import useCSS from "../../hooks/useCSS";
+import useLatest from "../../hooks/useLatest";
 import { TransitionGroupChildProps } from "../TransitionGroup/util";
 
 export interface RippleDotProps extends TransitionGroupChildProps {

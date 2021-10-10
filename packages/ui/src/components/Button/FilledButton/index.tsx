@@ -1,15 +1,13 @@
 import { clsx } from "@littlethings/css";
 import { ComponentChildren } from "preact";
-import ButtonBase from "../../ButtonBase";
+import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import Dynamic, { DynamicComponent } from "../../Dynamic";
 import useFilledButtonStyles, {
 	FilledButtonStylesOptions,
 } from "./useFilledButtonStyles";
 
-export interface FilledButtonProps {
-	color?: FilledButtonStylesOptions["color"];
-	disabled?: FilledButtonStylesOptions["disabled"];
-	size?: FilledButtonStylesOptions["size"];
+export interface FilledButtonProps extends ButtonBaseProps {
+	float?: boolean;
 }
 
 const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
@@ -18,9 +16,10 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
 	color = "primary",
 	disabled = false,
 	size = "md",
+	float = false,
 	...props
 }) => {
-	const classes = useFilledButtonStyles({ color, disabled, size });
+	const classes = useFilledButtonStyles({ color, disabled });
 
 	return (
 		<ButtonBase
@@ -29,7 +28,11 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
 			disabled={disabled}
 			size={size}
 			{...props}
-			class={clsx(classes.root, props.class)}
+			class={clsx(
+				classes.root,
+				float ? classes.float : null,
+				props.class
+			)}
 		>
 			{children}
 		</ButtonBase>

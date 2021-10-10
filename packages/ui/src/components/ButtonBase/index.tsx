@@ -3,7 +3,7 @@ import { ComponentChildren, FunctionComponent } from "preact";
 import { useRef, useEffect, useCallback } from "preact/hooks";
 import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
-import Dynamic, { DynamicComponent } from "../Dynamic";
+import Dynamic, { DynamicComponent, DynamicProps } from "../Dynamic";
 import Ripple, { RippleHandle } from "../Ripple";
 import useButtonBaseStyles, {
 	ButtonBaseStylesOptions,
@@ -14,6 +14,10 @@ export interface ButtonBaseProps {
 	color?: ButtonBaseStylesOptions["color"];
 	size?: ButtonBaseStylesOptions["size"];
 	disabled?: ButtonBaseStylesOptions["disabled"];
+	prefixIcon?: ComponentChildren;
+	PrefixIconProps?: DynamicProps<"span">;
+	postfixIcon?: ComponentChildren;
+	PostfixIconProps?: DynamicProps<"span">;
 	onKeyDown?: (event: KeyboardEvent) => void;
 	onKeyUp?: (event: KeyboardEvent) => void;
 	onMouseUp?: (event: MouseEvent) => void;
@@ -29,6 +33,10 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	size = "md",
 	loading = false,
 	disabled = false,
+	prefixIcon,
+	PrefixIconProps,
+	postfixIcon,
+	PostfixIconProps,
 	onKeyDown,
 	onKeyUp,
 	onMouseDown,
@@ -38,7 +46,14 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	...props
 }) => {
 	const rippleRef = useRippleRef();
-	const classes = useButtonBaseStyles({ color, size, loading, disabled });
+	const classes = useButtonBaseStyles({
+		color,
+		size,
+		loading,
+		disabled,
+		hasPrefixIcon: Boolean(prefixIcon),
+		hasPostfixIcon: Boolean(postfixIcon),
+	});
 
 	const handleRippleMouseDown = useRippleEvent(rippleRef, "add");
 	const handleRippleMouseUp = useRippleEvent(rippleRef, "remove");
@@ -116,8 +131,24 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 			onKeyDown={handleKeyDown}
 			onKeyUp={handleKeyUp}
 		>
+			{prefixIcon ? (
+				<Dynamic
+					as="span"
+					class={clsx(classes.prefixIcon, PrefixIconProps?.class)}
+				>
+					{prefixIcon}
+				</Dynamic>
+			) : null}
 			{/* @TODO(jakehamilton): Add a loading spinner */}
 			{loading ? null : children}
+			{postfixIcon ? (
+				<Dynamic
+					as="span"
+					class={clsx(classes.postfixIcon, PostfixIconProps?.class)}
+				>
+					{postfixIcon}
+				</Dynamic>
+			) : null}
 			<Ripple handleRef={rippleRef} />
 		</Dynamic>
 	);

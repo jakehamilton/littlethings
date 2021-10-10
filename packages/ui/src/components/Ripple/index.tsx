@@ -251,7 +251,12 @@ const Ripple: FunctionComponent<RippleProps> = ({
 
 		setRipples((prevRipples) => {
 			if (prevRipples.length > 0) {
-				return prevRipples.slice(1);
+				console.count("Remove Ripple");
+				const newRipples = prevRipples.slice(1);
+
+				console.log([...newRipples]);
+
+				return newRipples;
 			} else {
 				return prevRipples;
 			}

@@ -8,33 +8,28 @@ import {
 	object,
 } from "../../../../.storybook/controls";
 
-import FilledButton, { FilledButtonProps } from ".";
+import OutlinedButton, { OutlinedButtonProps } from ".";
 
 const DEFAULT_CHILDREN = "Click Me";
 
 export default {
-	title: "Design System/Button/Filled",
-	component: FilledButton,
+	title: "Design System/Button/Outlined",
+	component: OutlinedButton,
 	args: {
 		children: DEFAULT_CHILDREN,
 		onClick: action("onClick"),
-		float: false,
 	},
 	argTypes: {
 		disabled: boolean({
 			defaultValue: false,
 			description: "Whether or not the button should be disabled.",
 		}),
-		float: boolean({
-			defaultValue: false,
-			description: "Make the button float above the page.",
-		}),
 		children: disable(),
 	},
-} as Meta<FilledButtonProps>;
+} as Meta<OutlinedButtonProps>;
 
-const Template: Story<FilledButtonProps> = (args: FilledButtonProps) => (
-	<FilledButton {...args} />
+const Template: Story<OutlinedButtonProps> = (args) => (
+	<OutlinedButton {...args} />
 );
 
 export const Default = Template.bind({});
@@ -44,23 +39,7 @@ Default.parameters = {
 			code: `
 import { Button } from "@littlethings/ui";
 
-<Button variant="filled">${DEFAULT_CHILDREN}</Button>
-`.trim(),
-		},
-	},
-};
-
-export const Floating = Template.bind({});
-Floating.args = {
-	float: true,
-};
-Floating.parameters = {
-	docs: {
-		source: {
-			code: `
-import { Button } from "@littlethings/ui";
-
-<Button variant="filled" float>${DEFAULT_CHILDREN}</Button>
+<Button variant="outlined">${DEFAULT_CHILDREN}</Button>
 `.trim(),
 		},
 	},
@@ -76,7 +55,7 @@ Small.parameters = {
 			code: `
 import { Button } from "@littlethings/ui";
 
-<Button variant="filled" size="sm">${DEFAULT_CHILDREN}</Button>
+<Button variant="outlined" size="sm">${DEFAULT_CHILDREN}</Button>
 `.trim(),
 		},
 	},
@@ -92,7 +71,7 @@ Medium.parameters = {
 			code: `
 import { Button } from "@littlethings/ui";
 
-<Button variant="filled" size="md">${DEFAULT_CHILDREN}</Button>
+<Button variant="outlined" size="md">${DEFAULT_CHILDREN}</Button>
 `.trim(),
 		},
 	},
@@ -108,7 +87,7 @@ Large.parameters = {
 			code: `
 import { Button } from "@littlethings/ui";
 
-<Button variant="filled" size="lg">${DEFAULT_CHILDREN}</Button>
+<Button variant="outlined" size="lg">${DEFAULT_CHILDREN}</Button>
 `.trim(),
 		},
 	},
@@ -124,7 +103,7 @@ ExtraLarge.parameters = {
 			code: `
 import { Button } from "@littlethings/ui";
 
-<Button variant="filled" size="xl">${DEFAULT_CHILDREN}</Button>
+<Button variant="outlined" size="xl">${DEFAULT_CHILDREN}</Button>
 `.trim(),
 		},
 	},

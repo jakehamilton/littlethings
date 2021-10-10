@@ -10,13 +10,11 @@ export type Size = "sm" | "md" | "lg" | "xl";
 export interface FilledButtonStylesOptions {
 	color: ThemePaletteColorNames | ThemePaletteColor;
 	disabled: boolean;
-	size: Size;
 }
 
 const useFilledButtonStyles = ({
 	color,
 	disabled,
-	size,
 }: FilledButtonStylesOptions) => {
 	const classes = useCSS(({ css, theme, util }) => {
 		const themeColor = util.color(color);
@@ -28,21 +26,37 @@ const useFilledButtonStyles = ({
 
 				box-shadow: ${util.shadow("sm")};
 
-				transform: translateY(0);
-				transition: transform 150ms ease-out, background 150ms ease-out,
-					box-shadow 150ms ease-out;
+				transition: background 150ms linear, box-shadow 150ms linear;
 
 				&:hover {
-					transform: translateY(${util.space(-0.25)}px);
 					background: ${util.lighten(themeColor.main, 8)};
-					box-shadow: ${util.shadow("md")};
 				}
 
 				&:active {
 					background: ${util.darken(themeColor.main, 2)};
-					box-shadow: ${util.shadow("xs")},
-						inset 0 2px 10px rgba(0, 0, 0, 0.075);
-					transform: translateY(${util.space(0.25)}px);
+					transition: background 115ms linear, box-shadow 115ms linear;
+				}
+			`,
+			float: css`
+				transform: scale(1) translateY(0);
+
+				box-shadow: ${util.shadow("md")};
+
+				transition: transform 150ms linear, background 150ms linear,
+					box-shadow 150ms linear;
+
+				&:hover {
+					transform: scale(1) translateY(${util.space(-0.5)}px);
+					background: ${util.lighten(themeColor.main, 8)};
+					box-shadow: ${util.shadow("lg")};
+				}
+
+				&:active {
+					background: ${util.darken(themeColor.main, 2)};
+					box-shadow: ${util.shadow("xs")};
+					transform: scale(1) translateY(${util.space(0.25)}px);
+					transition: transform 115ms linear, background 115ms linear,
+						box-shadow 115ms linear;
 				}
 			`,
 		};

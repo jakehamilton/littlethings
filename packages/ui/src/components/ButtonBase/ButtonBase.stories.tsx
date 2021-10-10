@@ -1,4 +1,6 @@
 import { action } from "@storybook/addon-actions";
+import { Story } from "@storybook/preact";
+import { ArrowRight, Heart } from "preact-feather";
 
 import ButtonBase, { ButtonBaseProps } from ".";
 
@@ -13,6 +15,16 @@ export default {
 	},
 };
 
-const Template = (args: ButtonBaseProps) => <ButtonBase {...args} />;
+const Template: Story<ButtonBaseProps> = (args) => <ButtonBase {...args} />;
 
 export const Default = Template.bind({});
+
+export const PrefixIcon = Template.bind({});
+PrefixIcon.args = {
+	prefixIcon: <Heart size={16} />,
+};
+
+export const PostfixIcon = Template.bind({});
+PostfixIcon.args = {
+	postfixIcon: <ArrowRight size={16} />,
+};

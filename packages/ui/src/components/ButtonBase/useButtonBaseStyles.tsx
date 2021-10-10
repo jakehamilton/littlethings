@@ -1,3 +1,4 @@
+import { ComponentChildren } from "preact";
 import useCSS from "../../hooks/useCSS";
 import {
 	ThemeFont,
@@ -12,29 +13,50 @@ export interface ButtonBaseStylesOptions {
 	size: Size;
 	loading: boolean;
 	disabled: boolean;
+	hasPrefixIcon?: boolean;
+	hasPostfixIcon?: boolean;
 }
 
-const getPadding = (size: Size): { x: number; y: number } => {
+interface Padding {
+	left: number;
+	right: number;
+	top: number;
+	bottom: number;
+}
+
+const getPadding = (
+	size: Size,
+	hasPrefixIcon: ButtonBaseStylesOptions["hasPrefixIcon"],
+	hasPostfixIcon: ButtonBaseStylesOptions["hasPostfixIcon"]
+): Padding => {
 	switch (size) {
 		case "sm":
 			return {
-				x: 1.75,
-				y: 0.75,
+				left: hasPrefixIcon ? 1.5 : 1.75,
+				right: hasPostfixIcon ? 1.5 : 1.75,
+				top: 0.75,
+				bottom: 0.75,
 			};
 		case "md":
 			return {
-				x: 2,
-				y: 1,
+				left: hasPrefixIcon ? 1.75 : 2,
+				right: hasPostfixIcon ? 1.75 : 2,
+				top: 1,
+				bottom: 1,
 			};
 		case "lg":
 			return {
-				x: 2.25,
-				y: 1,
+				left: hasPrefixIcon ? 2 : 2.25,
+				right: hasPostfixIcon ? 2 : 2.25,
+				top: 1,
+				bottom: 1,
 			};
 		case "xl":
 			return {
-				x: 2.75,
-				y: 1.5,
+				left: hasPrefixIcon ? 2.5 : 2.75,
+				right: hasPostfixIcon ? 2.5 : 2.75,
+				top: 1.5,
+				bottom: 1.5,
 			};
 	}
 };
@@ -69,13 +91,15 @@ const useButtonBaseStyles = ({
 	color,
 	size,
 	loading,
+	hasPrefixIcon,
+	hasPostfixIcon,
 }: ButtonBaseStylesOptions) => {
 	const classes = useCSS(({ css, theme, util }) => {
 		const background = theme.palette.background;
 
 		const themeColor = color ? util.color(color) : undefined;
 
-		const padding = getPadding(size);
+		const padding = getPadding(size, hasPrefixIcon, hasPostfixIcon);
 
 		const font = util.font("primary");
 
@@ -104,7 +128,10 @@ const useButtonBaseStyles = ({
 				line-height: ${fontSize.height}rem;
 				text-transform: uppercase;
 
-				padding: ${util.space(padding.y)}px ${util.space(padding.x)}px;
+				padding-left: ${util.space(padding.left)}px;
+				padding-right: ${util.space(padding.right)}px;
+				padding-top: ${util.space(padding.top)}px;
+				padding-bottom: ${util.space(padding.bottom)}px;
 
 				&:focus {
 					outline: none;
@@ -115,8 +142,8 @@ const useButtonBaseStyles = ({
 					display: block;
 					content: "";
 
-					width: calc(100% + ${util.space(1.5)}px);
-					height: calc(100% + ${util.space(1.5)}px);
+					width: calc(100% + ${util.space(2)}px);
+					height: calc(100% + ${util.space(2)}px);
 
 					top: 50%;
 					left: 50%;
@@ -137,6 +164,14 @@ const useButtonBaseStyles = ({
 						visibility: visible;
 					}
 				}
+			`,
+			prefixIcon: css`
+				display: inline-flex;
+				margin-right: ${util.space(0.5)}px;
+			`,
+			postfixIcon: css`
+				display: inline-flex;
+				margin-left: ${util.space(0.5)}px;
 			`,
 		};
 	});
