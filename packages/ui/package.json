@@ -4,8 +4,12 @@
 	"description": "A small, Preact-based UI library",
 	"main": "src/index.js",
 	"scripts": {
+		"clean": "rm -rf ./dist/*",
+		"build": "npm run clean && npm run build:lib && npm run build:types",
+		"build:lib": "vite build",
+		"build:types": "tsc -p . --emitDeclarationOnly",
 		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"build:storybook": "build-storybook"
 	},
 	"keywords": [
 		"ui",

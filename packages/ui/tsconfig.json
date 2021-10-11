@@ -1,12 +1,16 @@
 {
 	"compilerOptions": {
+		"outDir": "./dist",
 		"moduleResolution": "node",
 		"strict": true,
 		"allowSyntheticDefaultImports": true,
 		"jsx": "react-jsx",
 		"jsxImportSource": "preact",
 		"declaration": true,
-		"lib": ["ESNext"],
-		"target": "ES2015"
-	}
+		"lib": ["ESNext", "DOM"],
+		"target": "ES2015",
+		"typeRoots": ["./src/types"]
+	},
+	"include": ["src/**/*"],
+	"exclude": ["src/**/*.stories.*"]
 }

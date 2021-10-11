@@ -6,9 +6,10 @@ const createLogger = async () => {
 	global.process.env.LOG_TIMESTAMP =
 		global.process.env.LOG_TIMESTAMP || "true";
 
+	// @ts-expect-error
 	const { default: littlelog } = await import("@littlethings/log");
 
-	const logger = littlelog.create("vite") as unknown as Logger;
+	const logger = (littlelog.create("vite") as unknown) as Logger;
 
 	for (const key of ["info", "warn", "error"] as const) {
 		const method = logger[key];
@@ -36,5 +37,13 @@ export default async () => {
 	return defineConfig({
 		customLogger: await createLogger(),
 		plugins: [preact()],
+		build: {
+			lib: {
+				name: "LittleUI",
+				entry: "./src/index.tsx",
+				fileName: (format) => `ui.${format}.js`,
+				formats: ["es", "umd", "cjs"],
+			},
+		},
 	});
 };
