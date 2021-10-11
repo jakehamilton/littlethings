@@ -1,5 +1,4 @@
 import { clsx } from "@littlethings/css";
-import { FunctionComponent } from "preact";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import { DynamicComponent } from "../../Dynamic";
 import useTextButtonStyles from "./useTextButtonStyles";
@@ -14,7 +13,7 @@ const TextButton: DynamicComponent<TextButtonProps, "button"> = ({
 	disabled = false,
 	...props
 }) => {
-	const classes = useTextButtonStyles({ color });
+	const classes = useTextButtonStyles({ color, disabled });
 
 	return (
 		<ButtonBase
@@ -23,7 +22,11 @@ const TextButton: DynamicComponent<TextButtonProps, "button"> = ({
 			disabled={disabled}
 			size={size}
 			{...props}
-			class={clsx(classes.root, props.class)}
+			class={clsx(
+				classes.root,
+				disabled ? classes.disabled : null,
+				props.class
+			)}
 		>
 			{children}
 		</ButtonBase>

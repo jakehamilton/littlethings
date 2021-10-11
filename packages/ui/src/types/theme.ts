@@ -34,6 +34,7 @@ export interface ThemePalette {
 	primary: ThemePaletteColor;
 	secondary: ThemePaletteColor;
 	background: ThemePaletteColor;
+	disabled: ThemePaletteColor;
 }
 
 export type ThemePaletteColorNames = keyof ThemePalette;

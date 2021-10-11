@@ -66,6 +66,22 @@ import { Button } from "@littlethings/ui";
 	},
 };
 
+export const Disabled = Template.bind({});
+Disabled.args = {
+	disabled: true,
+};
+Disabled.parameters = {
+	docs: {
+		source: {
+			code: `
+import { Button } from "@littlethings/ui";
+
+<Button variant="filled" disabled>${DEFAULT_CHILDREN}</Button>
+`.trim(),
+		},
+	},
+};
+
 export const Small = Template.bind({});
 Small.args = {
 	size: "sm",

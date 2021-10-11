@@ -91,6 +91,7 @@ const useButtonBaseStyles = ({
 	color,
 	size,
 	loading,
+	disabled,
 	hasPrefixIcon,
 	hasPostfixIcon,
 }: ButtonBaseStylesOptions) => {
@@ -120,7 +121,7 @@ const useButtonBaseStyles = ({
 				outline: none;
 				background: transparent;
 
-				cursor: pointer;
+				cursor: ${disabled ? "initial" : "pointer"};
 				border-radius: ${util.round("sm")}px;
 
 				font-size: ${fontSize.size}rem;

@@ -9,6 +9,7 @@ import {
 } from "../../../../.storybook/controls";
 
 import OutlinedButton, { OutlinedButtonProps } from ".";
+import ButtonBase from "../../ButtonBase";
 
 const DEFAULT_CHILDREN = "Click Me";
 
@@ -40,6 +41,22 @@ Default.parameters = {
 import { Button } from "@littlethings/ui";
 
 <Button variant="outlined">${DEFAULT_CHILDREN}</Button>
+`.trim(),
+		},
+	},
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+	disabled: true,
+};
+Disabled.parameters = {
+	docs: {
+		source: {
+			code: `
+import { Button } from "@littlethings/ui";
+
+<Button variant="outlined" disabled>${DEFAULT_CHILDREN}</Button>
 `.trim(),
 		},
 	},

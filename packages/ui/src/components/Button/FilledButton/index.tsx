@@ -31,6 +31,7 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
 			class={clsx(
 				classes.root,
 				float ? classes.float : null,
+				disabled ? classes.disabled : null,
 				props.class
 			)}
 		>

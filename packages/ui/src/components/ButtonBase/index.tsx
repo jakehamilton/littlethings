@@ -125,11 +125,13 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 			as={as}
 			{...props}
 			class={clsx(classes.root, props.class)}
-			onMouseDown={handleMouseDown}
-			onMouseUp={handleMouseUp}
-			onMouseLeave={handleMouseLeave}
-			onKeyDown={handleKeyDown}
-			onKeyUp={handleKeyUp}
+			onMouseDown={disabled ? undefined : handleMouseDown}
+			onMouseUp={disabled ? undefined : handleMouseUp}
+			onMouseLeave={disabled ? undefined : handleMouseLeave}
+			onKeyDown={disabled ? undefined : handleKeyDown}
+			onKeyUp={disabled ? undefined : handleKeyUp}
+			disabled={disabled}
+			aria-disabled={disabled}
 		>
 			{prefixIcon ? (
 				<Dynamic

@@ -18,6 +18,7 @@ const useFilledButtonStyles = ({
 }: FilledButtonStylesOptions) => {
 	const classes = useCSS(({ css, theme, util }) => {
 		const themeColor = util.color(color);
+		const disabledColor = util.color("disabled");
 
 		return {
 			root: css`
@@ -48,15 +49,37 @@ const useFilledButtonStyles = ({
 				&:hover {
 					transform: scale(1) translateY(${util.space(-0.5)}px);
 					background: ${util.lighten(themeColor.main, 8)};
-					box-shadow: ${util.shadow("lg")};
+					box-shadow: ${disabled
+						? util.shadow("md")
+						: util.shadow("lg")};
 				}
 
 				&:active {
-					background: ${util.darken(themeColor.main, 2)};
-					box-shadow: ${util.shadow("xs")};
-					transform: scale(1) translateY(${util.space(0.25)}px);
 					transition: transform 115ms linear, background 115ms linear,
 						box-shadow 115ms linear;
+					transform: scale(1) translateY(${util.space(0.25)}px);
+					background: ${util.darken(themeColor.main, 2)};
+					box-shadow: ${disabled
+						? util.shadow("md")
+						: util.shadow("xs")};
+				}
+			`,
+			disabled: css`
+				color: ${disabledColor.text};
+				background: ${disabledColor.main};
+
+				transform: none;
+
+				&:hover {
+					color: ${disabledColor.text};
+					background: ${disabledColor.main};
+					transform: none;
+				}
+
+				&:active {
+					color: ${disabledColor.text};
+					background: ${disabledColor.main};
+					transform: none;
 				}
 			`,
 		};

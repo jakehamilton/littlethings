@@ -170,6 +170,12 @@ const DEFAULT_LIGHT_PALETTE: ThemePalette = {
 		dark: Emerald["700"],
 		text: White["900"],
 	},
+	disabled: {
+		light: Gray["100"],
+		main: Gray["200"],
+		dark: Gray["600"],
+		text: Gray["400"],
+	},
 };
 
 const DEFAULT_DARK_PALETTE: ThemePalette = {
@@ -191,6 +197,12 @@ const DEFAULT_DARK_PALETTE: ThemePalette = {
 		main: Emerald["500"],
 		dark: Emerald["700"],
 		text: White["900"],
+	},
+	disabled: {
+		light: Gray["300"],
+		main: Gray["500"],
+		dark: Gray["700"],
+		text: Gray["900"],
 	},
 };
 
