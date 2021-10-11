@@ -1,9 +1,11 @@
 import { clsx } from "@littlethings/css";
 import { ComponentChildren, FunctionComponent } from "preact";
-import { useRef, useEffect, useCallback } from "preact/hooks";
+import { useRef, useEffect, useCallback, useMemo } from "preact/hooks";
 import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
+import useTheme from "../../hooks/useTheme";
 import Dynamic, { DynamicComponent, DynamicProps } from "../Dynamic";
+import Loading from "../Loading";
 import Ripple, { RippleHandle } from "../Ripple";
 import useButtonBaseStyles, {
 	ButtonBaseStylesOptions,
@@ -54,6 +56,21 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 		hasPrefixIcon: Boolean(prefixIcon),
 		hasPostfixIcon: Boolean(postfixIcon),
 	});
+
+	const { theme, util } = useTheme();
+
+	const loadingColor = useMemo(() => {
+		const background = util.color("background");
+
+		const base = color ? util.color(color) : background;
+
+		return {
+			light: base.text,
+			dark: base.text,
+			main: base.text,
+			text: base.text,
+		};
+	}, [theme, color]);
 
 	const handleRippleMouseDown = useRippleEvent(rippleRef, "add");
 	const handleRippleMouseUp = useRippleEvent(rippleRef, "remove");
@@ -141,8 +158,18 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 					{prefixIcon}
 				</Dynamic>
 			) : null}
-			{/* @TODO(jakehamilton): Add a loading spinner */}
-			{loading ? null : children}
+			<span class={classes.container}>
+				{loading ? (
+					<Loading
+						size={size}
+						color={loadingColor}
+						class={classes.loading}
+					/>
+				) : null}
+				<span aria-hidden={loading} class={classes.content}>
+					{children}
+				</span>
+			</span>
 			{postfixIcon ? (
 				<Dynamic
 					as="span"

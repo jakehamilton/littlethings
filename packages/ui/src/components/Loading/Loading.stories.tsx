@@ -5,6 +5,12 @@ export default {
 	title: "Design System/Loading",
 };
 
-const Template = (args: LoadingProps) => <Loading {...args} />;
+const Template: Story<LoadingProps> = (args: LoadingProps) => (
+	<Loading {...args} />
+);
 
-export const Default: Story = Template.bind({});
+export const Default = Template.bind({});
+Default.args = {
+	size: "md",
+	color: "primary",
+};

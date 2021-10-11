@@ -166,6 +166,21 @@ const useButtonBaseStyles = ({
 					}
 				}
 			`,
+			container: css`
+				position: relative;
+			`,
+			loading: css`
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			`,
+			content: css`
+				opacity: ${loading ? 0 : 1};
+				visibility: ${loading ? "hidden" : "visible"};
+			`,
 			prefixIcon: css`
 				display: inline-flex;
 				margin-right: ${util.space(0.5)}px;

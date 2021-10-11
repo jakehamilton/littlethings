@@ -19,12 +19,10 @@ const Template: Story<ButtonBaseProps> = (args) => <ButtonBase {...args} />;
 
 export const Default = Template.bind({});
 
-export const PrefixIcon = Template.bind({});
-PrefixIcon.args = {
-	prefixIcon: <Heart size={16} />,
-};
+export const PrefixIcon: Story<ButtonBaseProps> = (args) => (
+	<ButtonBase {...args} prefixIcon={<Heart size={16} />} />
+);
 
-export const PostfixIcon = Template.bind({});
-PostfixIcon.args = {
-	postfixIcon: <ArrowRight size={16} />,
-};
+export const PostfixIcon: Story<ButtonBaseProps> = (args) => (
+	<ButtonBase {...args} postfixIcon={<ArrowRight size={16} />} />
+);
