@@ -4,12 +4,18 @@ import { useRef, useEffect, useCallback, useMemo } from "preact/hooks";
 import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
 import useTheme from "../../hooks/useTheme";
+import { CSSClass } from "../../types/css";
 import Dynamic, { DynamicComponent, DynamicProps } from "../Dynamic";
-import Loading from "../Loading";
+import Loading, { LoadingProps } from "../Loading";
 import Ripple, { RippleHandle } from "../Ripple";
 import useButtonBaseStyles, {
 	ButtonBaseStylesOptions,
 } from "./useButtonBaseStyles";
+
+export interface ButtonBaseClasses {
+	container?: CSSClass;
+	content?: CSSClass;
+}
 
 export interface ButtonBaseProps {
 	loading?: ButtonBaseStylesOptions["loading"];
@@ -20,6 +26,8 @@ export interface ButtonBaseProps {
 	PrefixIconProps?: DynamicProps<"span">;
 	postfixIcon?: ComponentChildren;
 	PostfixIconProps?: DynamicProps<"span">;
+	LoadingProps?: Partial<LoadingProps>;
+	classes?: ButtonBaseClasses;
 	onKeyDown?: (event: KeyboardEvent) => void;
 	onKeyUp?: (event: KeyboardEvent) => void;
 	onMouseUp?: (event: MouseEvent) => void;
@@ -39,6 +47,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	PrefixIconProps,
 	postfixIcon,
 	PostfixIconProps,
+	LoadingProps,
 	onKeyDown,
 	onKeyUp,
 	onMouseDown,
@@ -158,15 +167,19 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 					{prefixIcon}
 				</Dynamic>
 			) : null}
-			<span class={classes.container}>
+			<span class={clsx(classes.container, props.classes?.container)}>
 				{loading ? (
 					<Loading
 						size={size}
 						color={loadingColor}
 						class={classes.loading}
+						{...LoadingProps}
 					/>
 				) : null}
-				<span aria-hidden={loading} class={classes.content}>
+				<span
+					aria-hidden={loading}
+					class={clsx(classes.content, props.classes?.content)}
+				>
 					{children}
 				</span>
 			</span>

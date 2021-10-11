@@ -18,6 +18,10 @@ export default {
 		size: "md",
 	},
 	argTypes: {
+		variant: select({
+			defaultValue: "filled",
+			options: ["filled", "text", "outlined"],
+		}),
 		disabled: boolean({
 			defaultValue: false,
 			description: "Whether the button is disabled or not.",

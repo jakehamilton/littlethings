@@ -82,6 +82,9 @@ const useFilledButtonStyles = ({
 					transform: none;
 				}
 			`,
+			dot: css`
+				background: ${disabled ? disabledColor.text : themeColor.text};
+			`,
 		};
 	});
 

@@ -23,6 +23,9 @@ const useOutlinedButtonStyles = ({
 				color: ${disabledColor.text};
 				border: 2px solid ${disabledColor.text};
 			`,
+			dot: css`
+				background: ${disabled ? disabledColor.text : themeColor.main};
+			`,
 		};
 	});
 

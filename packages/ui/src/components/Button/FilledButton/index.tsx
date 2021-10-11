@@ -28,6 +28,13 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
 			disabled={disabled}
 			size={size}
 			{...props}
+			LoadingProps={{
+				...props.LoadingProps,
+				classes: {
+					...props.LoadingProps?.classes,
+					dot: clsx(classes.dot, props.LoadingProps?.classes?.dot),
+				},
+			}}
 			class={clsx(
 				classes.root,
 				float ? classes.float : null,
