@@ -61,24 +61,24 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 
 	const handleMouseDown = useCallback(
 		(event: MouseEvent) => {
-			handleRippleMouseDown(event);
 			onMouseDown?.(event);
+			handleRippleMouseDown(event);
 		},
 		[onMouseDown]
 	);
 
 	const handleMouseUp = useCallback(
 		(event: MouseEvent) => {
-			handleRippleMouseUp(event);
 			onMouseUp?.(event);
+			handleRippleMouseUp(event);
 		},
 		[onMouseUp]
 	);
 
 	const handleMouseLeave = useCallback(
 		(event: MouseEvent) => {
-			handleRippleMouseLeave(event);
 			onMouseLeave?.(event);
+			handleRippleMouseLeave(event);
 		},
 		[onMouseLeave]
 	);
