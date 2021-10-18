@@ -8,8 +8,9 @@
 		"build": "npm run clean && npm run build:lib && npm run build:types",
 		"build:lib": "vite build",
 		"build:types": "tsc -p . --emitDeclarationOnly",
+		"build:storybook": "build-storybook",
 		"storybook": "start-storybook -p 6006",
-		"build:storybook": "build-storybook"
+		"dev": "vite"
 	},
 	"keywords": [
 		"ui",
@@ -23,7 +24,6 @@
 	},
 	"peerDependencies": {
 		"preact": "^10.5.14",
-		"goober": "^2.0.41",
 		"tinycolor2": "^1.4.2"
 	},
 	"devDependencies": {
