@@ -36,7 +36,7 @@
 		"core-js": "^3.16.4",
 		"storybook-builder-vite": "0.0.12",
 		"typescript": "^4.5.0-dev.20210831",
-		"vite": "^2.5.2",
+		"vite": "^2.6.7",
 		"@littlethings/log": "^2.5.0",
 		"@preact/preset-vite": "^2.1.0",
 		"@mdx-js/preact": "^2.0.0-next.9",

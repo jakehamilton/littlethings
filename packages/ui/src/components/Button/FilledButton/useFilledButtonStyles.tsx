@@ -1,15 +1,17 @@
 import useCSS from "../../../hooks/useCSS";
+import { CSSClass } from "../../../types/css";
 import {
 	ThemeFont,
 	ThemePaletteColor,
 	ThemePaletteColorNames,
 } from "../../../types/theme";
+import { ButtonBaseProps } from "../../ButtonBase";
 
 export type Size = "sm" | "md" | "lg" | "xl";
 
 export interface FilledButtonStylesOptions {
-	color: ThemePaletteColorNames | ThemePaletteColor;
-	disabled: boolean;
+	color: NonNullable<ButtonBaseProps["color"]>;
+	disabled: NonNullable<ButtonBaseProps["disabled"]>;
 }
 
 const useFilledButtonStyles = ({
@@ -17,7 +19,9 @@ const useFilledButtonStyles = ({
 	disabled,
 }: FilledButtonStylesOptions) => {
 	const classes = useCSS(({ css, theme, util }) => {
-		const themeColor = util.color(color);
+		const themeColor =
+			color === "text" ? util.color("background") : util.color(color);
+
 		const disabledColor = util.color("disabled");
 
 		return {

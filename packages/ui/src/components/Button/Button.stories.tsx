@@ -1,8 +1,17 @@
 import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/preact";
+import { Github } from "preact-feather";
 
 import Button, { ButtonProps } from ".";
-import { boolean, color, disable, select } from "../../../.storybook/controls";
+
+import {
+	boolean,
+	color,
+	disable,
+	select,
+	themeColor,
+} from "../../../.storybook/controls";
+import { WithChildren } from "../../types/preact";
 
 const DEFAULT_CHILDREN = "Click Me";
 
@@ -20,7 +29,7 @@ export default {
 	argTypes: {
 		variant: select({
 			defaultValue: "filled",
-			options: ["filled", "text", "outlined"],
+			options: ["filled", "text", "outlined", "icon"],
 		}),
 		disabled: boolean({
 			defaultValue: false,
@@ -39,12 +48,15 @@ export default {
 			defaultValue: "md",
 			options: ["sm", "md", "lg", "xl"],
 		}),
+		color: themeColor("primary"),
 		children: disable(),
 	},
 } as Meta<ButtonProps>;
 
-const Template: Story<ButtonProps> = (args: ButtonProps) => (
-	<Button {...args} />
+const Template: Story<WithChildren<ButtonProps>> = (args) => (
+	<Button {...args}>
+		{args.variant === "icon" ? <Github /> : args.children}
+	</Button>
 );
 
 export const Default = Template.bind({});

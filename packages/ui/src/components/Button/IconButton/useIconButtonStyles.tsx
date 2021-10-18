@@ -1,13 +1,34 @@
 import useCSS from "../../../hooks/useCSS";
 import { ButtonBaseProps } from "../../ButtonBase";
 
-export interface TextButtonStylesOptions {
+export interface IconButtonStylesOptions {
+	size: NonNullable<ButtonBaseProps["size"]>;
 	color: NonNullable<ButtonBaseProps["color"]>;
 	disabled: NonNullable<ButtonBaseProps["disabled"]>;
 }
 
-const useTextButtonStyles = ({ color, disabled }: TextButtonStylesOptions) => {
+const getSize = (size: IconButtonStylesOptions["size"]): number => {
+	switch (size) {
+		case "sm":
+			return 36;
+		default:
+		case "md":
+			return 42;
+		case "lg":
+			return 52;
+		case "xl":
+			return 64;
+	}
+};
+
+const useIconButtonStyles = ({
+	size,
+	color,
+	disabled,
+}: IconButtonStylesOptions) => {
 	const classes = useCSS(({ css, theme, util }) => {
+		const elSize = getSize(size);
+
 		const themeColor =
 			color === "text" || color === "background"
 				? {
@@ -23,6 +44,22 @@ const useTextButtonStyles = ({ color, disabled }: TextButtonStylesOptions) => {
 		return {
 			root: css`
 				color: ${themeColor.main};
+				border-radius: 50%;
+				width: ${elSize}px;
+				height: ${elSize}px;
+				padding: 0;
+
+				&::before {
+					border-radius: 50%;
+				}
+			`,
+			content: css`
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: ${elSize}px;
+				height: ${elSize}px;
+				overflow: hidden;
 			`,
 			disabled: css`
 				color: ${disabledColor.text};
@@ -36,4 +73,4 @@ const useTextButtonStyles = ({ color, disabled }: TextButtonStylesOptions) => {
 	return classes;
 };
 
-export default useTextButtonStyles;
+export default useIconButtonStyles;

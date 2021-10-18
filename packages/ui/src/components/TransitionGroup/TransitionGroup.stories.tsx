@@ -2,6 +2,8 @@ import { clsx } from "@littlethings/css";
 import { useState } from "preact/hooks";
 import TransitionGroup, { TransitionGroupProps } from ".";
 import useCSS from "../../hooks/useCSS";
+import Button from "../Button";
+import Gap from "../Gap";
 import Transition, { TransitionStatus } from "../Transition";
 
 export default {
@@ -15,6 +17,7 @@ const Template = (args: TransitionGroupProps) => {
 	const classes = useCSS(({ css }) => {
 		return {
 			item: css`
+				display: flex;
 				transition: opacity 1s linear;
 				opacity: 1;
 			`,
@@ -45,19 +48,24 @@ const Template = (args: TransitionGroupProps) => {
 				{items.map((item, i) => (
 					<Transition key={item} timeout={1000} enter exit appear>
 						{(status) => (
-							<div
-								class={clsx(
-									classes.item,
-									status === TransitionStatus.UNMOUNTED
-										? null
-										: classes[status]
-								)}
-								onClick={() => {
-									remove(i);
-								}}
-							>
-								Hello {item}
-							</div>
+							<>
+								<Button
+									variant="outlined"
+									onClick={() => remove(i)}
+									classes={{
+										root: clsx(
+											classes.item,
+											status ===
+												TransitionStatus.UNMOUNTED
+												? null
+												: classes[status]
+										),
+									}}
+								>
+									Remove Item #{item}
+								</Button>
+								{i !== items.length ? <Gap /> : null}
+							</>
 						)}
 					</Transition>
 				))}

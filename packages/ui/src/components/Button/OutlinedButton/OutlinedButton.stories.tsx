@@ -29,11 +29,16 @@ export default {
 	},
 } as Meta<OutlinedButtonProps>;
 
-const Template: Story<OutlinedButtonProps> = (args) => (
+const Template: Story<OutlinedButtonProps> = (args: OutlinedButtonProps) => (
 	<OutlinedButton {...args} />
 );
 
-export const Default = Template.bind({});
+export const Default: Story<OutlinedButtonProps> = Template.bind({});
+Default.args = {
+	classes: {
+		root: "my-class",
+	},
+};
 Default.parameters = {
 	docs: {
 		source: {

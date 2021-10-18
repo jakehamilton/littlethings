@@ -1,5 +1,7 @@
 import { useState } from "preact/hooks";
 import Transition, { TransitionProps } from ".";
+import Button from "../Button";
+import Gap from "../Gap";
 
 export default {
 	title: "Utility/Transition",
@@ -15,11 +17,12 @@ const Template = (args: TransitionProps) => {
 
 	return (
 		<div>
-			<input type="checkbox" onClick={handleToggle}>
+			<Button variant="text" onClick={handleToggle}>
 				Toggle
-			</input>
+			</Button>
+			<Gap />
 			<Transition in={checked} enter exit timeout={3000}>
-				{(status) => <>{status}</>}
+				{(status) => <>Current Status: {status}</>}
 			</Transition>
 		</div>
 	);

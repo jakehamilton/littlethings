@@ -13,13 +13,15 @@ import useButtonBaseStyles, {
 } from "./useButtonBaseStyles";
 
 export interface ButtonBaseClasses {
-	container?: CSSClass;
-	content?: CSSClass;
+	root: CSSClass;
+	container: CSSClass;
+	content: CSSClass;
+	disabled: CSSClass;
 }
 
 export interface ButtonBaseProps {
 	loading?: ButtonBaseStylesOptions["loading"];
-	color?: ButtonBaseStylesOptions["color"];
+	color?: ButtonBaseStylesOptions["color"] | "text";
 	size?: ButtonBaseStylesOptions["size"];
 	disabled?: ButtonBaseStylesOptions["disabled"];
 	prefixIcon?: ComponentChildren;
@@ -27,7 +29,7 @@ export interface ButtonBaseProps {
 	postfixIcon?: ComponentChildren;
 	PostfixIconProps?: DynamicProps<"span">;
 	LoadingProps?: Partial<LoadingProps>;
-	classes?: ButtonBaseClasses;
+	classes?: Partial<ButtonBaseClasses>;
 	onKeyDown?: (event: KeyboardEvent) => void;
 	onKeyUp?: (event: KeyboardEvent) => void;
 	onMouseUp?: (event: MouseEvent) => void;
@@ -39,7 +41,7 @@ export interface ButtonBaseProps {
 const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	as = "button",
 	children,
-	color,
+	color = "text",
 	size = "md",
 	loading = false,
 	disabled = false,
@@ -57,6 +59,9 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	...props
 }) => {
 	const rippleRef = useRippleRef();
+
+	const { theme, util } = useTheme();
+
 	const classes = useButtonBaseStyles({
 		color,
 		size,
@@ -66,18 +71,17 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 		hasPostfixIcon: Boolean(postfixIcon),
 	});
 
-	const { theme, util } = useTheme();
-
 	const loadingColor = useMemo(() => {
-		const background = util.color("background");
-
-		const base = color ? util.color(color) : background;
+		const themeColor =
+			color === "text" || color === "background"
+				? { text: theme.typography.color.primary }
+				: util.color(color);
 
 		return {
-			light: base.text,
-			dark: base.text,
-			main: base.text,
-			text: base.text,
+			light: themeColor.text,
+			dark: themeColor.text,
+			main: themeColor.text,
+			text: themeColor.text,
 		};
 	}, [theme, color]);
 
@@ -111,8 +115,6 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {
-			event.preventDefault();
-
 			onKeyDown?.(event);
 
 			if (
@@ -131,8 +133,6 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 
 	const handleKeyUp = useCallback(
 		(event: KeyboardEvent) => {
-			event.preventDefault();
-
 			onKeyUp?.(event);
 
 			if (
@@ -150,7 +150,13 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 		<Dynamic
 			as={as}
 			{...props}
-			class={clsx(classes.root, props.class)}
+			class={clsx(
+				classes.root,
+				props.class,
+				props.classes?.root,
+				disabled ? props.classes?.disabled : null
+			)}
+			onClick={disabled ? undefined : onClick}
 			onMouseDown={disabled ? undefined : handleMouseDown}
 			onMouseUp={disabled ? undefined : handleMouseUp}
 			onMouseLeave={disabled ? undefined : handleMouseLeave}

@@ -1,20 +1,24 @@
 import { Meta, Story } from "@storybook/preact";
 import { action } from "@storybook/addon-actions";
 
+import { Github } from "preact-feather";
+
 import {
 	boolean,
 	date,
 	disable,
 	object,
+	select,
+	themeColor,
 } from "../../../../.storybook/controls";
 
-import FilledButton, { FilledButtonProps } from ".";
+import IconButton, { IconButtonProps } from ".";
 
 const DEFAULT_CHILDREN = "Click Me";
 
 export default {
-	title: "Design System/Button/Filled",
-	component: FilledButton,
+	title: "Design System/Button/Icon",
+	component: IconButton,
 	args: {
 		children: DEFAULT_CHILDREN,
 		onClick: action("onClick"),
@@ -22,20 +26,27 @@ export default {
 		color: "primary",
 	},
 	argTypes: {
+		color: themeColor("primary"),
 		disabled: boolean({
 			defaultValue: false,
 			description: "Whether or not the button should be disabled.",
 		}),
-		float: boolean({
+		loading: boolean({
 			defaultValue: false,
-			description: "Make the button float above the page.",
+			description: "Show a loading spinner on the button.",
+		}),
+		size: select({
+			defaultValue: "md",
+			options: ["sm", "md", "lg", "xl"],
 		}),
 		children: disable(),
 	},
-} as Meta<FilledButtonProps>;
+} as Meta<IconButtonProps>;
 
-const Template: Story<FilledButtonProps> = (args: FilledButtonProps) => (
-	<FilledButton {...args} />
+const Template: Story<IconButtonProps> = (args: IconButtonProps) => (
+	<IconButton {...args}>
+		<Github />
+	</IconButton>
 );
 
 export const Default = Template.bind({});
@@ -44,24 +55,11 @@ Default.parameters = {
 		source: {
 			code: `
 import { Button } from "@littlethings/ui";
+import { Github } from "preact-feather";
 
-<Button variant="filled">${DEFAULT_CHILDREN}</Button>
-`.trim(),
-		},
-	},
-};
-
-export const Floating = Template.bind({});
-Floating.args = {
-	float: true,
-};
-Floating.parameters = {
-	docs: {
-		source: {
-			code: `
-import { Button } from "@littlethings/ui";
-
-<Button variant="filled" float>${DEFAULT_CHILDREN}</Button>
+<Button variant="icon">
+	<Github />
+</Button>
 `.trim(),
 		},
 	},
@@ -76,8 +74,11 @@ Disabled.parameters = {
 		source: {
 			code: `
 import { Button } from "@littlethings/ui";
+import { Github } from "preact-feather";
 
-<Button variant="filled" disabled>${DEFAULT_CHILDREN}</Button>
+<Button variant="icon" disabled>
+	<Github />
+</Button>
 `.trim(),
 		},
 	},
@@ -92,8 +93,11 @@ Small.parameters = {
 		source: {
 			code: `
 import { Button } from "@littlethings/ui";
+import { Github } from "preact-feather";
 
-<Button variant="filled" size="sm">${DEFAULT_CHILDREN}</Button>
+<Button variant="icon" size="sm">
+	<Github />
+</Button>
 `.trim(),
 		},
 	},
@@ -108,8 +112,11 @@ Medium.parameters = {
 		source: {
 			code: `
 import { Button } from "@littlethings/ui";
+import { Github } from "preact-feather";
 
-<Button variant="filled" size="md">${DEFAULT_CHILDREN}</Button>
+<Button variant="icon" size="md">
+	<Github />
+</Button>
 `.trim(),
 		},
 	},
@@ -124,8 +131,11 @@ Large.parameters = {
 		source: {
 			code: `
 import { Button } from "@littlethings/ui";
+import { Github } from "preact-feather";
 
-<Button variant="filled" size="lg">${DEFAULT_CHILDREN}</Button>
+<Button variant="icon" size="lg">
+	<Github />
+</Button>
 `.trim(),
 		},
 	},
@@ -140,8 +150,11 @@ ExtraLarge.parameters = {
 		source: {
 			code: `
 import { Button } from "@littlethings/ui";
+import { Github } from "preact-feather";
 
-<Button variant="filled" size="xl">${DEFAULT_CHILDREN}</Button>
+<Button variant="icon" size="xl">
+	<Github />
+</Button>
 `.trim(),
 		},
 	},

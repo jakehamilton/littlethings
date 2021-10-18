@@ -120,6 +120,19 @@ const Ripple: FunctionComponent<RippleProps> = ({
 	);
 
 	useEffect(() => {
+		// When we unmount, remove all callbacks and timeouts
+		return () => {
+			rippleCallback.current = null;
+			delayedUpdateRipplesCallback.current = null;
+
+			if (delayedUpdateRipplesTimeout.current) {
+				clearTimeout(delayedUpdateRipplesTimeout.current);
+				delayedUpdateRipplesTimeout.current = null;
+			}
+		};
+	}, []);
+
+	useEffect(() => {
 		// When `ripples` update, fire any saved callback for the last action.
 		rippleCallback.current?.();
 		rippleCallback.current = null;
@@ -251,10 +264,7 @@ const Ripple: FunctionComponent<RippleProps> = ({
 
 		setRipples((prevRipples) => {
 			if (prevRipples.length > 0) {
-				console.count("Remove Ripple");
 				const newRipples = prevRipples.slice(1);
-
-				console.log([...newRipples]);
 
 				return newRipples;
 			} else {

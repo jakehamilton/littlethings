@@ -4,7 +4,7 @@ import { ThemePaletteColor, ThemePaletteColorNames } from "../../types/theme";
 export type Size = "sm" | "md" | "lg" | "xl";
 
 export interface LoadingStylesOptions {
-	color: ThemePaletteColorNames | ThemePaletteColor;
+	color: ThemePaletteColorNames | ThemePaletteColor | "text";
 	size: Size;
 }
 
@@ -39,8 +39,16 @@ const getMeasurements = (size: Size): Measurements => {
 };
 
 const useLoadingStyles = ({ color, size }: LoadingStylesOptions) => {
-	const classes = useCSS(({ css, keyframes, util }) => {
-		const themeColor = util.color(color);
+	const classes = useCSS(({ css, keyframes, theme, util }) => {
+		const themeColor =
+			color === "text"
+				? {
+						light: theme.typography.color.primary,
+						main: theme.typography.color.primary,
+						dark: theme.typography.color.primary,
+						text: theme.typography.color.primary,
+				  }
+				: util.color(color);
 
 		const { rootSize, dotSize } = getMeasurements(size);
 

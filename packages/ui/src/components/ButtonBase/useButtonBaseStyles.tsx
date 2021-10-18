@@ -9,7 +9,7 @@ import {
 export type Size = "sm" | "md" | "lg" | "xl";
 
 export interface ButtonBaseStylesOptions {
-	color?: ThemePaletteColorNames | ThemePaletteColor;
+	color: ThemePaletteColorNames | ThemePaletteColor | "text";
 	size: Size;
 	loading: boolean;
 	disabled: boolean;
@@ -96,9 +96,8 @@ const useButtonBaseStyles = ({
 	hasPostfixIcon,
 }: ButtonBaseStylesOptions) => {
 	const classes = useCSS(({ css, theme, util }) => {
-		const background = theme.palette.background;
-
-		const themeColor = color ? util.color(color) : undefined;
+		const themeColor =
+			color === "text" ? util.color("background") : util.color(color);
 
 		const padding = getPadding(size, hasPrefixIcon, hasPostfixIcon);
 
@@ -107,9 +106,9 @@ const useButtonBaseStyles = ({
 		const fontSize = font.sizes[getFontSize(size)];
 
 		const focusRingColor =
-			themeColor && util.isReadable(background.main, themeColor.main)
-				? themeColor.main
-				: theme.typography.color.secondary;
+			color === "text" || color === "background"
+				? theme.typography.color.primary
+				: themeColor.main;
 
 		return {
 			root: css`

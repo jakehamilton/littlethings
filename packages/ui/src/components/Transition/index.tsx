@@ -1,6 +1,7 @@
 import {
 	cloneElement,
 	ComponentChildren,
+	FunctionComponent,
 	isValidElement,
 	toChildArray,
 } from "preact";
@@ -48,7 +49,7 @@ export interface TransitionProps {
 		| ((status: TransitionStatus) => ComponentChildren);
 }
 
-const Transition: DynamicComponent<TransitionProps> = (props) => {
+const Transition: FunctionComponent<TransitionProps> = (props) => {
 	// We diff the props later to see if we need to update the
 	// status to match a new `in` value.
 	const prevPropsRef = useRef(props);

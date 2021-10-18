@@ -1,6 +1,8 @@
 import { Meta, Story } from "@storybook/preact";
 import { action } from "@storybook/addon-actions";
 
+import { Github } from "preact-feather";
+
 import {
 	boolean,
 	date,

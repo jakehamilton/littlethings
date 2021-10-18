@@ -1,3 +1,26 @@
+import {
+	FilledButtonClasses,
+	FilledButtonProps,
+} from "../components/Button/FilledButton";
+import {
+	OutlinedButtonClasses,
+	OutlinedButtonProps,
+} from "../components/Button/OutlinedButton";
+import {
+	TextButtonClasses,
+	TextButtonProps,
+} from "../components/Button/TextButton";
+import { GapClasses, GapProps } from "../components/Gap";
+import {
+	IconButtonClasses,
+	IconButtonProps,
+} from "../components/Button/IconButton";
+import { LoadingClasses, LoadingProps } from "../components/Loading";
+import { SurfaceClasses, SurfaceProps } from "../components/Surface";
+import { CSSFactory, CSSFactoryInput } from "../hooks/useCSS";
+import { CSSClasses } from "./css";
+import { ProseClasses, ProseProps } from "../components/Prose";
+
 export type ThemeMode = "light" | "dark";
 
 export interface ThemeRounding {
@@ -66,6 +89,8 @@ export interface ThemeFont {
 	};
 }
 
+export type ThemeFontSizeNames = keyof ThemeFont["sizes"];
+
 export interface ThemeFontConfig {
 	family: string;
 	sizes: {
@@ -131,15 +156,23 @@ export interface ThemeShadowsConfig {
 	xl?: string;
 }
 
-export type ThemeOverride = () => void;
+export type ThemeOverride<
+	Classes extends CSSClasses = {},
+	Props extends object = {}
+> = (input: CSSFactoryInput, props: Props) => Partial<Classes>;
 
 export interface ThemeOverrides {
-	[key: string]: ThemeOverride;
+	Gap?: ThemeOverride<GapClasses, GapProps>;
+	Prose?: ThemeOverride<ProseClasses, ProseProps>;
+	Surface?: ThemeOverride<SurfaceClasses, SurfaceProps>;
+	Loading?: ThemeOverride<LoadingClasses, LoadingProps>;
+	TextButton?: ThemeOverride<TextButtonClasses, TextButtonProps>;
+	FilledButton?: ThemeOverride<FilledButtonClasses, FilledButtonProps>;
+	OutlinedButton?: ThemeOverride<OutlinedButtonClasses, OutlinedButtonProps>;
+	IconButton?: ThemeOverride<IconButtonClasses, IconButtonProps>;
 }
 
-export interface ThemeOverridesConfig {
-	[key: string]: ThemeOverride;
-}
+export type ThemeOverridesConfig = Partial<ThemeOverrides>;
 
 export interface Theme {
 	spacing: number;

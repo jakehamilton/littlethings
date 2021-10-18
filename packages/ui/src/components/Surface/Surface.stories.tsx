@@ -1,6 +1,7 @@
 import { clsx } from "@littlethings/css";
-import { Story } from "@storybook/preact";
+import { Meta, Story } from "@storybook/preact";
 import Surface, { SurfaceProps } from ".";
+import { select, themeColor } from "../../../.storybook/controls";
 import useCSS from "../../hooks/useCSS";
 
 export default {
@@ -9,7 +10,14 @@ export default {
 	args: {
 		elevation: "none",
 	},
-};
+	argTypes: {
+		color: themeColor("background"),
+		elevation: select({
+			defaultValue: "md",
+			options: ["xs", "sm", "md", "lg", "xl"],
+		}),
+	},
+} as Meta<SurfaceProps>;
 
 const Template: Story<SurfaceProps> = (args) => {
 	const classes = useCSS(({ css, util }) => {
@@ -17,7 +25,7 @@ const Template: Story<SurfaceProps> = (args) => {
 			root: css`
 				width: ${util.space(10)}px;
 				height: ${util.space(10)}px;
-				border-radius: ${util.round("md")};
+				border-radius: ${util.round("md")}px;
 			`,
 		};
 	});
@@ -42,11 +50,11 @@ export const Default: Story<SurfaceProps> = (args) => {
 
 	return (
 		<div class={classes.root}>
-			<Surface elevation="xs" class={classes.surface} />
-			<Surface elevation="sm" class={classes.surface} />
-			<Surface elevation="md" class={classes.surface} />
-			<Surface elevation="lg" class={classes.surface} />
-			<Surface elevation="xl" class={classes.surface} />
+			<Surface {...args} elevation="xs" class={classes.surface} />
+			<Surface {...args} elevation="sm" class={classes.surface} />
+			<Surface {...args} elevation="md" class={classes.surface} />
+			<Surface {...args} elevation="lg" class={classes.surface} />
+			<Surface {...args} elevation="xl" class={classes.surface} />
 		</div>
 	);
 };

@@ -77,6 +77,8 @@ html {
 
 		return {};
 	});
+
+	return null;
 };
 
 export default CSSBase;

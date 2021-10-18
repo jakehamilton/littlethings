@@ -1,16 +1,31 @@
 import useCSS from "../../hooks/useCSS";
-import { ThemeShadows } from "../../types/theme";
+import {
+	ThemePaletteColor,
+	ThemePaletteColorNames,
+	ThemeShadows,
+} from "../../types/theme";
 
 export interface SurfaceStylesOptions {
-	elevation?: keyof ThemeShadows | "none";
+	color: ThemePaletteColorNames | ThemePaletteColor;
+	variant: keyof Omit<ThemePaletteColor, "text">;
+	elevation: keyof ThemeShadows | "none";
 }
 
-const useSurfaceStyles = ({ elevation = "none" }: SurfaceStylesOptions) => {
+const useSurfaceStyles = ({
+	color,
+	variant,
+	elevation,
+}: SurfaceStylesOptions) => {
 	const classes = useCSS(({ css, util }) => {
+		const themeColor =
+			typeof color === "string" ? util.color(color) : color;
+
 		const shadow = elevation === "none" ? "none" : util.shadow(elevation);
 
 		return {
 			root: css`
+				color: ${themeColor.text};
+				background: ${themeColor[variant]};
 				box-shadow: ${shadow};
 			`,
 		};

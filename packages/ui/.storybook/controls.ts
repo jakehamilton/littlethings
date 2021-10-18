@@ -1,3 +1,5 @@
+import { ThemePaletteColorNames } from "../src/types/theme";
+
 type BooleanControl = {
 	type: "boolean";
 };
@@ -108,17 +110,15 @@ type Helper<Ctrl extends Control, P extends object = {}> = (
 	config?: ConfigWithoutType<Ctrl, P>
 ) => Config<Ctrl, P>;
 
-const spread =
-	<C extends Control, P extends Record<string, any> = {}>(
-		type: C["type"]
-	): Helper<C, P> =>
-	(config = {} as ConfigWithoutType<C, P>) => ({
-		...config,
-		control: {
-			...config?.control,
-			type,
-		},
-	});
+const spread = <C extends Control, P extends Record<string, any> = {}>(
+	type: C["type"]
+): Helper<C, P> => (config = {} as ConfigWithoutType<C, P>) => ({
+	...config,
+	control: {
+		...config?.control,
+		type,
+	},
+});
 
 export const disable = (config: Config<Control> = {}) => ({
 	...config,
@@ -154,3 +154,23 @@ export const text = spread<TextControl>("text");
 export const color = spread<ColorControl>("color");
 
 export const date = spread<DateControl>("date");
+
+export const themeColor = <P extends Record<string, any> = {}>(
+	defaultColor: ThemePaletteColorNames,
+	config?: ConfigWithoutType<SelectControl, P>
+) => {
+	const colors: Array<ThemePaletteColorNames> = [
+		"primary",
+		"secondary",
+		"background",
+	];
+
+	return select({
+		defaultValue: defaultColor,
+		options: colors,
+		...config,
+		control: {
+			...config?.control,
+		},
+	});
+};

@@ -1,19 +1,40 @@
 import { clsx } from "@littlethings/css";
+import useClasses from "../../../hooks/useClasses";
+import useOverrides from "../../../hooks/useOverrides";
+import { CSSClass } from "../../../types/css";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import { DynamicComponent } from "../../Dynamic";
 import useTextButtonStyles from "./useTextButtonStyles";
 
-export interface TextButtonProps extends ButtonBaseProps {}
+export interface TextButtonClasses {
+	root: CSSClass;
+	disabled: CSSClass;
+}
 
-const TextButton: DynamicComponent<TextButtonProps, "button"> = ({
-	children,
-	as = "button",
-	color = "primary",
-	size = "md",
-	disabled = false,
-	...props
-}) => {
-	const classes = useTextButtonStyles({ color, disabled });
+export interface TextButtonProps extends ButtonBaseProps {
+	classes?: Partial<ButtonBaseProps["classes"] & TextButtonClasses>;
+}
+
+const TextButton: DynamicComponent<TextButtonProps, "button"> = (props) => {
+	const {
+		children,
+		as = "button",
+		color = "primary",
+		size = "md",
+		disabled = false,
+		...baseProps
+	} = props;
+
+	const styles = useTextButtonStyles({ color, disabled });
+
+	const overrides = useOverrides("TextButton", props, [
+		as,
+		color,
+		size,
+		disabled,
+	]);
+
+	const classes = useClasses([styles, overrides, props.classes]);
 
 	return (
 		<ButtonBase
@@ -21,19 +42,21 @@ const TextButton: DynamicComponent<TextButtonProps, "button"> = ({
 			color={color}
 			disabled={disabled}
 			size={size}
-			{...props}
+			{...baseProps}
 			LoadingProps={{
-				...props.LoadingProps,
+				...baseProps.LoadingProps,
 				classes: {
-					...props.LoadingProps?.classes,
-					dot: clsx(classes.dot, props.LoadingProps?.classes?.dot),
+					...baseProps.LoadingProps?.classes,
+					dot: clsx(styles.dot, baseProps.LoadingProps?.classes?.dot),
 				},
 			}}
-			class={clsx(
-				classes.root,
-				disabled ? classes.disabled : null,
-				props.class
-			)}
+			classes={{
+				...baseProps.classes,
+				root: clsx(classes.root, baseProps.classes?.root),
+				disabled: disabled
+					? clsx(classes.disabled, baseProps.classes?.disabled)
+					: "",
+			}}
 		>
 			{children}
 		</ButtonBase>

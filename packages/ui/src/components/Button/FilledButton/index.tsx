@@ -1,25 +1,44 @@
 import { clsx } from "@littlethings/css";
-import { ComponentChildren } from "preact";
+import useClasses from "../../../hooks/useClasses";
+import useOverrides from "../../../hooks/useOverrides";
+import { CSSClass } from "../../../types/css";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
-import Dynamic, { DynamicComponent } from "../../Dynamic";
-import useFilledButtonStyles, {
-	FilledButtonStylesOptions,
-} from "./useFilledButtonStyles";
+import { DynamicComponent } from "../../Dynamic";
+import useFilledButtonStyles from "./useFilledButtonStyles";
+
+export interface FilledButtonClasses {
+	root: CSSClass;
+	float: CSSClass;
+	disabled: CSSClass;
+}
 
 export interface FilledButtonProps extends ButtonBaseProps {
+	classes?: Partial<ButtonBaseProps["classes"] & FilledButtonClasses>;
 	float?: boolean;
 }
 
-const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
-	children,
-	as = "button",
-	color = "primary",
-	disabled = false,
-	size = "md",
-	float = false,
-	...props
-}) => {
-	const classes = useFilledButtonStyles({ color, disabled });
+const FilledButton: DynamicComponent<FilledButtonProps, "button"> = (props) => {
+	const {
+		children,
+		as = "button",
+		color = "primary",
+		disabled = false,
+		size = "md",
+		float = false,
+		...baseProps
+	} = props;
+
+	const styles = useFilledButtonStyles({ color, disabled });
+
+	const overrides = useOverrides("FilledButton", props, [
+		as,
+		color,
+		disabled,
+		size,
+		float,
+	]);
+
+	const classes = useClasses([styles, overrides, props.classes]);
 
 	return (
 		<ButtonBase
@@ -27,20 +46,28 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = ({
 			color={color}
 			disabled={disabled}
 			size={size}
-			{...props}
+			{...baseProps}
 			LoadingProps={{
-				...props.LoadingProps,
+				...baseProps.LoadingProps,
 				classes: {
-					...props.LoadingProps?.classes,
-					dot: clsx(classes.dot, props.LoadingProps?.classes?.dot),
+					...baseProps.LoadingProps?.classes,
+					dot: clsx(
+						disabled ? styles.dot : null,
+						baseProps.LoadingProps?.classes?.dot
+					),
 				},
 			}}
-			class={clsx(
-				classes.root,
-				float ? classes.float : null,
-				disabled ? classes.disabled : null,
-				props.class
-			)}
+			classes={{
+				...baseProps.classes,
+				root: clsx(
+					classes.root,
+					baseProps.classes?.root,
+					float ? classes.float : null
+				),
+				disabled: disabled
+					? clsx(classes.disabled, baseProps.classes?.disabled)
+					: "",
+			}}
 		>
 			{children}
 		</ButtonBase>

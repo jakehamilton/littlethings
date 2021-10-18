@@ -10,8 +10,17 @@ const useOutlinedButtonStyles = ({
 	color,
 	disabled,
 }: OutlinedButtonStylesOptions) => {
-	const classes = useCSS(({ css, util }) => {
-		const themeColor = util.color(color);
+	const classes = useCSS(({ css, theme, util }) => {
+		const themeColor =
+			color === "text" || color === "background"
+				? {
+						light: theme.typography.color.primary,
+						main: theme.typography.color.primary,
+						dark: theme.typography.color.primary,
+						text: theme.typography.color.primary,
+				  }
+				: util.color(color);
+
 		const disabledColor = util.color("disabled");
 
 		return {
