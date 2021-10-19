@@ -6,21 +6,21 @@ import Surface from "../../src/components/Surface";
 const Surfaces = () => {
 	const classes = useCSS(({ css, util }) => {
 		return {
-			root: css`
-				display: flex;
-				flex-direction: column;
-				padding: ${util.space(4)}px;
-			`,
-			example: css`
-				display: flex;
-				flex-wrap: wrap;
-				gap: ${util.space(1)}px;
-			`,
-			surface: css`
-				width: ${util.space(8)}px;
-				height: ${util.space(8)}px;
-				border-radius: ${util.round("md")}px;
-			`,
+			root: css({
+				display: "flex",
+				flexDirection: "column",
+				padding: `${util.space(4)}px`,
+			}),
+			example: css({
+				display: "flex",
+				flexWrap: "wrap",
+				gap: `${util.space(1)}px`,
+			}),
+			surface: css({
+				width: `${util.space(8)}px`,
+				height: `${util.space(8)}px`,
+				borderRadius: `${util.round("md")}px`,
+			}),
 		};
 	});
 

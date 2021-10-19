@@ -18,21 +18,21 @@ const Swatch: FunctionComponent<{ intensity: string; background: string }> = ({
 }) => {
 	const classes = useCSS(({ css, theme, util }) => {
 		return {
-			root: css`
-				display: flex;
-				align-items: center;
-				flex-direction: column;
-			`,
-			color: css`
-				width: ${util.space(8)}px;
-				height: ${util.space(8)}px;
-				border-radius: ${util.round("md")}px;
-				background: ${background};
-			`,
-			intensity: css`
-				padding-top: 8px;
-				color: ${theme.typography.color.secondary};
-			`,
+			root: css({
+				display: "flex",
+				alignItems: "center",
+				flexDirection: "column",
+			}),
+			color: css({
+				width: `${util.space(8)}px`,
+				height: `${util.space(8)}px`,
+				borderRadius: `${util.round("md")}px`,
+				background,
+			}),
+			intensity: css({
+				paddingTop: "8px",
+				color: theme.typography.color.secondary,
+			}),
 		};
 	});
 

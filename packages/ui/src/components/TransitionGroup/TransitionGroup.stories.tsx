@@ -16,23 +16,23 @@ const Template = (args: TransitionGroupProps) => {
 
 	const classes = useCSS(({ css }) => {
 		return {
-			item: css`
-				display: flex;
-				transition: opacity 1s linear;
-				opacity: 1;
-			`,
-			entering: css`
-				opacity: 1;
-			`,
-			entered: css`
-				opacity: 1;
-			`,
-			exiting: css`
-				opacity: 0;
-			`,
-			exited: css`
-				opacity: 0;
-			`,
+			item: css({
+				display: "flex",
+				transition: "opacity 1s linear",
+				opacity: "1",
+			}),
+			entering: css({
+				opacity: "1",
+			}),
+			entered: css({
+				opacity: "1",
+			}),
+			exiting: css({
+				opacity: "0",
+			}),
+			exited: css({
+				opacity: "0",
+			}),
 		};
 	});
 

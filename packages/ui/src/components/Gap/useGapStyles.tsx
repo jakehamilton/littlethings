@@ -10,13 +10,13 @@ const useGapStyles = ({ size }: GapStylesOptions) => {
 	const classes = useCSS(({ css, util }) => {
 		const margin = util.space(size);
 		return {
-			root: css``,
-			vertical: css`
-				margin-top: ${margin}px;
-			`,
-			horizontal: css`
-				margin-left: ${margin}px;
-			`,
+			root: css({}),
+			vertical: css({
+				marginTop: `${margin}px`,
+			}),
+			horizontal: css({
+				marginLeft: `${margin}px`,
+			}),
 		};
 	});
 

@@ -74,16 +74,16 @@ const getFontSize = (size: Size): keyof ThemeFont["sizes"] => {
 	}
 };
 
-const getFontWeight = (size: Size): number => {
+const getFontWeight = (size: Size): string => {
 	switch (size) {
 		case "sm":
-			return 600;
+			return "600";
 		case "md":
-			return 600;
+			return "600";
 		case "lg":
-			return 600;
+			return "600";
 		case "xl":
-			return 600;
+			return "600";
 	}
 };
 
@@ -111,83 +111,83 @@ const useButtonBaseStyles = ({
 				: themeColor.main;
 
 		return {
-			root: css`
-				display: inline-flex;
-				align-items: center;
-				position: relative;
+			root: css({
+				display: "inline-flex",
+				alignItems: "center",
+				position: "relative",
 
-				border: none;
-				outline: none;
-				background: transparent;
+				border: "none",
+				outline: "none",
+				background: "transparent",
 
-				cursor: ${disabled ? "initial" : "pointer"};
-				border-radius: ${util.round("sm")}px;
+				cursor: disabled ? "initial" : "pointer",
+				borderRadius: `${util.round("sm")}px`,
 
-				font-size: ${fontSize.size}rem;
-				font-weight: ${getFontWeight(size)};
-				line-height: ${fontSize.height}rem;
-				text-transform: uppercase;
+				fontSize: `${fontSize.size}rem`,
+				fontWeight: getFontWeight(size),
+				lineHeight: `${fontSize.height}rem`,
+				textTransform: "uppercase",
 
-				padding-left: ${util.space(padding.left)}px;
-				padding-right: ${util.space(padding.right)}px;
-				padding-top: ${util.space(padding.top)}px;
-				padding-bottom: ${util.space(padding.bottom)}px;
+				paddingLeft: `${util.space(padding.left)}px`,
+				paddingRight: `${util.space(padding.right)}px`,
+				paddingTop: `${util.space(padding.top)}px`,
+				paddingBottom: `${util.space(padding.bottom)}px`,
 
-				&:focus {
-					outline: none;
-				}
+				"&:focus": {
+					outline: "none",
+				},
 
-				&::before {
-					position: absolute;
-					display: block;
-					content: "";
+				"&::before": {
+					position: "absolute",
+					display: "block",
+					content: "''",
 
-					width: calc(100% + ${util.space(2)}px);
-					height: calc(100% + ${util.space(2)}px);
+					width: `calc(100% + ${util.space(2)}px)`,
+					height: `calc(100% + ${util.space(2)}px)`,
 
-					top: 50%;
-					left: 50%;
+					top: "50%",
+					left: "50%",
 
-					transform: translate(-50%, -50%);
+					transform: "translate(-50%, -50%)",
 
-					border: 4px solid ${focusRingColor};
-					border-radius: ${util.round("md")}px;
+					border: `4px solid ${focusRingColor}`,
+					borderRadius: `${util.round("md")}px`,
 
-					opacity: 0;
-					visibility: hidden;
-					pointer-events: none;
-				}
+					opacity: "0",
+					visibility: "hidden",
+					pointerEvents: "none",
+				},
 
-				&:focus-visible {
-					&::before {
-						opacity: 1;
-						visibility: visible;
-					}
-				}
-			`,
-			container: css`
-				position: relative;
-			`,
-			loading: css`
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			`,
-			content: css`
-				opacity: ${loading ? 0 : 1};
-				visibility: ${loading ? "hidden" : "visible"};
-			`,
-			prefixIcon: css`
-				display: inline-flex;
-				margin-right: ${util.space(0.5)}px;
-			`,
-			postfixIcon: css`
-				display: inline-flex;
-				margin-left: ${util.space(0.5)}px;
-			`,
+				"&:focus-visible": {
+					"&::before": {
+						opacity: "1",
+						visibility: "visible",
+					},
+				},
+			}),
+			container: css({
+				position: "relative",
+			}),
+			loading: css({
+				position: "absolute",
+				width: "100%",
+				height: "100%",
+				top: "50%",
+				left: "50%",
+				transform: "translate(-50%, -50%)",
+			}),
+			content: css({
+				opacity: loading ? "0" : "1",
+				visibility: loading ? "hidden" : "visible",
+			}),
+			prefixIcon: css({
+				display: "inline-flex",
+				marginRight: `${util.space(0.5)}px`,
+			}),
+			postfixIcon: css({
+				display: "inline-flex",
+				marginLeft: `${util.space(0.5)}px`,
+			}),
 		};
 	});
 

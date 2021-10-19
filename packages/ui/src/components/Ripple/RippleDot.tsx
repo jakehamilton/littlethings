@@ -21,34 +21,34 @@ const RippleDot: FunctionComponent<RippleDotProps> = (props) => {
 			const radius = props.size / 2;
 
 			return {
-				root: css`
-					display: block;
-					position: absolute;
+				root: css({
+					display: "block",
+					position: "absolute",
 
-					width: ${props.size}px;
-					height: ${props.size}px;
-					top: ${-radius + props.y}px;
-					left: ${-radius + props.x}px;
-					opacity: 1;
-				`,
-				child: css`
-					display: block;
-					width: 100%;
-					height: 100%;
-					border-radius: 50%;
-					background-color: ${props.color ?? "currentColor"};
-					opacity: 0.3;
-					transform: scale(1);
-				`,
-				enter: css`
-					animation: ${grow} ${props.duration}ms ease-in-out;
-					opacity: 0.3;
-					transform: scale(1);
-				`,
-				exit: css`
-					animation: ${fadeOut} ${props.duration}ms ease-in-out;
-					opacity: 0;
-				`,
+					width: `${props.size}px`,
+					height: `${props.size}px`,
+					top: `${-radius + props.y}px`,
+					left: `${-radius + props.x}px`,
+					opacity: "1",
+				}),
+				child: css({
+					display: "block",
+					width: "100%",
+					height: "100%",
+					borderRadius: "50%",
+					backgroundColor: props.color ?? "currentColor",
+					opacity: "0.3",
+					transform: "scale(1)",
+				}),
+				enter: css({
+					animation: `${grow} ${props.duration}ms ease-in-out`,
+					opacity: "0.3",
+					transform: "scale(1)",
+				}),
+				exit: css({
+					animation: `${fadeOut} ${props.duration}ms ease-in-out`,
+					opacity: "0",
+				}),
 			};
 		},
 		[props.x, props.y, props.size, props.duration]

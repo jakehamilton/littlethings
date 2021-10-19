@@ -44,6 +44,16 @@ export default async () => {
 				fileName: (format) => `ui.${format}.js`,
 				formats: ["es", "umd", "cjs"],
 			},
+			rollupOptions: {
+				external: ["preact", "@littlethings/css", "tinycolor2"],
+				output: {
+					globals: {
+						"@littlethings/css": "LittleCSS",
+						preact: "Preact",
+						tinycolor2: "tinycolor",
+					},
+				},
+			},
 		},
 	});
 };

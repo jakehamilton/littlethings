@@ -12,23 +12,19 @@ const Header = () => {
 		const secondary = util.color("secondary");
 
 		return {
-			root: css`
-				display: flex;
-				flex-direction: column;
-				padding: ${util.space(8)}px ${util.space(4)}px;
-				background-image: linear-gradient(
-					80deg,
-					${primary.main},
-					${secondary.main}
-				);
-			`,
-			title: css`
-				font-size: 4.25rem;
-				line-height: 1;
-			`,
-			text: css`
-				color: ${primary.text};
-			`,
+			root: css({
+				display: "flex",
+				flexDirection: "column",
+				padding: `${util.space(8)}px ${util.space(4)}px`,
+				backgroundImage: `linear-gradient(80deg, ${primary.main}, ${secondary.main})`,
+			}),
+			title: css({
+				fontSize: "4.25rem",
+				lineHeight: "1",
+			}),
+			text: css({
+				color: primary.text,
+			}),
 		};
 	});
 
@@ -39,7 +35,7 @@ const Header = () => {
 				font="secondary"
 				classes={{ root: clsx(classes.title, classes.text) }}
 			>
-				LittleUI
+				Little UI
 			</Prose>
 			<Prose
 				size="md"

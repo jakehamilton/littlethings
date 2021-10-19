@@ -23,11 +23,11 @@ const useSurfaceStyles = ({
 		const shadow = elevation === "none" ? "none" : util.shadow(elevation);
 
 		return {
-			root: css`
-				color: ${themeColor.text};
-				background: ${themeColor[variant]};
-				box-shadow: ${shadow};
-			`,
+			root: css({
+				color: themeColor.text,
+				background: themeColor[variant],
+				boxShadow: shadow,
+			}),
 		};
 	});
 

@@ -24,17 +24,17 @@ const useOutlinedButtonStyles = ({
 		const disabledColor = util.color("disabled");
 
 		return {
-			root: css`
-				color: ${themeColor.main};
-				border: 2px solid ${themeColor.main};
-			`,
-			disabled: css`
-				color: ${disabledColor.text};
-				border: 2px solid ${disabledColor.text};
-			`,
-			dot: css`
-				background: ${disabled ? disabledColor.text : themeColor.main};
-			`,
+			root: css({
+				color: themeColor.main,
+				border: `2px solid ${themeColor.main}`,
+			}),
+			disabled: css({
+				color: disabledColor.text,
+				border: `2px solid ${disabledColor.text}`,
+			}),
+			dot: css({
+				background: disabled ? disabledColor.text : themeColor.main,
+			}),
 		};
 	});
 

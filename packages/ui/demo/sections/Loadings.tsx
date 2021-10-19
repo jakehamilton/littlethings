@@ -6,17 +6,17 @@ import Loading from "../../src/components/Loading";
 const Loadings = () => {
 	const classes = useCSS(({ css, util }) => {
 		return {
-			root: css`
-				display: flex;
-				flex-direction: column;
-				padding: ${util.space(4)}px;
-			`,
-			example: css`
-				display: flex;
-				flex-wrap: wrap;
-				gap: ${util.space(3)}px;
-				padding-left: ${util.space(1)}px;
-			`,
+			root: css({
+				display: "flex",
+				flexDirection: "column",
+				padding: `${util.space(4)}px`,
+			}),
+			example: css({
+				display: "flex",
+				flexWrap: "wrap",
+				gap: `${util.space(3)}px`,
+				paddingLeft: `${util.space(1)}px`,
+			}),
 		};
 	});
 

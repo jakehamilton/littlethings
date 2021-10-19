@@ -63,54 +63,53 @@ const useLoadingStyles = ({ color, size }: LoadingStylesOptions) => {
     `;
 
 		return {
-			root: css`
-				position: relative;
-				width: ${rootSize}px;
-				height: ${rootSize}px;
-			`,
-			container: css`
-				position: absolute;
+			root: css({
+				position: "relative",
+				width: `${rootSize}px`,
+				height: `${rootSize}px`,
+			}),
+			container: css({
+				position: "absolute",
 
-				width: ${rootSize}px;
-				height: ${rootSize}px;
+				width: `${rootSize}px`,
+				height: `${rootSize}px`,
 
-				top: 50%;
-				left: 50%;
+				top: "50%",
+				left: "50%",
 
-				transform: translate(-50%, -50%) rotate(0);
-				animation: ${spin} 1.3s cubic-bezier(0.53, 0.16, 0.39, 0.9)
-					infinite;
-			`,
-			dot: css`
-				position: absolute;
+				transform: "translate(-50%, -50%) rotate(0)",
+				animation: `${spin} 1.3s cubic-bezier(0.53, 0.16, 0.39, 0.9) infinite`,
+			}),
+			dot: css({
+				position: "absolute",
 
-				width: ${dotSize}px;
-				height: ${dotSize}px;
+				width: `${dotSize}px`,
+				height: `${dotSize}px`,
 
-				border-radius: 50%;
+				borderRadius: "50%",
 
-				background: ${themeColor.main};
+				background: themeColor.main,
 
-				&:nth-child(1) {
-					top: 0;
-					left: 0;
-				}
+				"&:nth-child(1)": {
+					top: "0",
+					left: "0",
+				},
 
-				&:nth-child(2) {
-					top: 0;
-					right: 0;
-				}
+				"&:nth-child(2)": {
+					top: "0",
+					right: "0",
+				},
 
-				&:nth-child(3) {
-					bottom: 0;
-					left: 0;
-				}
+				"&:nth-child(3)": {
+					bottom: "0",
+					left: "0",
+				},
 
-				&:nth-child(4) {
-					bottom: 0;
-					right: 0;
-				}
-			`,
+				"&:nth-child(4)": {
+					bottom: "0",
+					right: "0",
+				},
+			}),
 		};
 	});
 

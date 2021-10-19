@@ -21,15 +21,15 @@ const useTextButtonStyles = ({ color, disabled }: TextButtonStylesOptions) => {
 		const disabledColor = util.color("disabled");
 
 		return {
-			root: css`
-				color: ${themeColor.main};
-			`,
-			disabled: css`
-				color: ${disabledColor.text};
-			`,
-			dot: css`
-				background: ${disabled ? disabledColor.text : themeColor.main};
-			`,
+			root: css({
+				color: themeColor.main,
+			}),
+			disabled: css({
+				color: disabledColor.text,
+			}),
+			dot: css({
+				background: disabled ? disabledColor.text : themeColor.main,
+			}),
 		};
 	});
 

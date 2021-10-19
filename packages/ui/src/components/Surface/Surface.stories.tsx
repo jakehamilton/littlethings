@@ -22,11 +22,11 @@ export default {
 const Template: Story<SurfaceProps> = (args) => {
 	const classes = useCSS(({ css, util }) => {
 		return {
-			root: css`
-				width: ${util.space(10)}px;
-				height: ${util.space(10)}px;
-				border-radius: ${util.round("md")}px;
-			`,
+			root: css({
+				width: `${util.space(10)}px`,
+				height: `${util.space(10)}px`,
+				borderRadius: `${util.round("md")}px`,
+			}),
 		};
 	});
 	return <Surface {...args} class={classes.root} />;
@@ -35,16 +35,16 @@ const Template: Story<SurfaceProps> = (args) => {
 export const Default: Story<SurfaceProps> = (args) => {
 	const classes = useCSS(({ css, util }) => {
 		return {
-			root: css`
-				display: flex;
-				flex-wrap: wrap;
-				gap: ${util.space(4)}px;
-			`,
-			surface: css`
-				width: ${util.space(8)}px;
-				height: ${util.space(8)}px;
-				border-radius: ${util.round("sm")}px;
-			`,
+			root: css({
+				display: "flex",
+				flexWrap: "wrap",
+				gap: `${util.space(4)}px`,
+			}),
+			surface: css({
+				width: `${util.space(8)}px`,
+				height: `${util.space(8)}px`,
+				borderRadius: `${util.round("sm")}px`,
+			}),
 		};
 	});
 

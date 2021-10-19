@@ -42,31 +42,31 @@ const useIconButtonStyles = ({
 		const disabledColor = util.color("disabled");
 
 		return {
-			root: css`
-				color: ${themeColor.main};
-				border-radius: 50%;
-				width: ${elSize}px;
-				height: ${elSize}px;
-				padding: 0;
+			root: css({
+				color: themeColor.main,
+				borderRadius: "50%",
+				width: `${elSize}px`,
+				height: `${elSize}px`,
+				padding: "0",
 
-				&::before {
-					border-radius: 50%;
-				}
-			`,
-			content: css`
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				width: ${elSize}px;
-				height: ${elSize}px;
-				overflow: hidden;
-			`,
-			disabled: css`
-				color: ${disabledColor.text};
-			`,
-			dot: css`
-				background: ${disabled ? disabledColor.text : themeColor.main};
-			`,
+				"&::before": {
+					borderRadius: "50%",
+				},
+			}),
+			content: css({
+				display: "inline-flex",
+				alignItems: "center",
+				justifyContent: "center",
+				width: `${elSize}px`,
+				height: `${elSize}px`,
+				overflow: "hidden",
+			}),
+			disabled: css({
+				color: disabledColor.text,
+			}),
+			dot: css({
+				background: disabled ? disabledColor.text : themeColor.main,
+			}),
 		};
 	});
 

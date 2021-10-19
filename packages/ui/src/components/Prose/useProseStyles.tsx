@@ -33,14 +33,14 @@ const useProseStyles = ({ color, variant, font, size }: ProseStylesConfig) => {
 		const sizeVariant = themeFont.sizes[size];
 
 		return {
-			root: css`
-				${themeColor ? `color: ${themeColor.main};` : ""}
+			root: css({
+				color: themeColor ? themeColor.main : "currentColor",
 
-				font-family: ${themeFont.family};
-				font-size: ${sizeVariant.size}rem;
-				font-weight: ${sizeVariant.weight};
-				line-height: ${sizeVariant.height};
-			`,
+				fontFamily: themeFont.family,
+				fontSize: `${sizeVariant.size}rem`,
+				fontWeight: String(sizeVariant.weight),
+				lineHeight: String(sizeVariant.height),
+			}),
 		};
 	});
 
