@@ -27,16 +27,14 @@ const isTemplateStringsArray = (x: any): x is TemplateStringsArray =>
 
 function css(
 	this: CSSContext | void,
-	definitionsOrStrings: CSSDefinitions | TemplateStringsArray,
+	block: CSSDefinitions | TemplateStringsArray,
 	...data: Array<any>
 ): string {
 	const context: CSSContext = this || {};
 
-	const compiled: string | CSSDefinitions = isTemplateStringsArray(
-		definitionsOrStrings
-	)
-		? compile(definitionsOrStrings, data)
-		: definitionsOrStrings;
+	const compiled: string | CSSDefinitions = isTemplateStringsArray(block)
+		? compile(block, data)
+		: block;
 
 	const sheet = getSheet(context.target);
 
