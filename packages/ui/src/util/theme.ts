@@ -17,9 +17,11 @@ import Black from "../colors/black";
 import Light from "../colors/light";
 import Dark from "../colors/dark";
 import Gray from "../colors/gray";
+import CoolGray from "../colors/coolGray";
 import Purple from "../colors/purple";
 import tinycolor from "tinycolor2";
 import Orange from "../colors/orange";
+import WarmGray from "../colors/warmGray";
 
 const DEFAULT_SPACING: number = 8;
 
@@ -176,10 +178,10 @@ const DEFAULT_DARK_PALETTE: ThemePalette = {
 		text: White["900"],
 	},
 	disabled: {
-		light: Gray["300"],
-		main: Gray["500"],
-		dark: Gray["700"],
-		text: Gray["900"],
+		light: Black["50"],
+		main: Black["100"],
+		dark: Black["400"],
+		text: White["300"],
 	},
 };
 

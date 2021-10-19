@@ -3,7 +3,9 @@ import useCSS from "../../hooks/useCSS";
 const CSSBase = () => {
 	// @TODO(jakehamilton): Come back and turn this into an object
 	//  for bundle size improvements.
-	useCSS(({ glob, theme }) => {
+	useCSS(({ glob, theme, util }) => {
+		const background = util.color("background");
+
 		glob`
 /* Box sizing rules */
 *,
@@ -73,6 +75,8 @@ html {
   font-size: ${theme.typography.base}px;
   font-family: ${theme.typography.primary.family};
   font-weight: normal;
+  color: ${background.text};
+  background: ${background.main};
 }`;
 
 		return {};

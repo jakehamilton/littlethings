@@ -4,7 +4,7 @@ import CSSBase from "../src/components/CSSBase";
 import App from "./App";
 
 render(
-	<ThemeProvider>
+	<ThemeProvider mode="dark">
 		<CSSBase />
 		<App />
 	</ThemeProvider>,
