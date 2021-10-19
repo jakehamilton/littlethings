@@ -50,20 +50,20 @@ const Swatches: FunctionComponent<{ color: Color; name: string }> = ({
 }) => {
 	const classes = useCSS(({ css, theme }) => {
 		return {
-			root: css`
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-			`,
-			title: css`
-				color: ${theme.typography.color.primary};
-				font-weight: 600;
-			`,
-			swatches: css`
-				display: flex;
-				gap: 8px;
-				margin-bottom: 16px;
-			`,
+			root: css({
+				display: "flex",
+				flexDirection: "column",
+				gap: "4px",
+			}),
+			title: css({
+				color: theme.typography.color.primary,
+				fontWeight: "600",
+			}),
+			swatches: css({
+				display: "flex",
+				gap: "8px",
+				marginBottom: "16px",
+			}),
 		};
 	});
 
@@ -87,10 +87,10 @@ const Swatches: FunctionComponent<{ color: Color; name: string }> = ({
 const render = () => {
 	const classes = useCSS(({ css, theme }) => {
 		return {
-			root: css`
-				padding: ${theme.spacing}px ${theme.spacing * 2}px;
-				background-color: ${theme.palette.background.main};
-			`,
+			root: css({
+				padding: `${theme.spacing}px ${theme.spacing * 2}px`,
+				backgroundColor: theme.palette.background.main,
+			}),
 		};
 	});
 

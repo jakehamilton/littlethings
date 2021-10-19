@@ -52,15 +52,15 @@ const useLoadingStyles = ({ color, size }: LoadingStylesOptions) => {
 
 		const { rootSize, dotSize } = getMeasurements(size);
 
-		const spin = keyframes`
-      from {
-        transform: translate(-50%, -50%) rotate(0deg);
-      }
+		const spin = keyframes({
+			from: {
+				transform: "translate(-50%, -50%) rotate(0deg)",
+			},
 
-      to {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
-    `;
+			to: {
+				transform: "translate(-50%, -50%) rotate(360deg)",
+			},
+		});
 
 		return {
 			root: css({
