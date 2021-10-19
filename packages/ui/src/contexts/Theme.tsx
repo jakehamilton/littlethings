@@ -3,11 +3,13 @@ import { StateUpdater, useMemo, useState } from "preact/hooks";
 import tinycolor from "tinycolor2";
 
 import {
+	DynamicThemePaletteColorNames,
 	Theme,
+	ThemeColorName,
 	ThemeFont,
 	ThemeMode,
 	ThemePaletteColor,
-	ThemePaletteColorNames,
+	ThemePaletteColorName,
 	ThemeRounding,
 	ThemeShadows,
 	ThemeSpec,
@@ -21,9 +23,7 @@ export interface ThemeUtil {
 	round: (size: keyof ThemeRounding) => number;
 	font: (name: ThemeTypographyName) => ThemeFont;
 	shadow: (name: keyof ThemeShadows) => string;
-	color: (
-		color: ThemePaletteColorNames | ThemePaletteColor
-	) => ThemePaletteColor;
+	color: (color: ThemeColorName | ThemePaletteColor) => ThemePaletteColor;
 	lighten: (color: string, amount?: number) => string;
 	darken: (color: string, amount?: number) => string;
 	isReadable: (
@@ -77,6 +77,11 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 	}, [themes, mode]);
 
 	const util = useMemo(() => {
+		const ColorCache = new Map<
+			ThemePaletteColorName | DynamicThemePaletteColorNames,
+			ThemePaletteColor
+		>();
+
 		const util: ThemeUtil = {
 			space: (size) => theme.spacing * size,
 			round: (size) => theme.rounding[size],
@@ -86,7 +91,45 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 				if (typeof color === "object") {
 					return color;
 				} else {
-					return theme.palette[color];
+					const [name, variant] = color.split(".");
+
+					if (variant === undefined || variant === "") {
+						return theme.palette[name as ThemePaletteColorName];
+					} else {
+						if (ColorCache.has(color)) {
+							return ColorCache.get(color)!;
+						}
+
+						const themeColor =
+							theme.palette[name as ThemePaletteColorName][
+								variant as keyof ThemePaletteColor
+							];
+
+						const textColor =
+							theme.palette[name as ThemePaletteColorName][
+								variant === "text" ? "main" : "text"
+							];
+
+						const newColor: ThemePaletteColor = {
+							light:
+								"#" + tinycolor(themeColor).lighten().toHex(),
+							main: themeColor,
+							dark: "#" + tinycolor(themeColor).darken().toHex(),
+							text:
+								"#" +
+								tinycolor
+									.mostReadable(themeColor, [textColor], {
+										includeFallbackColors: true,
+										level: "AA",
+										size: "small",
+									})
+									.toHex(),
+						};
+
+						ColorCache.set(color, newColor);
+
+						return newColor;
+					}
 				}
 			},
 			lighten: (color, amount) => {

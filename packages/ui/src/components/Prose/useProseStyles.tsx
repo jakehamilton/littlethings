@@ -1,48 +1,52 @@
 import useCSS from "../../hooks/useCSS";
 import {
+	ThemeColorName,
 	ThemeFontSizeNames,
 	ThemePaletteColor,
-	ThemePaletteColorNames,
+	ThemePaletteColorName,
 	ThemeTypographyColor,
 	ThemeTypographyName,
 } from "../../types/theme";
 
 export interface ProseStylesConfig {
-	color?: ThemePaletteColorNames | ThemePaletteColor;
+	color?: ThemeColorName | ThemePaletteColor;
 	variant?: keyof ThemeTypographyColor;
 	font: ThemeTypographyName;
 	size: ThemeFontSizeNames;
 }
 
 const useProseStyles = ({ color, variant, font, size }: ProseStylesConfig) => {
-	const classes = useCSS(({ css, theme, util }) => {
-		const themeColor = color
-			? util.color(color)
-			: variant === "primary"
-			? {
-					main: theme.typography.color.primary,
-			  }
-			: variant === "secondary"
-			? {
-					main: theme.typography.color.secondary,
-			  }
-			: undefined;
+	const classes = useCSS(
+		({ css, theme, util }) => {
+			const themeColor = color
+				? util.color(color)
+				: variant === "primary"
+				? {
+						main: theme.typography.color.primary,
+				  }
+				: variant === "secondary"
+				? {
+						main: theme.typography.color.secondary,
+				  }
+				: undefined;
 
-		const themeFont = util.font(font);
+			const themeFont = util.font(font);
 
-		const sizeVariant = themeFont.sizes[size];
+			const sizeVariant = themeFont.sizes[size];
 
-		return {
-			root: css({
-				color: themeColor ? themeColor.main : "currentColor",
+			return {
+				root: css({
+					color: themeColor ? themeColor.main : "currentColor",
 
-				fontFamily: themeFont.family,
-				fontSize: `${sizeVariant.size}rem`,
-				fontWeight: String(sizeVariant.weight),
-				lineHeight: String(sizeVariant.height),
-			}),
-		};
-	});
+					fontFamily: themeFont.family,
+					fontSize: `${sizeVariant.size}rem`,
+					fontWeight: String(sizeVariant.weight),
+					lineHeight: String(sizeVariant.height),
+				}),
+			};
+		},
+		[color, variant, font, size]
+	);
 
 	return classes;
 };

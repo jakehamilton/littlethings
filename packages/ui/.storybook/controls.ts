@@ -1,4 +1,4 @@
-import { ThemePaletteColorNames } from "../src/types/theme";
+import { ThemeColorName, ThemePaletteColorName } from "../src/types/theme";
 
 type BooleanControl = {
 	type: "boolean";
@@ -156,10 +156,10 @@ export const color = spread<ColorControl>("color");
 export const date = spread<DateControl>("date");
 
 export const themeColor = <P extends Record<string, any> = {}>(
-	defaultColor: ThemePaletteColorNames,
+	defaultColor: ThemePaletteColorName,
 	config?: ConfigWithoutType<SelectControl, P>
 ) => {
-	const colors: Array<ThemePaletteColorNames> = [
+	const colors: Array<ThemeColorName> = [
 		"primary",
 		"secondary",
 		"background",

@@ -26,49 +26,52 @@ const useIconButtonStyles = ({
 	color,
 	disabled,
 }: IconButtonStylesOptions) => {
-	const classes = useCSS(({ css, theme, util }) => {
-		const elSize = getSize(size);
+	const classes = useCSS(
+		({ css, theme, util }) => {
+			const elSize = getSize(size);
 
-		const themeColor =
-			color === "text" || color === "background"
-				? {
-						light: theme.typography.color.primary,
-						main: theme.typography.color.primary,
-						dark: theme.typography.color.primary,
-						text: theme.typography.color.primary,
-				  }
-				: util.color(color);
+			const themeColor =
+				color === "text" || color === "background"
+					? {
+							light: theme.typography.color.primary,
+							main: theme.typography.color.primary,
+							dark: theme.typography.color.primary,
+							text: theme.typography.color.primary,
+					  }
+					: util.color(color);
 
-		const disabledColor = util.color("disabled");
+			const disabledColor = util.color("disabled");
 
-		return {
-			root: css({
-				color: themeColor.main,
-				borderRadius: "50%",
-				width: `${elSize}px`,
-				height: `${elSize}px`,
-				padding: "0",
-
-				"&::before": {
+			return {
+				root: css({
+					color: themeColor.main,
 					borderRadius: "50%",
-				},
-			}),
-			content: css({
-				display: "inline-flex",
-				alignItems: "center",
-				justifyContent: "center",
-				width: `${elSize}px`,
-				height: `${elSize}px`,
-				overflow: "hidden",
-			}),
-			disabled: css({
-				color: disabledColor.text,
-			}),
-			dot: css({
-				background: disabled ? disabledColor.text : themeColor.main,
-			}),
-		};
-	});
+					width: `${elSize}px`,
+					height: `${elSize}px`,
+					padding: "0",
+
+					"&::before": {
+						borderRadius: "50%",
+					},
+				}),
+				content: css({
+					display: "inline-flex",
+					alignItems: "center",
+					justifyContent: "center",
+					width: `${elSize}px`,
+					height: `${elSize}px`,
+					overflow: "hidden",
+				}),
+				disabled: css({
+					color: disabledColor.text,
+				}),
+				dot: css({
+					background: disabled ? disabledColor.text : themeColor.main,
+				}),
+			};
+		},
+		[size, color, disabled]
+	);
 
 	return classes;
 };

@@ -60,7 +60,13 @@ export interface ThemePalette {
 	disabled: ThemePaletteColor;
 }
 
-export type ThemePaletteColorNames = keyof ThemePalette;
+export type ThemePaletteColorName = keyof ThemePalette;
+
+export type DynamicThemePaletteColorNames = `${keyof ThemePalette}.${keyof ThemePaletteColor}`;
+
+export type ThemeColorName =
+	| ThemePaletteColorName
+	| DynamicThemePaletteColorNames;
 
 export interface ThemePaletteConfig {
 	primary?: ThemePaletteColorConfig;

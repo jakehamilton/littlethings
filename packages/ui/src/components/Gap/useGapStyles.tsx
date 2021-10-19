@@ -7,18 +7,21 @@ export interface GapStylesOptions {
 }
 
 const useGapStyles = ({ size }: GapStylesOptions) => {
-	const classes = useCSS(({ css, util }) => {
-		const margin = util.space(size);
-		return {
-			root: css({}),
-			vertical: css({
-				marginTop: `${margin}px`,
-			}),
-			horizontal: css({
-				marginLeft: `${margin}px`,
-			}),
-		};
-	});
+	const classes = useCSS(
+		({ css, util }) => {
+			const margin = util.space(size);
+			return {
+				root: css({}),
+				vertical: css({
+					marginTop: `${margin}px`,
+				}),
+				horizontal: css({
+					marginLeft: `${margin}px`,
+				}),
+			};
+		},
+		[size]
+	);
 
 	return classes;
 };
