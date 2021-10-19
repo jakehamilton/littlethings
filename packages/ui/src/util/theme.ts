@@ -18,7 +18,6 @@ import Light from "../colors/light";
 import Dark from "../colors/dark";
 import Gray from "../colors/gray";
 import Purple from "../colors/purple";
-import Emerald from "../colors/emerald";
 import tinycolor from "tinycolor2";
 import Orange from "../colors/orange";
 
