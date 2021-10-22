@@ -23,6 +23,8 @@ For packages that this ticket affects, please replace its
 "[ ]" with "[x]".
 -->
 
+-   [ ] @littlethings/ui
+-   [ ] @littlethings/css
 -   [ ] @littlethings/log
 -   [ ] @littlethings/test
 
