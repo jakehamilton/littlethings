@@ -40,11 +40,11 @@ const DEBUG = HAS_DEBUG ? new RegExp(process.env.DEBUG) : null;
  * @returns {string}
  */
 const getTimestamp = () => {
-    if (TIMESTAMP) {
-        return `${kleur.dim(new Date().toISOString())} `;
-    } else {
-        return "";
-    }
+	if (TIMESTAMP) {
+		return `${kleur.dim(new Date().toISOString())} `;
+	} else {
+		return "";
+	}
 };
 
 /**
@@ -54,39 +54,39 @@ const getTimestamp = () => {
  * @returns {string} prefix
  */
 const getLogPrefix = (name, prefix) => {
-    if (NO_PREFIX) {
-        return "";
-    }
+	if (NO_PREFIX) {
+		return "";
+	}
 
-    const userPrefix = prefix ? `[${prefix}]` : "";
+	const userPrefix = prefix ? `[${prefix}]` : "";
 
-    const timestamp = getTimestamp();
+	const timestamp = getTimestamp();
 
-    switch (name) {
-        case "SILENT":
-            if (userPrefix === "") {
-                return "";
-            } else {
-                return `${timestamp}${kleur.bold().white(userPrefix)}`;
-            }
-        case "INFO":
-            return `${timestamp}${kleur.bold().blue(`${userPrefix}[INFO]`)} `;
-        case "WARN":
-            return `${timestamp}${kleur.bold().yellow(`${userPrefix}[WARN]`)} `;
-        case "DEBUG":
-            return `${timestamp}${kleur
-                .bold()
-                .magenta(`${userPrefix}[DEBUG]`)} `;
-        case "TRACE":
-            return `${timestamp}${kleur.bold().dim(`${userPrefix}[TRACE]`)} `;
-        case "ERROR":
-            return `${timestamp}${kleur.bold().red(`${userPrefix}[ERROR]`)} `;
-        case "FATAL":
-            return `${timestamp}${kleur
-                .bold()
-                .bgRed()
-                .white(`${userPrefix}[FATAL]`)} `;
-    }
+	switch (name) {
+		case "SILENT":
+			if (userPrefix === "") {
+				return "";
+			} else {
+				return `${timestamp}${kleur.bold().white(userPrefix)}`;
+			}
+		case "INFO":
+			return `${timestamp}${kleur.bold().blue(`${userPrefix}[INFO]`)} `;
+		case "WARN":
+			return `${timestamp}${kleur.bold().yellow(`${userPrefix}[WARN]`)} `;
+		case "DEBUG":
+			return `${timestamp}${kleur
+				.bold()
+				.magenta(`${userPrefix}[DEBUG]`)} `;
+		case "TRACE":
+			return `${timestamp}${kleur.bold().dim(`${userPrefix}[TRACE]`)} `;
+		case "ERROR":
+			return `${timestamp}${kleur.bold().red(`${userPrefix}[ERROR]`)} `;
+		case "FATAL":
+			return `${timestamp}${kleur
+				.bold()
+				.bgRed()
+				.white(`${userPrefix}[FATAL]`)} `;
+	}
 };
 
 /**
@@ -102,15 +102,15 @@ const getVerbosity = util.getNumberFromLevel;
 let verbosity;
 
 if (process && process.env) {
-    // Expecting node environment.
-    // @ts-ignore
-    verbosity = util.getNumberFromLevel(
-        process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : "INFO"
-    );
+	// Expecting node environment.
+	verbosity = util.getNumberFromLevel(
+		// @ts-ignore
+		process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : "INFO"
+	);
 } else if (window) {
-    // Expecting browser environment.
-    // @ts-ignore
-    verbosity = util.getNumberFromLevel(window.LOG_LEVEL.toUpperCase());
+	// Expecting browser environment.
+	// @ts-ignore
+	verbosity = util.getNumberFromLevel(window.LOG_LEVEL.toUpperCase());
 }
 
 /**
@@ -120,8 +120,8 @@ if (process && process.env) {
  * @returns {void}
  */
 const setVerbosity = (name) => {
-    verbosity = util.getNumberFromLevel(name);
-    process.env.LOG_LEVEL = name;
+	verbosity = util.getNumberFromLevel(name);
+	process.env.LOG_LEVEL = name;
 };
 
 /**
@@ -130,39 +130,39 @@ const setVerbosity = (name) => {
  * @param {boolean} [wrap]
  */
 const getLogMessage = (message, wrap = false) => {
-    if (message === undefined) {
-        return "undefined";
-    } else if (message === null) {
-        return "null";
-    } else if (Array.isArray(message)) {
-        const output = message.map((item) => {
-            return getLogMessage(item, true);
-        });
+	if (message === undefined) {
+		return "undefined";
+	} else if (message === null) {
+		return "null";
+	} else if (Array.isArray(message)) {
+		const output = message.map((item) => {
+			return getLogMessage(item, true);
+		});
 
-        return output.join(kleur.white(","));
-    } else if (typeof message === "object") {
-        let output = [];
+		return output.join(kleur.white(","));
+	} else if (typeof message === "object") {
+		let output = [];
 
-        for (const key of Object.keys(message)) {
-            output.push(
-                `${kleur.bold().white(`${key}=`)}${kleur.gray(
-                    getLogMessage(message[key], true)
-                )}`
-            );
-        }
+		for (const key of Object.keys(message)) {
+			output.push(
+				`${kleur.bold().white(`${key}=`)}${kleur.gray(
+					getLogMessage(message[key], true)
+				)}`
+			);
+		}
 
-        if (wrap) {
-            return `${kleur.bold().white("{")} ${output.join(
-                " "
-            )} ${kleur.bold().white("}")}`;
-        } else {
-            return output.join(" ");
-        }
-    } else if (typeof message === "string" && wrap) {
-        return `"${message.replace('"', '\\"')}"`;
-    } else {
-        return message;
-    }
+		if (wrap) {
+			return `${kleur.bold().white("{")} ${output.join(
+				" "
+			)} ${kleur.bold().white("}")}`;
+		} else {
+			return output.join(" ");
+		}
+	} else if (typeof message === "string" && wrap) {
+		return `"${message.replace('"', '\\"')}"`;
+	} else {
+		return message;
+	}
 };
 
 /**
@@ -171,26 +171,26 @@ const getLogMessage = (message, wrap = false) => {
  * @param {LogLevelName} name
  */
 const logger = (name, prefix = "") => {
-    const level = util.getNumberFromLevel(name);
+	const level = util.getNumberFromLevel(name);
 
-    /**
-     * Log a message to stdout.
-     *
-     * @param {string} message
-     */
-    const logger = (message) => {
-        if (verbosity >= level) {
-            if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
-                return;
-            }
+	/**
+	 * Log a message to stdout.
+	 *
+	 * @param {string} message
+	 */
+	const logger = (message) => {
+		if (verbosity >= level) {
+			if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+				return;
+			}
 
-            process.stdout.write(
-                `${getLogPrefix(name, prefix)}${getLogMessage(message)}\n`
-            );
-        }
-    };
+			process.stdout.write(
+				`${getLogPrefix(name, prefix)}${getLogMessage(message)}\n`
+			);
+		}
+	};
 
-    return logger;
+	return logger;
 };
 
 /**
@@ -199,22 +199,22 @@ const logger = (name, prefix = "") => {
  * @param {string} prefix
  */
 const warnLogger = (prefix = "") => {
-    /**
-     * Log a message to stdout.
-     *
-     * @param {string} message
-     */
-    const logger = (message) => {
-        if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
-            return;
-        }
+	/**
+	 * Log a message to stdout.
+	 *
+	 * @param {string} message
+	 */
+	const logger = (message) => {
+		if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+			return;
+		}
 
-        process.stdout.write(
-            `${getLogPrefix("WARN", prefix)}${getLogMessage(message)}\n`
-        );
-    };
+		process.stdout.write(
+			`${getLogPrefix("WARN", prefix)}${getLogMessage(message)}\n`
+		);
+	};
 
-    return logger;
+	return logger;
 };
 
 /**
@@ -223,22 +223,22 @@ const warnLogger = (prefix = "") => {
  * @param {string} prefix
  */
 const errorLogger = (prefix = "") => {
-    /**
-     * Log a message to stdout.
-     *
-     * @param {string} message
-     */
-    const logger = (message) => {
-        if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
-            return;
-        }
+	/**
+	 * Log a message to stdout.
+	 *
+	 * @param {string} message
+	 */
+	const logger = (message) => {
+		if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+			return;
+		}
 
-        process.stderr.write(
-            `${getLogPrefix("ERROR", prefix)}${getLogMessage(message)}\n`
-        );
-    };
+		process.stderr.write(
+			`${getLogPrefix("ERROR", prefix)}${getLogMessage(message)}\n`
+		);
+	};
 
-    return logger;
+	return logger;
 };
 
 /**
@@ -247,22 +247,22 @@ const errorLogger = (prefix = "") => {
  * @param {string} prefix
  */
 const fatalLogger = (prefix = "") => {
-    /**
-     * Log a message to stdout.
-     *
-     * @param {string} message
-     */
-    const logger = (message) => {
-        if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
-            return;
-        }
+	/**
+	 * Log a message to stdout.
+	 *
+	 * @param {string} message
+	 */
+	const logger = (message) => {
+		if (HAS_DEBUG && (prefix === "" || DEBUG.exec(prefix) === null)) {
+			return;
+		}
 
-        process.stderr.write(
-            `${getLogPrefix("FATAL", prefix)}${getLogMessage(message)}\n`
-        );
-    };
+		process.stderr.write(
+			`${getLogPrefix("FATAL", prefix)}${getLogMessage(message)}\n`
+		);
+	};
 
-    return logger;
+	return logger;
 };
 
 /**
@@ -270,31 +270,31 @@ const fatalLogger = (prefix = "") => {
  * @param {string} prefix
  */
 const create = (prefix) => {
-    if (typeof prefix !== "string") {
-        prefix = "";
-    }
+	if (typeof prefix !== "string") {
+		prefix = "";
+	}
 
-    return {
-        info: logger("INFO", prefix),
-        debug: logger("DEBUG", prefix),
-        trace: logger("TRACE", prefix),
-        warn: warnLogger(prefix),
-        error: errorLogger(prefix),
-        fatal: fatalLogger(prefix),
-        create,
-        child: () => create(prefix),
-    };
+	return {
+		info: logger("INFO", prefix),
+		debug: logger("DEBUG", prefix),
+		trace: logger("TRACE", prefix),
+		warn: warnLogger(prefix),
+		error: errorLogger(prefix),
+		fatal: fatalLogger(prefix),
+		create,
+		child: () => create(prefix),
+	};
 };
 
 module.exports = {
-    getVerbosity,
-    setVerbosity,
-    info: logger("INFO"),
-    debug: logger("DEBUG"),
-    trace: logger("TRACE"),
-    warn: warnLogger(),
-    error: errorLogger(),
-    fatal: fatalLogger(),
-    create,
-    child: create,
+	getVerbosity,
+	setVerbosity,
+	info: logger("INFO"),
+	debug: logger("DEBUG"),
+	trace: logger("TRACE"),
+	warn: warnLogger(),
+	error: errorLogger(),
+	fatal: fatalLogger(),
+	create,
+	child: create,
 };
