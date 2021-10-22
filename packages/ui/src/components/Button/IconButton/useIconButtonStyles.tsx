@@ -21,12 +21,13 @@ const getSize = (size: IconButtonStylesOptions["size"]): number => {
 	}
 };
 
-const useIconButtonStyles = ({
-	size,
-	color,
-	disabled,
-}: IconButtonStylesOptions) => {
+const useIconButtonStyles = (
+	size: IconButtonStylesOptions["size"],
+	color: IconButtonStylesOptions["color"],
+	disabled: IconButtonStylesOptions["disabled"]
+) => {
 	const classes = useCSS(
+		"IconButton",
 		({ css, theme, util }) => {
 			const elSize = getSize(size);
 

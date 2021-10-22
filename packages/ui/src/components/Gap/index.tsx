@@ -21,7 +21,7 @@ export interface GapProps {
 const Gap: DynamicComponent<GapProps, "div"> = (props) => {
 	const { as = "div", size = 1, vertical, horizontal, ...baseProps } = props;
 
-	const styles = useGapStyles({ size, vertical, horizontal });
+	const styles = useGapStyles(size);
 
 	const overrides = useOverrides("Gap", props, [size, vertical, horizontal]);
 

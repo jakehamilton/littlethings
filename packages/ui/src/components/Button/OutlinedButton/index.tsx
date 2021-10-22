@@ -30,7 +30,7 @@ const OutlinedButton: DynamicComponent<OutlinedButtonProps, "button"> = (
 		...baseProps
 	} = props;
 
-	const styles = useOutlinedButtonStyles({ color, disabled });
+	const styles = useOutlinedButtonStyles(color, disabled);
 
 	const overrides = useOverrides("OutlinedButton", props, [
 		as,

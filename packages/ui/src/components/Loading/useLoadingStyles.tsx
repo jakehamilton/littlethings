@@ -42,8 +42,12 @@ const getMeasurements = (size: Size): Measurements => {
 	}
 };
 
-const useLoadingStyles = ({ color, size }: LoadingStylesOptions) => {
+const useLoadingStyles = (
+	color: LoadingStylesOptions["color"],
+	size: LoadingStylesOptions["size"]
+) => {
 	const classes = useCSS(
+		"Loading",
 		({ css, keyframes, theme, util }) => {
 			const themeColor =
 				color === "text"
@@ -67,12 +71,14 @@ const useLoadingStyles = ({ color, size }: LoadingStylesOptions) => {
 				},
 			});
 
+			const root = css({
+				position: "relative",
+				width: `${rootSize}px`,
+				height: `${rootSize}px`,
+			});
+
 			return {
-				root: css({
-					position: "relative",
-					width: `${rootSize}px`,
-					height: `${rootSize}px`,
-				}),
+				root,
 				container: css({
 					position: "absolute",
 

@@ -22,7 +22,7 @@ export interface LoadingProps {
 const Loading: DynamicComponent<LoadingProps, "div"> = (props) => {
 	const { color = "primary", size = "md" } = props;
 
-	const styles = useLoadingStyles({ color, size });
+	const styles = useLoadingStyles(color, size);
 
 	const overrides = useOverrides("Loading", props, [color, size]);
 

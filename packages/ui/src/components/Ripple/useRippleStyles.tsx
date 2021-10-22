@@ -1,7 +1,7 @@
 import useCSS from "../../hooks/useCSS";
 
 const useRippleStyles = () => {
-	const classes = useCSS(({ css }) => {
+	const classes = useCSS("Ripple", ({ css }) => {
 		return {
 			root: css({
 				position: "absolute",

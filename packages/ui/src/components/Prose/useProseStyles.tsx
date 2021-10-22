@@ -15,8 +15,14 @@ export interface ProseStylesConfig {
 	size: ThemeFontSizeNames;
 }
 
-const useProseStyles = ({ color, variant, font, size }: ProseStylesConfig) => {
+const useProseStyles = (
+	color: ProseStylesConfig["color"],
+	variant: ProseStylesConfig["variant"],
+	font: ProseStylesConfig["font"],
+	size: ProseStylesConfig["size"]
+) => {
 	const classes = useCSS(
+		"Prose",
 		({ css, theme, util }) => {
 			const themeColor = color
 				? util.color(color)

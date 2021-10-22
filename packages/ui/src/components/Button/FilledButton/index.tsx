@@ -28,7 +28,7 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useFilledButtonStyles({ color, disabled });
+	const styles = useFilledButtonStyles(color, disabled);
 
 	const overrides = useOverrides("FilledButton", props, [
 		as,

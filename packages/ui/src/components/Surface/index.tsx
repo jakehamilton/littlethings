@@ -25,7 +25,7 @@ const Surface: DynamicComponent<SurfaceProps, "div"> = (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useSurfaceStyles({ elevation, color, variant });
+	const styles = useSurfaceStyles(color, variant, elevation);
 
 	const overrides = useOverrides("Surface", props, [as, elevation]);
 
@@ -34,6 +34,9 @@ const Surface: DynamicComponent<SurfaceProps, "div"> = (props) => {
 	return (
 		<Dynamic
 			as={as}
+			color={color}
+			variant={variant}
+			elevation={elevation}
 			{...baseProps}
 			class={clsx(classes.root, baseProps.class)}
 		/>

@@ -20,7 +20,7 @@ export default {
 } as Meta<SurfaceProps>;
 
 const Template: Story<SurfaceProps> = (args) => {
-	const classes = useCSS(({ css, util }) => {
+	const classes = useCSS("SurfaceStory", ({ css, util }) => {
 		return {
 			root: css({
 				width: `${util.space(10)}px`,
@@ -33,7 +33,7 @@ const Template: Story<SurfaceProps> = (args) => {
 };
 
 export const Default: Story<SurfaceProps> = (args) => {
-	const classes = useCSS(({ css, util }) => {
+	const classes = useCSS("SurfaceStoryDefault", ({ css, util }) => {
 		return {
 			root: css({
 				display: "flex",

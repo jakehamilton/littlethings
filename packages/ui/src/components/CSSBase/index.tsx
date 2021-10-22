@@ -1,9 +1,10 @@
+import { useEffect } from "preact/hooks";
 import useCSS from "../../hooks/useCSS";
 
 const CSSBase = () => {
 	// @TODO(jakehamilton): Come back and turn this into an object
 	//  for bundle size improvements.
-	useCSS(({ glob, theme, util }) => {
+	const classes = useCSS("CSSBase", ({ glob, css, theme, util }) => {
 		const background = util.color("background");
 
 		glob`
@@ -70,17 +71,26 @@ textarea,
 select {
   font: inherit;
 }
+`;
 
-html {
-  font-size: ${theme.typography.base}px;
-  font-family: ${theme.typography.primary.family};
-  font-weight: normal;
-  color: ${background.text};
-  background: ${background.main};
-}`;
-
-		return {};
+		return {
+			body: css({
+				fontSize: `${theme.typography.base}px`,
+				fontFamily: `${theme.typography.primary.family}`,
+				fontWeight: "normal",
+				color: background.text,
+				background: background.main,
+			}),
+		};
 	});
+
+	useEffect(() => {
+		document.body.classList.add(classes.body);
+
+		return () => {
+			document.body.classList.remove(classes.body);
+		};
+	}, [classes.body]);
 
 	return null;
 };

@@ -17,6 +17,7 @@ const Swatch: FunctionComponent<{ intensity: string; background: string }> = ({
 	background,
 }) => {
 	const classes = useCSS(
+		"ColorStorySwatch",
 		({ css, theme, util }) => {
 			return {
 				root: css({
@@ -51,7 +52,7 @@ const Swatches: FunctionComponent<{ color: Color; name: string }> = ({
 	color,
 	name,
 }) => {
-	const classes = useCSS(({ css, theme }) => {
+	const classes = useCSS("ColorStorySwatches", ({ css, theme }) => {
 		return {
 			root: css({
 				display: "flex",
@@ -88,7 +89,7 @@ const Swatches: FunctionComponent<{ color: Color; name: string }> = ({
 };
 
 const render = () => {
-	const classes = useCSS(({ css, theme }) => {
+	const classes = useCSS("ColorStory", ({ css, theme }) => {
 		return {
 			root: css({
 				padding: `${theme.spacing}px ${theme.spacing * 2}px`,

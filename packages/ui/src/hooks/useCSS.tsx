@@ -18,14 +18,39 @@ export type CSSFactory<Classes extends CSSClasses> = (
 	config: CSSFactoryInput
 ) => Classes;
 
+export const CSS_CACHE = new Map<any, Map<Array<any>, object>>();
+
 const useCSS = <Classes extends CSSClasses>(
+	key: any,
 	factory: CSSFactory<Classes>,
 	inputs: Inputs = []
 ): Classes => {
 	const { mode, theme, util } = useTheme();
 
+	const deps = [mode, theme, ...inputs];
+
 	const classes = useMemo(() => {
-		return factory({
+		if (!CSS_CACHE.has(key)) {
+			CSS_CACHE.set(key, new Map());
+		}
+
+		const cache = CSS_CACHE.get(key)!;
+
+		for (const cachedInputs of cache.keys()) {
+			let found = true;
+			for (let i = 0; i < cachedInputs.length; i++) {
+				if (cachedInputs[i] !== deps[i]) {
+					found = false;
+					break;
+				}
+			}
+
+			if (found) {
+				return cache.get(cachedInputs) as Classes;
+			}
+		}
+
+		const classes = factory({
 			css,
 			glob,
 			keyframes,
@@ -33,7 +58,11 @@ const useCSS = <Classes extends CSSClasses>(
 			theme,
 			util,
 		});
-	}, [mode, theme, ...inputs]);
+
+		cache.set(deps, classes);
+
+		return classes;
+	}, deps);
 
 	return classes;
 };

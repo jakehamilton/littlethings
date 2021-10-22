@@ -88,15 +88,16 @@ const getFontWeight = (size: Size): string => {
 	}
 };
 
-const useButtonBaseStyles = ({
-	color,
-	size,
-	loading,
-	disabled,
-	hasPrefixIcon,
-	hasPostfixIcon,
-}: ButtonBaseStylesOptions) => {
+const useButtonBaseStyles = (
+	color: ButtonBaseStylesOptions["color"],
+	size: ButtonBaseStylesOptions["size"],
+	loading: ButtonBaseStylesOptions["loading"],
+	disabled: ButtonBaseStylesOptions["disabled"],
+	hasPrefixIcon: ButtonBaseStylesOptions["hasPrefixIcon"],
+	hasPostfixIcon: ButtonBaseStylesOptions["hasPostfixIcon"]
+) => {
 	const classes = useCSS(
+		"ButtonBase",
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" ? util.color("background") : util.color(color);

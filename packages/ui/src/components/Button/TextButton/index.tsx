@@ -25,7 +25,7 @@ const TextButton: DynamicComponent<TextButtonProps, "button"> = (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useTextButtonStyles({ color, disabled });
+	const styles = useTextButtonStyles(color, disabled);
 
 	const overrides = useOverrides("TextButton", props, [
 		as,

@@ -6,8 +6,9 @@ export interface GapStylesOptions {
 	horizontal?: boolean;
 }
 
-const useGapStyles = ({ size }: GapStylesOptions) => {
+const useGapStyles = (size: GapStylesOptions["size"]) => {
 	const classes = useCSS(
+		"Gap",
 		({ css, util }) => {
 			const margin = util.space(size);
 			return {

@@ -6,8 +6,12 @@ export interface TextButtonStylesOptions {
 	disabled: NonNullable<ButtonBaseProps["disabled"]>;
 }
 
-const useTextButtonStyles = ({ color, disabled }: TextButtonStylesOptions) => {
+const useTextButtonStyles = (
+	color: TextButtonStylesOptions["color"],
+	disabled: TextButtonStylesOptions["disabled"]
+) => {
 	const classes = useCSS(
+		"TextButton",
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" || color === "background"

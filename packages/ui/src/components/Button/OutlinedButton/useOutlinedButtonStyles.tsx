@@ -6,11 +6,12 @@ export interface OutlinedButtonStylesOptions {
 	disabled: NonNullable<ButtonBaseProps["disabled"]>;
 }
 
-const useOutlinedButtonStyles = ({
-	color,
-	disabled,
-}: OutlinedButtonStylesOptions) => {
+const useOutlinedButtonStyles = (
+	color: OutlinedButtonStylesOptions["color"],
+	disabled: OutlinedButtonStylesOptions["disabled"]
+) => {
 	const classes = useCSS(
+		"OutlinedButton",
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" || color === "background"

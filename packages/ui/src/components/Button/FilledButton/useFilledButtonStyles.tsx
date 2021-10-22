@@ -14,11 +14,12 @@ export interface FilledButtonStylesOptions {
 	disabled: NonNullable<ButtonBaseProps["disabled"]>;
 }
 
-const useFilledButtonStyles = ({
-	color,
-	disabled,
-}: FilledButtonStylesOptions) => {
+const useFilledButtonStyles = (
+	color: FilledButtonStylesOptions["color"],
+	disabled: FilledButtonStylesOptions["disabled"]
+) => {
 	const classes = useCSS(
+		"FilledButton",
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" ? util.color("background") : util.color(color);

@@ -28,7 +28,7 @@ const Prose: DynamicComponent<ProseProps, "span"> = (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useProseStyles({ color, font, variant, size });
+	const styles = useProseStyles(color, variant, font, size);
 
 	const overrides = useOverrides("Prose", props);
 

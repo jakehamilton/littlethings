@@ -36,7 +36,7 @@ const IconButton: DynamicComponent<IconButtonProps, "button"> = (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useIconButtonStyles({ size, color, disabled });
+	const styles = useIconButtonStyles(size, color, disabled);
 
 	const overrides = useOverrides("IconButton", props, [
 		as,

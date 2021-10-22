@@ -9,13 +9,17 @@ const useOverrides = <Name extends keyof ThemeOverrides, Props extends object>(
 ): NonNullable<ThemeOverrides[Name]> extends ThemeOverride<infer Classes, Props>
 	? Partial<Classes>
 	: never => {
-	const overrides = useCSS((input) => {
-		const factory = input.theme.overrides[name];
+	const overrides = useCSS(
+		`Overrides-${name}`,
+		(input) => {
+			const factory = input.theme.overrides[name];
 
-		const overrides = factory?.(input, props) ?? {};
+			const overrides = factory?.(input, props) ?? {};
 
-		return overrides;
-	}, inputs);
+			return overrides;
+		},
+		inputs
+	);
 
 	// @ts-expect-error
 	return overrides;

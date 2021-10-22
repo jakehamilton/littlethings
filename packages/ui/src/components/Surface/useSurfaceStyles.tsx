@@ -12,12 +12,13 @@ export interface SurfaceStylesOptions {
 	elevation: keyof ThemeShadows | "none";
 }
 
-const useSurfaceStyles = ({
-	color,
-	variant,
-	elevation,
-}: SurfaceStylesOptions) => {
+const useSurfaceStyles = (
+	color: SurfaceStylesOptions["color"],
+	variant: SurfaceStylesOptions["variant"],
+	elevation: SurfaceStylesOptions["elevation"]
+) => {
 	const classes = useCSS(
+		"Surface",
 		({ css, util }) => {
 			const themeColor =
 				typeof color === "string" ? util.color(color) : color;

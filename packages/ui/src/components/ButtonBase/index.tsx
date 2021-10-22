@@ -20,6 +20,7 @@ export interface ButtonBaseClasses {
 }
 
 export interface ButtonBaseProps {
+	ripple?: boolean;
 	loading?: ButtonBaseStylesOptions["loading"];
 	color?: ButtonBaseStylesOptions["color"] | "text";
 	size?: ButtonBaseStylesOptions["size"];
@@ -41,6 +42,7 @@ export interface ButtonBaseProps {
 const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	as = "button",
 	children,
+	ripple = true,
 	color = "text",
 	size = "md",
 	loading = false,
@@ -62,14 +64,14 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 
 	const { theme, util } = useTheme();
 
-	const classes = useButtonBaseStyles({
+	const classes = useButtonBaseStyles(
 		color,
 		size,
 		loading,
 		disabled,
-		hasPrefixIcon: Boolean(prefixIcon),
-		hasPostfixIcon: Boolean(postfixIcon),
-	});
+		Boolean(prefixIcon),
+		Boolean(postfixIcon)
+	);
 
 	const loadingColor = useMemo(() => {
 		const themeColor =
@@ -122,8 +124,8 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 				!disabled &&
 				(event.key === "Enter" || event.key === " ")
 			) {
-				rippleRef.current!.remove(event, () => {
-					rippleRef.current!.add(event);
+				rippleRef.current?.remove(event, () => {
+					rippleRef.current?.add(event);
 				});
 				onClick?.(event);
 			}
@@ -140,7 +142,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 				!disabled &&
 				(event.key === "Enter" || event.key === " ")
 			) {
-				rippleRef.current!.remove(event);
+				rippleRef.current?.remove(event);
 			}
 		},
 		[disabled]
@@ -197,7 +199,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 					{postfixIcon}
 				</Dynamic>
 			) : null}
-			<Ripple handleRef={rippleRef} />
+			{ripple ? <Ripple handleRef={rippleRef} /> : null}
 		</Dynamic>
 	);
 };

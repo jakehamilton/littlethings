@@ -17,6 +17,7 @@ export interface RippleDotProps extends TransitionGroupChildProps {
 
 const RippleDot: FunctionComponent<RippleDotProps> = (props) => {
 	const classes = useCSS(
+		"RippleDot",
 		({ css }) => {
 			const radius = props.size / 2;
 

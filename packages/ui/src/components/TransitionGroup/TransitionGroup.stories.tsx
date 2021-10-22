@@ -14,7 +14,7 @@ export default {
 const Template = (args: TransitionGroupProps) => {
 	const [items, setItems] = useState(Array.from({ length: 10 }, (x, i) => i));
 
-	const classes = useCSS(({ css }) => {
+	const classes = useCSS("TransitionGroupStory", ({ css }) => {
 		return {
 			item: css({
 				display: "flex",
