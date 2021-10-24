@@ -38,7 +38,7 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = (props) => {
 		float,
 	]);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<ButtonBase

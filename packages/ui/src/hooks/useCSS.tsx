@@ -18,23 +18,21 @@ export type CSSFactory<Classes extends CSSClasses> = (
 	config: CSSFactoryInput
 ) => Classes;
 
-export const CSS_CACHE = new Map<any, Map<Array<any>, object>>();
-
 const useCSS = <Classes extends CSSClasses>(
 	key: any,
 	factory: CSSFactory<Classes>,
 	inputs: Inputs = []
 ): Classes => {
-	const { mode, theme, util } = useTheme();
+	const { mode, theme, util, CSSCache } = useTheme();
 
 	const deps = [mode, theme, ...inputs];
 
 	const classes = useMemo(() => {
-		if (!CSS_CACHE.has(key)) {
-			CSS_CACHE.set(key, new Map());
+		if (!CSSCache.has(key)) {
+			CSSCache.set(key, new Map());
 		}
 
-		const cache = CSS_CACHE.get(key)!;
+		const cache = CSSCache.get(key)!;
 
 		for (const cachedInputs of cache.keys()) {
 			let found = true;

@@ -26,7 +26,7 @@ const Loading: DynamicComponent<LoadingProps, "div"> = (props) => {
 
 	const overrides = useOverrides("Loading", props, [color, size]);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<div class={clsx(classes.root, props.class)}>

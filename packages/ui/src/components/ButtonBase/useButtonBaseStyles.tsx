@@ -97,7 +97,7 @@ const useButtonBaseStyles = (
 	hasPostfixIcon: ButtonBaseStylesOptions["hasPostfixIcon"]
 ) => {
 	const classes = useCSS(
-		"ButtonBase",
+		useButtonBaseStyles,
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" ? util.color("background") : util.color(color);

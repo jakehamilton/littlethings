@@ -4,7 +4,7 @@ import useCSS from "../../hooks/useCSS";
 const CSSBase = () => {
 	// @TODO(jakehamilton): Come back and turn this into an object
 	//  for bundle size improvements.
-	const classes = useCSS("CSSBase", ({ glob, css, theme, util }) => {
+	const classes = useCSS(CSSBase, ({ glob, css, theme, util }) => {
 		const background = util.color("background");
 
 		glob`

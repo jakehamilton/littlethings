@@ -25,7 +25,7 @@ const Gap: DynamicComponent<GapProps, "div"> = (props) => {
 
 	const overrides = useOverrides("Gap", props, [size, vertical, horizontal]);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<Dynamic

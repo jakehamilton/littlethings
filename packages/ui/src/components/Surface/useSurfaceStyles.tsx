@@ -8,20 +8,17 @@ import {
 
 export interface SurfaceStylesOptions {
 	color: ThemeColorName | ThemePaletteColor;
-	variant: keyof Omit<ThemePaletteColor, "text">;
 	elevation: keyof ThemeShadows | "none";
 }
 
 const useSurfaceStyles = (
 	color: SurfaceStylesOptions["color"],
-	variant: SurfaceStylesOptions["variant"],
 	elevation: SurfaceStylesOptions["elevation"]
 ) => {
 	const classes = useCSS(
-		"Surface",
+		useSurfaceStyles,
 		({ css, util }) => {
-			const themeColor =
-				typeof color === "string" ? util.color(color) : color;
+			const themeColor = util.color(color);
 
 			const shadow =
 				elevation === "none" ? "none" : util.shadow(elevation);
@@ -29,12 +26,12 @@ const useSurfaceStyles = (
 			return {
 				root: css({
 					color: themeColor.text,
-					background: themeColor[variant],
+					background: themeColor.main,
 					boxShadow: shadow,
 				}),
 			};
 		},
-		[color, variant, elevation]
+		[color, elevation]
 	);
 
 	return classes;

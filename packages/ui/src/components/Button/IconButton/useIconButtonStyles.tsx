@@ -27,7 +27,7 @@ const useIconButtonStyles = (
 	disabled: IconButtonStylesOptions["disabled"]
 ) => {
 	const classes = useCSS(
-		"IconButton",
+		useIconButtonStyles,
 		({ css, theme, util }) => {
 			const elSize = getSize(size);
 

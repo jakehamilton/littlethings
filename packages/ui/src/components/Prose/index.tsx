@@ -32,7 +32,7 @@ const Prose: DynamicComponent<ProseProps, "span"> = (props) => {
 
 	const overrides = useOverrides("Prose", props);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<Dynamic as={as} {...baseProps} class={clsx(classes.root, props.class)}>

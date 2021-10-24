@@ -1,6 +1,7 @@
 import { createContext, FunctionComponent } from "preact";
 import { StateUpdater, useMemo, useState } from "preact/hooks";
 import tinycolor from "tinycolor2";
+import useLatest from "../hooks/useLatest";
 
 import {
 	DynamicThemePaletteColorNames,
@@ -13,7 +14,6 @@ import {
 	ThemeRounding,
 	ThemeShadows,
 	ThemeSpec,
-	ThemeTypography,
 	ThemeTypographyName,
 } from "../types/theme";
 import { createTheme } from "../util/theme";
@@ -49,6 +49,7 @@ export interface ThemeContextValue {
 	spec: ThemeSpec;
 	setSpec: StateUpdater<ThemeSpec>;
 	setMode: StateUpdater<ThemeMode>;
+	CSSCache: Map<any, Map<Array<any>, object>>;
 }
 
 export const ThemeContext = createContext<ThemeContextValue>(
@@ -76,17 +77,27 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 		return themes[mode];
 	}, [themes, mode]);
 
-	const util = useMemo(() => {
-		const ColorCache = new Map<
+	const themeRef = useLatest(theme);
+
+	const CSSCache = useMemo(() => {
+		return new Map();
+	}, []);
+
+	const ColorCache = useMemo(() => {
+		return new Map<
 			ThemePaletteColorName | DynamicThemePaletteColorNames,
 			ThemePaletteColor
 		>();
+	}, [mode]);
 
+	const ColorCacheRef = useLatest(ColorCache);
+
+	const util = useMemo(() => {
 		const util: ThemeUtil = {
-			space: (size) => theme.spacing * size,
-			round: (size) => theme.rounding[size],
-			font: (name) => theme.typography[name],
-			shadow: (name) => theme.shadows[name],
+			space: (size) => themeRef.current.spacing * size,
+			round: (size) => themeRef.current.rounding[size],
+			font: (name) => themeRef.current.typography[name],
+			shadow: (name) => themeRef.current.shadows[name],
 			color: (color) => {
 				if (typeof color === "object") {
 					return color;
@@ -94,21 +105,23 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 					const [name, variant] = color.split(".");
 
 					if (variant === undefined || variant === "") {
-						return theme.palette[name as ThemePaletteColorName];
+						return themeRef.current.palette[
+							name as ThemePaletteColorName
+						];
 					} else {
-						if (ColorCache.has(color)) {
-							return ColorCache.get(color)!;
+						if (ColorCacheRef.current.has(color)) {
+							return ColorCacheRef.current.get(color)!;
 						}
 
 						const themeColor =
-							theme.palette[name as ThemePaletteColorName][
-								variant as keyof ThemePaletteColor
-							];
+							themeRef.current.palette[
+								name as ThemePaletteColorName
+							][variant as keyof ThemePaletteColor];
 
 						const textColor =
-							theme.palette[name as ThemePaletteColorName][
-								variant === "text" ? "main" : "text"
-							];
+							themeRef.current.palette[
+								name as ThemePaletteColorName
+							][variant === "text" ? "main" : "text"];
 
 						const newColor: ThemePaletteColor = {
 							light:
@@ -126,7 +139,7 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 									.toHex(),
 						};
 
-						ColorCache.set(color, newColor);
+						ColorCacheRef.current.set(color, newColor);
 
 						return newColor;
 					}
@@ -164,7 +177,7 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 		};
 
 		return util;
-	}, [theme]);
+	}, []);
 
 	return (
 		<ThemeContext.Provider
@@ -175,8 +188,10 @@ export const ThemeProvider: FunctionComponent<ThemeProviderProps> = ({
 				spec,
 				setSpec,
 				setMode,
+				CSSCache,
 			}}
-			children={children}
-		/>
+		>
+			{children}
+		</ThemeContext.Provider>
 	);
 };

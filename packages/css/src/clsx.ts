@@ -30,37 +30,37 @@ function clsx(
 
 	const context = this || {};
 
-	const classNames = new Set<string>();
+	const id = toHash(input.join(HASH_NAME_SEPARATOR));
+
+	let scopedClasses = "";
 
 	for (const className of input) {
 		for (const singleClass of className.split(" ")) {
-			classNames.add(singleClass);
+			if (singleClass === "") {
+				continue;
+			}
+
+			const scopedClass = singleClass + SCOPED_NAME_SEPARATOR + id;
+
+			if (cache.has(singleClass)) {
+				if (!cache.has(scopedClass)) {
+					const scopedCSS = cache
+						.get(singleClass)!
+						.replaceAll(singleClass, scopedClass);
+
+					cache.set(scopedClass, scopedCSS);
+
+					update(scopedCSS, getSheet(context.target), context.append);
+				}
+
+				scopedClasses += " " + scopedClass;
+			} else {
+				scopedClasses += " " + singleClass;
+			}
 		}
 	}
 
-	const id = toHash(input.join(HASH_NAME_SEPARATOR));
-
-	const scopedClasses = Array.from(classNames).map((className: string) => {
-		const scopedClass = className + SCOPED_NAME_SEPARATOR + id;
-
-		if (cache.has(className)) {
-			if (!cache.has(scopedClass)) {
-				const scopedCSS = cache
-					.get(className)!
-					.replaceAll(className, scopedClass);
-
-				cache.set(scopedClass, scopedCSS);
-
-				update(scopedCSS, getSheet(context.target), context.append);
-			}
-
-			return scopedClass;
-		} else {
-			return className;
-		}
-	});
-
-	return scopedClasses.join(" ");
+	return scopedClasses;
 }
 
 export { clsx };

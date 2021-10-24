@@ -45,7 +45,7 @@ const IconButton: DynamicComponent<IconButtonProps, "button"> = (props) => {
 		disabled,
 	]);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	const child = toChildArray(children)[0];
 

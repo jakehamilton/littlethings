@@ -19,7 +19,7 @@ const useFilledButtonStyles = (
 	disabled: FilledButtonStylesOptions["disabled"]
 ) => {
 	const classes = useCSS(
-		"FilledButton",
+		useFilledButtonStyles,
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" ? util.color("background") : util.color(color);

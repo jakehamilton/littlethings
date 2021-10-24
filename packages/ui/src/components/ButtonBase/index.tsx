@@ -1,6 +1,7 @@
 import { clsx } from "@littlethings/css";
-import { ComponentChildren, FunctionComponent } from "preact";
-import { useRef, useEffect, useCallback, useMemo } from "preact/hooks";
+import { ComponentChildren } from "preact";
+import { useCallback, useMemo } from "preact/hooks";
+import { ThemePaletteColorName } from "../..";
 import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
 import useTheme from "../../hooks/useTheme";
@@ -74,17 +75,15 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 	);
 
 	const loadingColor = useMemo(() => {
-		const themeColor =
-			color === "text" || color === "background"
-				? { text: theme.typography.color.primary }
-				: util.color(color);
+		if (color === "text") {
+			return util.color("background.text");
+		} else if (typeof color === "string") {
+			const [name] = color.split(".");
 
-		return {
-			light: themeColor.text,
-			dark: themeColor.text,
-			main: themeColor.text,
-			text: themeColor.text,
-		};
+			return util.color(`${name as ThemePaletteColorName}.text`);
+		} else {
+			return util.color(color);
+		}
 	}, [theme, color]);
 
 	const handleRippleMouseDown = useRippleEvent(rippleRef, "add");
@@ -170,6 +169,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 			{prefixIcon ? (
 				<Dynamic
 					as="span"
+					{...PrefixIconProps}
 					class={clsx(classes.prefixIcon, PrefixIconProps?.class)}
 				>
 					{prefixIcon}
@@ -194,6 +194,7 @@ const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
 			{postfixIcon ? (
 				<Dynamic
 					as="span"
+					{...PostfixIconProps}
 					class={clsx(classes.postfixIcon, PostfixIconProps?.class)}
 				>
 					{postfixIcon}

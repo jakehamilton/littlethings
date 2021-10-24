@@ -15,7 +15,7 @@ const Header = () => {
 		setMode(mode === "light" ? "dark" : "light");
 	};
 
-	const classes = useCSS("Header", ({ css, util }) => {
+	const classes = useCSS(Header, ({ css, util }) => {
 		const primary = util.color("primary");
 		const secondary = util.color("secondary");
 

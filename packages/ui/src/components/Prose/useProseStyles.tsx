@@ -22,7 +22,7 @@ const useProseStyles = (
 	size: ProseStylesConfig["size"]
 ) => {
 	const classes = useCSS(
-		"Prose",
+		useProseStyles,
 		({ css, theme, util }) => {
 			const themeColor = color
 				? util.color(color)
@@ -47,7 +47,7 @@ const useProseStyles = (
 					fontFamily: themeFont.family,
 					fontSize: `${sizeVariant.size}rem`,
 					fontWeight: String(sizeVariant.weight),
-					lineHeight: String(sizeVariant.height),
+					lineHeight: `${sizeVariant.height}rem`,
 				}),
 			};
 		},

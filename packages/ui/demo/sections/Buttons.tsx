@@ -5,7 +5,7 @@ import Gap from "../../src/components/Gap";
 import { Github } from "preact-feather";
 
 const Buttons = () => {
-	const classes = useCSS("Buttons", ({ css, util }) => {
+	const classes = useCSS(Buttons, ({ css, util }) => {
 		return {
 			root: css({
 				display: "flex",

@@ -47,16 +47,11 @@ const useLoadingStyles = (
 	size: LoadingStylesOptions["size"]
 ) => {
 	const classes = useCSS(
-		"Loading",
-		({ css, keyframes, theme, util }) => {
+		useLoadingStyles,
+		({ css, keyframes, util }) => {
 			const themeColor =
 				color === "text"
-					? {
-							light: theme.typography.color.primary,
-							main: theme.typography.color.primary,
-							dark: theme.typography.color.primary,
-							text: theme.typography.color.primary,
-					  }
+					? util.color("background.text")
 					: util.color(color);
 
 			const { rootSize, dotSize } = getMeasurements(size);

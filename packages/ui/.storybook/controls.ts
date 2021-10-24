@@ -156,14 +156,18 @@ export const color = spread<ColorControl>("color");
 export const date = spread<DateControl>("date");
 
 export const themeColor = <P extends Record<string, any> = {}>(
-	defaultColor: ThemePaletteColorName,
+	defaultColor: ThemeColorName,
 	config?: ConfigWithoutType<SelectControl, P>
 ) => {
-	const colors: Array<ThemeColorName> = [
-		"primary",
-		"secondary",
-		"background",
-	];
+	const colors = ["primary", "secondary", "background", "disabled"]
+		.map((name) => [
+			name,
+			`${name}.light`,
+			`${name}.main`,
+			`${name}.dark`,
+			`${name}.text`,
+		])
+		.flat() as Array<ThemeColorName>;
 
 	return select({
 		defaultValue: defaultColor,
@@ -173,4 +177,10 @@ export const themeColor = <P extends Record<string, any> = {}>(
 			...config?.control,
 		},
 	});
+};
+
+export const action = (name: string) => {
+	return {
+		action: name,
+	};
 };

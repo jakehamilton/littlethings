@@ -39,11 +39,7 @@ const OutlinedButton: DynamicComponent<OutlinedButtonProps, "button"> = (
 		disabled,
 	]);
 
-	const classes = useClasses<OutlinedButtonClasses>([
-		styles,
-		overrides,
-		props.classes,
-	]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<ButtonBase
@@ -62,9 +58,7 @@ const OutlinedButton: DynamicComponent<OutlinedButtonProps, "button"> = (
 			classes={{
 				...props.classes,
 				root: clsx(classes.root, props.classes?.root),
-				disabled: disabled
-					? clsx(classes.disabled, props.classes?.disabled)
-					: "",
+				disabled: clsx(classes.disabled, props.classes?.disabled),
 			}}
 		>
 			{children}

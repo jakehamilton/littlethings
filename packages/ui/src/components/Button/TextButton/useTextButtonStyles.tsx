@@ -11,7 +11,7 @@ const useTextButtonStyles = (
 	disabled: TextButtonStylesOptions["disabled"]
 ) => {
 	const classes = useCSS(
-		"TextButton",
+		useTextButtonStyles,
 		({ css, theme, util }) => {
 			const themeColor =
 				color === "text" || color === "background"

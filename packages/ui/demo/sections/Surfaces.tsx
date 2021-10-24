@@ -4,7 +4,7 @@ import Gap from "../../src/components/Gap";
 import Surface from "../../src/components/Surface";
 
 const Surfaces = () => {
-	const classes = useCSS("Surfaces", ({ css, util }) => {
+	const classes = useCSS(Surfaces, ({ css, util }) => {
 		return {
 			root: css({
 				display: "flex",

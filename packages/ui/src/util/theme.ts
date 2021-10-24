@@ -134,7 +134,7 @@ const DEFAULT_LIGHT_PALETTE: ThemePalette = {
 	background: {
 		light: Light["50"],
 		main: Light["200"],
-		dark: Light["600"],
+		dark: Gray["200"],
 		text: Black["700"],
 	},
 	primary: {

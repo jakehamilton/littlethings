@@ -3,8 +3,7 @@ import { Inputs, useMemo } from "preact/hooks";
 import { CSSClass } from "../types/css";
 
 const useClasses = <Classes extends object>(
-	classes: Array<Partial<Classes> | null | undefined>,
-	inputs: Inputs = []
+	...classes: Array<Partial<Classes> | null | undefined>
 ): Partial<Classes> => {
 	const result = useMemo(() => {
 		const output: Partial<Classes> = {};
@@ -41,7 +40,7 @@ const useClasses = <Classes extends object>(
 		}
 
 		return output;
-	}, [...classes, ...inputs]);
+	}, classes);
 
 	return result;
 };

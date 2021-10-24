@@ -4,7 +4,7 @@ import Gap from "../../src/components/Gap";
 import Loading from "../../src/components/Loading";
 
 const Loadings = () => {
-	const classes = useCSS("Loadings", ({ css, util }) => {
+	const classes = useCSS(Loadings, ({ css, util }) => {
 		return {
 			root: css({
 				display: "flex",

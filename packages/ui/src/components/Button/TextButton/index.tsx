@@ -34,7 +34,7 @@ const TextButton: DynamicComponent<TextButtonProps, "button"> = (props) => {
 		disabled,
 	]);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<ButtonBase

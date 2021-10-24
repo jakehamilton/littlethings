@@ -12,7 +12,6 @@ export interface SurfaceClasses {
 export interface SurfaceProps {
 	classes?: Partial<SurfaceClasses>;
 	color?: SurfaceStylesOptions["color"];
-	variant?: SurfaceStylesOptions["variant"];
 	elevation?: SurfaceStylesOptions["elevation"];
 }
 
@@ -20,22 +19,20 @@ const Surface: DynamicComponent<SurfaceProps, "div"> = (props) => {
 	const {
 		as = "div",
 		color = "background",
-		variant = "main",
 		elevation = "none",
 		...baseProps
 	} = props;
 
-	const styles = useSurfaceStyles(color, variant, elevation);
+	const styles = useSurfaceStyles(color, elevation);
 
 	const overrides = useOverrides("Surface", props, [as, elevation]);
 
-	const classes = useClasses([styles, overrides, props.classes]);
+	const classes = useClasses(styles, overrides, props.classes);
 
 	return (
 		<Dynamic
 			as={as}
 			color={color}
-			variant={variant}
 			elevation={elevation}
 			{...baseProps}
 			class={clsx(classes.root, baseProps.class)}
