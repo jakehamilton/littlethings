@@ -3,13 +3,11 @@ import { CSSClass } from "../../types/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
 import Dynamic, { DynamicComponent, DynamicProps } from "../Dynamic";
-import useTextInputStyles, {
-	TextInputStylesOptions,
-} from "./useTextInputStyles";
+import useTextInputStyles, { TextInputStylesOptions } from "./useInputStyles";
 import { cloneElement, ComponentChildren, isValidElement } from "preact";
 import useTheme from "../../hooks/useTheme";
 
-export interface TextInputClasses {
+export interface InputClasses {
 	root: CSSClass;
 	input: CSSClass;
 	disabled: CSSClass;
@@ -17,30 +15,32 @@ export interface TextInputClasses {
 	postfixIcon: CSSClass;
 }
 
-export interface TextInputProps {
-	classes?: Partial<TextInputClasses>;
+export interface InputProps {
+	classes?: Partial<InputClasses>;
 	color?: TextInputStylesOptions["color"];
 	focus?: TextInputStylesOptions["focus"];
 	border?: TextInputStylesOptions["border"];
 	disabled?: boolean;
-	RootProps?: DynamicProps<"div">;
+	RootProps?: Omit<DynamicProps<"div">, "as">;
 	prefixIcon?: ComponentChildren;
 	PrefixIconProps?: Omit<DynamicProps<"div">, "as">;
 	postfixIcon?: ComponentChildren;
 	PostfixIconProps?: Omit<DynamicProps<"div">, "as">;
 }
 
-const TextInput: DynamicComponent<TextInputProps, "input"> = (props) => {
+const TextInput: DynamicComponent<InputProps, "input"> = (props) => {
 	const {
 		as = "input",
 		color = "background.light",
 		focus = "primary",
 		border = "background.dark",
 		disabled = false,
+		RootProps,
 		prefixIcon,
 		PrefixIconProps,
 		postfixIcon,
 		PostfixIconProps,
+		innerRef,
 		...baseProps
 	} = props;
 
@@ -61,6 +61,7 @@ const TextInput: DynamicComponent<TextInputProps, "input"> = (props) => {
 	return (
 		<Dynamic
 			as="div"
+			{...RootProps}
 			class={`${disabled ? styles.disabled : ""} ${clsx(
 				classes.root,
 				disabled ? classes.disabled : null,
@@ -86,6 +87,7 @@ const TextInput: DynamicComponent<TextInputProps, "input"> = (props) => {
 			) : null}
 			<Dynamic
 				as={as}
+				innerRef={innerRef}
 				{...baseProps}
 				class={clsx(classes.input, disabled ? classes.disabled : null)}
 				disabled={disabled}

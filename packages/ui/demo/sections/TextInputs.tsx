@@ -3,7 +3,7 @@ import Button from "../../src/components/Button";
 import Prose from "../../src/components/Prose";
 import Gap from "../../src/components/Gap";
 import { Airplay, Eye, Feather, Save } from "preact-feather";
-import TextInput from "../../src/components/TextInput";
+import Input from "../../src/components/Input";
 
 const TextInputs = () => {
 	const classes = useCSS(TextInputs, ({ css, util }) => {
@@ -52,20 +52,20 @@ const TextInputs = () => {
 			<Gap vertical size={2} />
 			<div class={classes.example}>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						prefixIcon={<Airplay />}
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						postfixIcon={<Eye />}
@@ -73,14 +73,14 @@ const TextInputs = () => {
 				</div>
 				<Gap vertical size={1} />
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						border="primary"
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						prefixIcon={<Airplay />}
@@ -88,7 +88,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						postfixIcon={<Eye />}
@@ -97,7 +97,7 @@ const TextInputs = () => {
 				</div>
 				<Gap vertical size={1} />
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						border="secondary"
@@ -105,7 +105,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						prefixIcon={<Airplay />}
@@ -114,7 +114,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						postfixIcon={<Eye />}
@@ -124,14 +124,14 @@ const TextInputs = () => {
 				</div>
 				<Gap vertical size={1} />
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						as="textarea"
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						as="textarea"
@@ -139,7 +139,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						as="textarea"
@@ -148,14 +148,14 @@ const TextInputs = () => {
 				</div>
 				<Gap vertical size={1} />
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						disabled
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						prefixIcon={<Airplay />}
@@ -163,7 +163,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						postfixIcon={<Eye />}
@@ -172,7 +172,7 @@ const TextInputs = () => {
 				</div>
 				<Gap vertical size={1} />
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						as="textarea"
@@ -180,7 +180,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						as="textarea"
@@ -189,7 +189,7 @@ const TextInputs = () => {
 					/>
 				</div>
 				<div>
-					<TextInput
+					<Input
 						class={classes.input}
 						placeholder="Enter something..."
 						as="textarea"

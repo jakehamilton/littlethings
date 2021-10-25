@@ -7,21 +7,28 @@ const CSSBase = () => {
 	const classes = useCSS(CSSBase, ({ glob, css, theme, util }) => {
 		const background = util.color("background");
 
+		/*
+		 *This appears to cause a bug in Firefox so it has been removed:
+		 *
+		 * html:focus-within {
+		 * 	scroll-behavior: smooth;
+		 * }
+		 *
+		 *https://twitter.com/jakehamiltondev/status/1452198179806629891?s=20
+		 */
+
 		glob`
-/* Box sizing rules */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Default input styles */
-input, button {
+input, button, select {
   appearance: none;
   -webkit-appearance: none;
 }
 
-/* Remove default margin */
 body,
 h1,
 h2,
@@ -35,36 +42,26 @@ dd {
   margin: 0;
 }
 
-/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role='list'],
 ol[role='list'] {
   list-style: none;
 }
 
-/* Set core root defaults */
-html:focus-within {
-  scroll-behavior: smooth;
-}
-
-/* Set core body defaults */
 body {
   min-height: 100vh;
   text-rendering: optimizeLegibility;
 }
 
-/* A elements that don't have a class get default styles */
 a:not([class]) {
   text-decoration-skip-ink: auto;
 }
 
-/* Make images easier to work with */
 img,
 picture {
   max-width: 100%;
   display: block;
 }
 
-/* Inherit fonts for inputs and buttons */
 input,
 button,
 textarea,

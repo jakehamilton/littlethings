@@ -32,11 +32,11 @@ const useTextInputStyles = (
 			let gridTemplate;
 
 			if (prefixIcon && postfixIcon) {
-				gridTemplate = "1fr max-content 1fr / 1fr min-content 1fr";
+				gridTemplate = "1fr / 1fr min-content 1fr";
 			} else if (prefixIcon) {
-				gridTemplate = "1fr max-content / min-content 1fr";
+				gridTemplate = "1fr / min-content 1fr";
 			} else if (postfixIcon) {
-				gridTemplate = "max-content 1fr / 1fr min-content";
+				gridTemplate = "1fr / 1fr min-content";
 			} else {
 				gridTemplate = "1fr / 1fr";
 			}

@@ -45,12 +45,18 @@ export default async () => {
 				formats: ["es", "umd", "cjs"],
 			},
 			rollupOptions: {
-				external: ["preact", "@littlethings/css", "tinycolor2"],
+				external: [
+					"preact",
+					"@littlethings/css",
+					"tinycolor2",
+					"@popperjs/core",
+				],
 				output: {
 					globals: {
 						"@littlethings/css": "LittleCSS",
 						preact: "Preact",
 						tinycolor2: "tinycolor",
+						"@poperjs/core": "Popper",
 					},
 				},
 			},

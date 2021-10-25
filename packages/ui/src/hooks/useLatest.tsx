@@ -1,4 +1,4 @@
-import { useEffect, useRef, Ref } from "preact/hooks";
+import { useRef, Ref } from "preact/hooks";
 
 const useLatest = <Value extends unknown>(value: Value): Ref<Value> => {
 	const ref = useRef(value);

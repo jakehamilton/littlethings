@@ -1,4 +1,10 @@
-import type { AnyComponent, ComponentChildren, JSX } from "preact";
+import type {
+	AnyComponent,
+	ComponentChildren,
+	FunctionComponent,
+	JSX,
+	Ref,
+} from "preact";
 
 export type ElementNames = keyof JSX.IntrinsicElements;
 
@@ -25,8 +31,25 @@ export type OptionalDynamicProps<
 	as?: As;
 } & (As extends undefined ? PropsFromAs<DefaultAs> : PropsFromAs<As>);
 
+export type RefFromAs<As extends OptionalDynamicAs = undefined> = [As] extends [
+	undefined
+]
+	? unknown
+	: As extends ElementNames
+	? JSX.IntrinsicElements[As] extends JSX.HTMLAttributes<infer Element>
+		? JSX.HTMLAttributes<Element>["ref"]
+		: unknown
+	: As extends (p: any, r: infer ComponentRef) => ComponentChildren
+	? ComponentRef
+	: As extends FunctionComponent<infer Props>
+	? Props extends { innerRef?: infer InnerRef }
+		? InnerRef
+		: unknown
+	: unknown;
+
 export type DynamicProps<As extends DynamicAs> = {
 	as: As;
+	innerRef?: RefFromAs<As>;
 } & ComponentProps &
 	PropsFromAs<As>;
 
@@ -42,7 +65,9 @@ export type DynamicComponent<
 > = <As extends OptionalDynamicAs = DefaultAs>(
 	props: Props &
 		Omit<ComponentProps, keyof Props> &
-		Omit<OptionalDynamicProps<As, DefaultAs>, keyof Props>
+		Omit<OptionalDynamicProps<As, DefaultAs>, keyof Props | "ref"> & {
+			innerRef?: RefFromAs<As>;
+		}
 ) => JSX.Element | null;
 
 const Dynamic = <As extends ElementNames | AnyComponent | string>({
@@ -52,6 +77,12 @@ const Dynamic = <As extends ElementNames | AnyComponent | string>({
 }: DynamicProps<As>): JSX.Element | null => {
 	if (as == null) {
 		return null;
+	}
+
+	if (typeof as === "string") {
+		// @ts-expect-error
+		props.ref = props.innerRef;
+		delete props.innerRef;
 	}
 
 	// @ts-ignore

@@ -20,7 +20,7 @@ import { SurfaceClasses, SurfaceProps } from "../components/Surface";
 import { CSSFactory, CSSFactoryInput } from "../hooks/useCSS";
 import { CSSClasses } from "./css";
 import { ProseClasses, ProseProps } from "../components/Prose";
-import { TextInputClasses, TextInputProps } from "../components/TextInput";
+import { InputClasses, InputProps } from "../components/Input";
 
 export type ThemeMode = "light" | "dark";
 
@@ -177,7 +177,7 @@ export interface ThemeOverrides {
 	FilledButton?: ThemeOverride<FilledButtonClasses, FilledButtonProps>;
 	OutlinedButton?: ThemeOverride<OutlinedButtonClasses, OutlinedButtonProps>;
 	IconButton?: ThemeOverride<IconButtonClasses, IconButtonProps>;
-	TextInput?: ThemeOverride<TextInputClasses, TextInputProps>;
+	TextInput?: ThemeOverride<InputClasses, InputProps>;
 }
 
 export type ThemeOverridesConfig = Partial<ThemeOverrides>;
