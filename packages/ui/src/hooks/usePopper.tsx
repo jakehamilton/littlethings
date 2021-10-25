@@ -124,7 +124,7 @@ const usePopper = (
 			popperRef.current?.destroy();
 			popperRef.current = null;
 		};
-	}, [target, popped, options.createPopper]);
+	}, [target.current, popped.current, options.createPopper]);
 
 	const fakeStyles = styles as {
 		[key: string]: JSXInternal.CSSProperties;

@@ -10,11 +10,26 @@ import {
 } from "../../../.storybook/controls";
 
 import Input, { InputProps } from ".";
-import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import {
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "preact/hooks";
 import { useCSS } from "../..";
-import { DynamicProps, WithDynamicProps } from "../Dynamic";
+import Dynamic, {
+	DynamicComponent,
+	DynamicProps,
+	PropsFromAs,
+	WithDynamicProps,
+} from "../Dynamic";
 import usePopper from "../../hooks/usePopper";
 import Surface from "../Surface";
+import { Modifier } from "@popperjs/core";
+import { toChildArray, isValidElement } from "preact";
+import Prose from "../Prose";
+import { clsx } from "@littlethings/css";
 
 export default {
 	title: "Design System/Input",
@@ -91,46 +106,149 @@ export const PostfixIcon: Story<InputProps> = (args) => {
 };
 
 export const Select: Story<InputProps> = (args) => {
+	const [isVisible, setIsVisible] = useState(false);
+
 	const baseRef = useRef<HTMLDivElement>(null);
 	const menuRef = useRef<HTMLDivElement>(null);
 
-	const popper = usePopper(baseRef, menuRef, {});
+	const modifier = useMemo(() => {
+		return {
+			name: "sameWidth",
+			enabled: true,
+			phase: "beforeWrite",
+			requires: ["computeStyles"],
+			fn({ state }) {
+				state.styles.popper.width = `${state.rects.reference.width}px`;
+			},
+			effect({ state }) {
+				state.elements.popper.style.width = `${
+					(state.elements.reference as any).offsetWidth
+				}px`;
+			},
+		} as Modifier<"sameWidth", {}>;
+	}, []);
+
+	const popper = usePopper(baseRef, menuRef, {
+		modifiers: [modifier],
+	});
+
+	const handleRootClick = (event: MouseEvent) => {
+		baseRef.current?.focus();
+
+		setIsVisible((prev) => !prev);
+
+		event.stopPropagation();
+
+		setTimeout(() => {
+			const handler = (event: MouseEvent) => {
+				setIsVisible(false);
+
+				window.removeEventListener("click", handler);
+			};
+
+			window.addEventListener("click", handler);
+		});
+	};
+
+	const handleInputClick = (event: MouseEvent) => {
+		event.preventDefault();
+		(event.target as HTMLElement).blur();
+	};
 
 	const classes = useCSS(Select, ({ css, util }) => {
+		const backgroundColor = util.color("background");
+
 		return {
-			root: css({}),
-			input: css({}),
+			root: css({
+				cursor: "pointer",
+			}),
+			input: css({
+				display: "flex",
+				alignItems: "center",
+			}),
 			menu: css({
 				padding: `${util.space(2)}px`,
 				borderRadius: `${util.round("md")}px`,
 			}),
+			postfixIcon: css({
+				color: `${backgroundColor.text} !important`,
+				background: `${backgroundColor.light} !important`,
+			}),
+			hidden: css({
+				visibility: "hidden",
+				opacity: "0",
+				pointerEvents: "none",
+			}),
 		};
 	});
+
+	const CustomInput: DynamicComponent<{}, "div"> = ({
+		children,
+		...props
+	}) => {
+		const options = toChildArray(children);
+
+		const selected = useState(
+			isValidElement(options[0])
+				? (options[0].props as PropsFromAs<"option">).value
+				: options[0]
+		);
+
+		const getOption = (value) => {
+			return (
+				options.find((option) =>
+					isValidElement(option)
+						? (option.props as PropsFromAs<"option">).value ===
+						  value
+						: option === value
+				) ?? "Select"
+			);
+		};
+
+		return (
+			// @ts-ignore
+			<Dynamic as="div" {...props}>
+				<Prose size="sm">{getOption(selected)}</Prose>
+				<select aria-hidden class={classes.hidden} value={selected}>
+					{children}
+				</select>
+			</Dynamic>
+		);
+	};
 
 	return (
 		<div>
 			<Input
 				{...args}
-				as="select"
+				as={CustomInput}
 				classes={classes}
 				prefixIcon={<Gift />}
+				PostfixIconProps={{
+					class: classes.postfixIcon,
+				}}
 				postfixIcon={<ChevronDown />}
 				RootProps={{
+					tabIndex: 0,
 					innerRef: baseRef,
+					onClick: handleRootClick,
 				}}
+				// @ts-ignore
+				onClick={handleInputClick}
 			>
-				<option>One</option>
-				<option>Two</option>
+				<option value="one">One</option>
+				<option value="two">Two</option>
 			</Input>
-			<Surface
-				innerRef={menuRef}
-				elevation="md"
-				style={popper.styles.popper}
-				class={classes.menu}
-				{...popper.attributes.popper}
-			>
-				Hello, World!
-			</Surface>
+			{isVisible ? (
+				<Surface
+					innerRef={menuRef}
+					elevation="md"
+					style={popper.styles.popper}
+					class={classes.menu}
+					{...popper.attributes.popper}
+				>
+					Hello, World!
+				</Surface>
+			) : null}
 		</div>
 	);
 };
