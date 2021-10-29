@@ -1,245 +1,266 @@
-import { AnyComponent, FunctionComponent, VNode } from "preact";
-import { JSXInternal } from "preact/src/jsx";
+import {
+	AnyComponent,
+	ComponentChildren,
+	FunctionComponent,
+	JSX,
+	VNode,
+} from "preact";
+import { CommonProps } from "../..";
 
+/**
+ * A utility for failure messages when types are incorrect. This
+ * lets you surface a message to the user when something goes wrong
+ * in the TypeScript type system.
+ *
+ * @example
+ * type MyType<T> = T extends string ? T : Error<"MyType: T doesn't extend string!">;
+ *
+ * type Result = MyType<42>; // Error<...>
+ */
 type Error<Message extends string> = { readonly __message: Message };
 
-type At<Arr extends Array<unknown>, N extends number> = Arr extends Record<
-	N,
-	infer T
->
-	? T
-	: never;
+/**
+ * HTML Elements we know about. Useful for getting things like
+ * an Element's Props.
+ */
+export type Elements = JSX.IntrinsicElements;
+/**
+ * A convenient shorthand for `keyof Elements`.
+ */
+export type ElementNames = keyof Elements;
 
-type Replace<Arr extends Array<unknown>, T> = Arr extends [
-	infer X,
-	...infer Rest
-]
-	? [T, ...Replace<Rest, T>]
-	: [];
+/**
+ * HTML Element Attributes. These are particularly useful for getting
+ * things like Ref types for elements.
+ */
+export type Attributes<
+	RefType extends EventTarget = EventTarget
+> = JSX.HTMLAttributes<RefType>;
 
-type Zip<
-	ArrX extends Array<unknown>,
-	ArrY extends Array<unknown>
-> = ArrX extends [infer X, ...infer RestX]
-	? ArrY extends [infer Y, ...infer RestY]
-		? [[X, Y], ...Zip<RestX, RestY>]
-		: Error<"Zip: Expected arrays to be the same length.">
-	: [];
+export interface CustomElements {}
+export type CustomElementNames = keyof CustomElements;
 
-type Elements = JSXInternal.IntrinsicElements;
+export type KnownElements =
+	| ElementNames
+	| CustomElementNames
+	| AnyComponent<any, any>;
 
-type ElementNames = keyof Elements;
+/**
+ * `DynamicAs` is the type of component or name of the element
+ * being used. If you want to add new elements, extend `CustomElements`
+ * with the names of your web components:
+ *
+ * @example
+ * declare module "@littlethings/ui/components/Dynamic" {
+ * 	interface MyWebComponentProps {
+ * 		sayHello: boolean;
+ * 	}
+ *
+ * 	export interface CustomElements {
+ * 		"my-web-component": MyWebComponentProps;
+ * 	}
+ * }
+ */
+export type DynamicAs = KnownElements;
 
-type KnownElement = ElementNames | FunctionComponent<any>;
+/**
+ * Sometimes `DynamicAs` is intended to be optional. This
+ * type is used for convenience in those cases.
+ */
+export type OptionalDynamicAs = DynamicAs | undefined;
 
-type DynamicAs = KnownElement;
+/**
+ * A utility for getting the raw props object from an element or
+ * component.
+ *
+ * @example <caption>Get the props for an HTML Element or Custom Element.</caption>
+ * type DivProps = ElementProps<"div">;
+ *
+ * @example <caption>Get the props for a Component.</caption>
+ * // Given some component...
+ * const MyComponent: FunctionComponent<{ name: string }> = () => null;
+ *
+ * type MyComponentProps = ElementProps<MyComponent>;
+ */
+export type ElementProps<
+	As extends OptionalDynamicAs
+> = As extends AnyComponent<infer Props, infer State>
+	? Props
+	: As extends ElementNames
+	? Elements[As]
+	: As extends CustomElementNames
+	? CustomElements[As]
+	: Error<"ElementProps: Unknown Element Type">; //Record<string, any>;
 
-type PropsObject = object;
-
-type ExtendedPropsShape = {
-	as: DynamicAs;
-	key: string;
-	props: PropsObject;
-	required?: boolean;
-};
-
-type ExtendedUnit = [DynamicAs, ExtendedPropsShape];
-
-type DynamicProps<As extends DynamicAs, Props extends PropsObject> = {
+/**
+ * A utility for getting the raw props object from an element or
+ * component, but with a default element/component in case the
+ * provided one is `undefined`. This functions identically to
+ * `ElementProps` except that it requires a second generic for
+ * the default element/component type.
+ */
+export type ElementPropsWithDefault<
+	As extends OptionalDynamicAs,
+	DefaultAs extends DynamicAs
+> = {
 	as?: As;
-} & Props &
-	Omit<
-		As extends ElementNames
-			? Elements[As]
-			: As extends FunctionComponent<infer ComponentProps>
-			? ComponentProps
-			: Record<string, any>,
-		keyof Props
-	>;
+} & ([As] extends [undefined] ? ElementProps<DefaultAs> : ElementProps<As>);
 
-type GetExtendedProps<Unit extends ExtendedUnit> = Unit extends [
-	infer As,
-	infer Props
-]
-	? Props extends ExtendedPropsShape
-		? As extends DynamicAs
-			? Props["required"] extends true
-				? Record<Props["key"], DynamicProps<As, Props["props"]>>
-				: Partial<
-						Record<
-							Props["key"],
-							DynamicProps<As, Props["props"]> | undefined
-						>
-				  >
-			: Error<"GetExtendedProps: Expected [DynamicAs, ExtendedPropsShape].">
-		: Error<"GetExtendedProps: Expected [DynamicAs, ExtendedPropsShape].">
-	: Error<"GetExtendedProps: Could not infer Props from [As, ExtendedPropsShape].">;
+/**
+ * A utility for getting the `Ref` type of an element or component.
+ *
+ * @example <caption>Get the `Ref` type for an HTML Element or Custom Element.</caption>
+ * type DivRef = ElementRef<"div">;
+ *
+ * @example <caption>Get the `Ref` type for a Component.</caption>
+ * const MyComponent: FunctionComponent<{ innerRef?:  }>
+ */
+export type ElementRef<As extends OptionalDynamicAs> = As extends undefined
+	? // If `As` is not supplied, we don't know the type of the element.
+	  unknown
+	: // If `As` is the name of an element.
+	As extends ElementNames
+	? Elements[As] extends Attributes<infer Element>
+		? // Use the ref type from that element's attributes.
+		  JSX.HTMLAttributes<Element>["ref"]
+		: unknown
+	: // If `As` is a custom element that the user has specified.
+	As extends CustomElementNames
+	? CustomElementNames[As] extends { ref?: infer RefType }
+		? // Use the `ref` type on its Props if available.
+		  RefType
+		: unknown
+	: // If `As` is a component.
+	As extends AnyComponent<infer Props, any>
+	? // When `ref` is in props, use it.
+	  Props extends { ref?: infer RefType }
+		? RefType
+		: // Otherwise if `innerRef` is in props, use that.
+		Props extends { innerRef?: infer RefType }
+		? RefType
+		: unknown
+	: // Otherwise, we don't know what element this is.
+	  unknown;
 
-type MergeExtendedProps<Args extends Array<ExtendedUnit> = []> = Args extends [
-	infer Unit
-]
-	? Unit extends ExtendedUnit
-		? GetExtendedProps<Unit>
-		: Error<"MergeExtendedProps: Expected [As, ExtendedPropsShape].">
-	: Args extends [infer Unit, ...infer Rest]
-	? Unit extends ExtendedUnit
-		? Rest extends Array<ExtendedUnit>
-			? GetExtendedProps<Unit> & MergeExtendedProps<Rest>
-			: Error<"MergeExtendedProps: Expected Array<ExtendedUnit>.">
-		: Error<"MergeExtendedProps: Expected [As, ExtendedPropsShape].">
-	: {};
+/**
+ * DynamicProps creates a Props object specific to an element
+ * or component. This is useful when you want to allow
+ * customization of the element you render. This is often used
+ * together with `<Dynamic />`.
+ *
+ * @example <caption>Simple usage.</caption>
+ * const MyComponent = <As extends DynamicAs>(props: DynamicProps<As>) => {
+ * 	return <Dynamic {...props} />
+ * }
+ *
+ * @example <caption>Customizing Sub-Components.</caption>
+ * const MyComponent = <PrefixAs extends DynamicAs, PostfixAs extends DynamicAs>(props: {
+ * 	PrefixProps: DynamicProps<PrefixAs>,
+ * 	PostfixProps: DynamicProps<PostfixAs>,
+ * }) => {
+ * 	return (
+ * 		<div>
+ * 			<Dynamic {props.PrefixProps} />
+ * 			<Dynamic {props.PostfixProps} />
+ * 		</div>
+ * 	);
+ * }
+ */
+export type DynamicProps<As extends DynamicAs> = {
+	as: As;
+	innerRef?: ElementRef<As>;
+} & CommonProps &
+	Omit<ElementProps<As>, "as" | "innerRef">;
 
-type MergeProps<
-	As extends DynamicAs,
-	Props extends PropsObject,
-	ExtendedProps extends Array<ExtendedPropsShape> = [],
-	ExtendedAs extends Array<DynamicAs> = []
-> = DynamicProps<As, Props> &
-	MergeExtendedProps<Zip<ExtendedAs, ExtendedProps>>;
+/**
+ * This type is only used in DynamicComponent. It was pulled
+ * out to keep things readable.
+ */
+type DynamicComponentProps<As extends OptionalDynamicAs, Props = {}> = Props &
+	Omit<CommonProps, keyof Props> &
+	Omit<ElementProps<As>, keyof Props | "as" | "innerRef"> & {
+		as?: As;
+		innerRef?: ElementRef<As>;
+	};
 
-type DynamicComponent<
-	DefaultAs extends DynamicAs,
-	Props extends PropsObject,
-	ExtendedProps extends Array<ExtendedPropsShape> = []
-> = <
-	As extends DynamicAs = DefaultAs,
-	ExtendedAs extends Replace<ExtendedProps, DynamicAs> = Replace<
-		ExtendedProps,
-		DynamicAs
-	>
+/**
+ * DynamicComponent lets you easily and quickly create a component that
+ * accepts an `as` prop for customization. This is commonly used with
+ * `<Dynamic />` in order to render different elements or components.
+ *
+ * @example
+ * interface MyProps {
+ * 	name: string;
+ * }
+ *
+ * const MyComponent: DynamicComponent<"div", MyProps> = (props) => {
+ * 	const { as = "div", name, ...baseProps } = props;
+ *
+ * 	return (
+ * 		<Dynamic as={as} {...baseProps}>
+ * 			{name}
+ * 		</Dynamic>
+ * 	);
+ * }
+ */
+export type DynamicComponent<DefaultAs extends DynamicAs, Props = {}> = <
+	As extends DynamicAs = DefaultAs
 >(
-	props: MergeProps<As, Props, ExtendedProps, ExtendedAs>
-) => VNode<MergeProps<As, Props, ExtendedProps, ExtendedAs>>;
+	props: DynamicComponentProps<As, Props>
+) => VNode<any> | null;
 
-const Dynamic = <As extends DynamicAs>(
-	props: {
-		as: As;
-	} & As extends ElementNames
-		? As extends keyof Elements
-			? Elements[As]
-			: Error<"Dynamic: Expected As to extend keyof Elements.">
-		: As extends AnyComponent<infer ComponentProps, infer ComponentState>
-		? ComponentProps
-		: Record<string, any>
-): VNode<any> => {
-	const { as, children, ...rest } = props;
+/**
+ * Dynamic takes an `as` property and will render the given element
+ * or component with the other props supplied.
+ *
+ * @example <caption>Render an HTML Element or Custom Element.</caption>
+ * <Dynamic
+ * 	as="div"
+ * 	// All other properties for the given element can be applied.
+ * 	onClick={(event) => {}}
+ * />
+ *
+ * @example <caption>Render a Component.</caption>
+ * interface MyProps {
+ * 	onMyEvent: (event: object) => void;
+ * }
+ *
+ * const MyComponent: FunctionComponent<MyProps> = (props) => {
+ * 	// Implementation left as an exercise for the reader...
+ * };
+ *
+ * // Render using MyComponent.
+ * <Dynamic
+ * 	as={MyComponent}
+ * 	// All properties from the Component's Props can be used
+ * 	onMyEvent={(event) => {}}
+ * />
+ */
+export const Dynamic = <As extends DynamicAs>(
+	props: DynamicProps<As>
+): VNode<DynamicProps<As>> => {
+	const { as, children, ...dynamicProps } = props;
+
+	if (typeof as === "string" && dynamicProps.innerRef) {
+		// @ts-expect-error
+		dynamicProps.ref = dynamicProps.innerRef;
+	}
 
 	// @ts-expect-error
-	// TypeScript's JSX injection ensures that the JSX
-	// factory is included already. Importing it again
-	// would break the build. Instead, we tell TypeScript
-	// to ignore the missing import for the `h` function.
-	return h(props.as!, rest, children);
+	return h(as, dynamicProps, children);
 };
 
 // ==============================
-// 	DEMO
+// DEMO
 // ==============================
 
-// Base component properties.
-interface MyComponentProps {}
+const MyComponent: DynamicComponent<"div", {}> = (props) => {
+	const { as = "div" } = props;
 
-// Augments to allow props passed to dynamic children.
-type MyExtendedProps = [
-	{
-		as: "div";
-		key: "ChildProps";
-		props: {
-			onHeck: () => void;
-		};
-	}
-];
+	const x: DynamicAs = as;
 
-// Creating a dynamic component that can use a custom
-// element or component via the "as" prop. This also
-// supports customizing its children via the configured
-// ChildProps key in MyExtendedProps.
-const MyComponent: DynamicComponent<
-	"div",
-	MyComponentProps,
-	MyExtendedProps
-> = (props) => {
-	const { as = "div", ChildProps } = props;
-
-	return (
-		<Dynamic as={as}>
-			<Dynamic as="div" {...ChildProps} />
-		</Dynamic>
-	);
+	// @FIXME(jakehamilton): Why does this not have the correct type?
+	return <Dynamic as={as} />;
 };
 
-// Render out our component with a custom element for
-// the root and children. Notice that the types for
-// props are correctly updated (eg. onClick is a
-// handler for the specific element).
-const a = (
-	<MyComponent
-		as="p"
-		onClick={() => {}}
-		ChildProps={{
-			as: "a",
-			onHeck: () => {},
-			onClick: () => {},
-		}}
-	/>
-);
-
-interface MySubComponentProps {
-	name?: string;
-}
-
-const MySubComponent: FunctionComponent<MySubComponentProps> = ({
-	name = "World",
-	children,
-}) => {
-	return (
-		<>
-			Hello, {name}! {children}
-		</>
-	);
-};
-
-const x: DynamicProps<typeof MySubComponent, {}> = {
-	as: MySubComponent,
-};
-
-const b = (
-	<MyComponent
-		as={MySubComponent}
-		name="Jake"
-		ChildProps={{
-			as: MySubComponent,
-			onHeck: () => {},
-		}}
-	/>
-);
-
-const c = <Dynamic as="canvas" onClick={() => {}} />;
-
-// Goal
-
-// interface MyComponentProps {
-//   x?: boolean;
-// }
-
-// const MyComponent: DynamicComponent<
-//   MyComponentProps,
-//   [{
-//     as: "div",
-//     key: "RootProps",
-//     props: { root?: boolean },
-//   },
-//   {
-//     as: "div",
-//     key: "ChildProps",
-//     props: { child?: boolean },
-//   }]
-// > = ({ RootProps, ChildProps, ...props}) => {
-//   return (
-//     <Dynamic {...RootProps}>
-//       <Dynamic {...ChildProps}>
-//         <Dynamic {...props} />
-//       </Dynamic>
-//     </Dynamic>
-//   )
-// }
+const result = <MyComponent onClick={() => {}} />;
