@@ -4,9 +4,8 @@
     "description": "A small css-in-js utility.",
     "main": "./dist/css.umd.js",
     "types": "./dist/index.d.ts",
-    "private": true,
     "scripts": {
-        "xbuild": "npm run build:lib && npm run build:types",
+        "build": "npm run build:lib && npm run build:types",
         "build:lib": "vite build",
         "build:types": "tsc -p . --emitDeclarationOnly"
     },
@@ -19,11 +18,10 @@
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "license": "MIT",
     "devDependencies": {
-        "vite": "^2.5.3"
-    },
-    "dependencies": {
+        "vite": "^2.5.3",
         "typescript": "^4.5.0-dev.20210904"
     },
+    "dependencies": {},
     "exports": {
         ".": {
             "default": "./dist/css.es.js",
