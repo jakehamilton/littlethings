@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "A small, Preact-based UI library",
 	"main": "src/index.js",
+	"private": true,
 	"scripts": {
 		"clean": "rm -rf ./dist/*",
 		"build": "npm run clean && npm run build:lib && npm run build:types",
