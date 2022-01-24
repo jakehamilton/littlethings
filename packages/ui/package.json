@@ -6,7 +6,7 @@
 	"private": true,
 	"scripts": {
 		"clean": "rm -rf ./dist/*",
-		"build": "npm run clean && npm run build:lib && npm run build:types",
+		"xbuild": "npm run clean && npm run build:lib && npm run build:types",
 		"build:lib": "vite build",
 		"build:types": "tsc -p . --emitDeclarationOnly",
 		"build:storybook": "build-storybook",

@@ -1,34 +1,34 @@
 {
-    "name": "@littlethings/css",
-    "version": "1.0.0",
-    "description": "A small css-in-js utility.",
-    "main": "./dist/css.umd.js",
-    "types": "./dist/index.d.ts",
-    "private": true,
-    "scripts": {
-        "build": "npm run build:lib && npm run build:types",
-        "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly"
-    },
-    "keywords": [
-        "css",
-        "css-in-js",
-        "utility",
-        "library"
-    ],
-    "author": "Jake Hamilton <jake.hamilton@hey.com>",
-    "license": "MIT",
-    "devDependencies": {
-        "vite": "^2.5.3"
-    },
-    "dependencies": {
-        "typescript": "^4.5.0-dev.20210904"
-    },
-    "exports": {
-        ".": {
-            "default": "./dist/css.es.js",
-            "import": "./dist/css.es.js",
-            "require": "./dist/css.cjs.js"
-        }
-    }
+	"name": "@littlethings/css",
+	"version": "1.0.0",
+	"description": "A small css-in-js utility.",
+	"main": "./dist/css.umd.js",
+	"types": "./dist/index.d.ts",
+	"private": true,
+	"scripts": {
+		"xbuild": "npm run build:lib && npm run build:types",
+		"build:lib": "vite build",
+		"build:types": "tsc -p . --emitDeclarationOnly"
+	},
+	"keywords": [
+		"css",
+		"css-in-js",
+		"utility",
+		"library"
+	],
+	"author": "Jake Hamilton <jake.hamilton@hey.com>",
+	"license": "MIT",
+	"devDependencies": {
+		"vite": "^2.5.3"
+	},
+	"dependencies": {
+		"typescript": "^4.5.0-dev.20210904"
+	},
+	"exports": {
+		".": {
+			"default": "./dist/css.es.js",
+			"import": "./dist/css.es.js",
+			"require": "./dist/css.cjs.js"
+		}
+	}
 }
