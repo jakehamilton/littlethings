@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.2
+
+### Fixes
+
+- make css package public
+
+
 ## 1.0.1
 
 ### Chores
