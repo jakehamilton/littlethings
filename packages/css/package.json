@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/css",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A small css-in-js utility.",
     "main": "./dist/css.umd.js",
     "types": "./dist/index.d.ts",
