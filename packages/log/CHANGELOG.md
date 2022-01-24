@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.6.0
+
+### Features
+
+- began work on littleui and littlecss
+
+
+### Fixes
+
+- move ts-disable comment to correct line
+
+
 ## 2.5.0
 
 ### Features
