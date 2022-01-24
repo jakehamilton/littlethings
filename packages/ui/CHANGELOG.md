@@ -4,6 +4,15 @@
 
 ### Chores
 
+- _(release)_: publish
+
+- enable css builds and update dependencies
+
+
+## 1.0.1
+
+### Chores
+
 - enable css builds and update dependencies
 
 
