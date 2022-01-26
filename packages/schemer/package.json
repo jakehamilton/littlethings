@@ -1,0 +1,44 @@
+{
+    "name": "@littlethings/schemer",
+    "version": "1.0.0",
+    "description": "Generate TypeScript modules from JSON Schema.",
+    "main": "./dist/schemer.umd.js",
+    "types": "./dist/index.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "npm run build:lib && npm run build:types",
+        "build:lib": "vite build",
+        "build:types": "tsc -p . --emitDeclarationOnly",
+        "test": "vitest",
+        "test:coverage": "vitest --coverage"
+    },
+    "keywords": [
+        "code",
+        "generator",
+        "littlethings",
+        "utility",
+        "library"
+    ],
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "vite": "^2.8.0-beta.3",
+        "typescript": "^4.6.0-dev.20220123",
+        "vitest": "^0.2.0",
+        "@types/json-schema": "^7.0.9"
+    },
+    "exports": {
+        ".": {
+            "default": "./dist/schemer.es.js",
+            "import": "./dist/schemer.es.js",
+            "require": "./dist/schemer.cjs.js"
+        }
+    },
+    "dependencies": {
+        "json-schema": "^0.4.0",
+        "camelcase": "^6.3.0",
+        "@littlethings/coder": "^1.0.0"
+    }
+}
