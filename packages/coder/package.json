@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/coder",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A small and simple code generation tool.",
     "main": "./dist/coder.umd.js",
     "types": "./dist/index.d.ts",
