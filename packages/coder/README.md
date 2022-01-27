@@ -26,19 +26,19 @@ import Coder from "@littlethings/coder";
 // Create a new instance of Coder.
 const coder = new Coder();
 
-// Write a line of code
+// Write a line of code.
 coder.line(`console.log("first line of code");`);
 
-// Write an empty line
+// Write an empty line.
 coder.line();
 
-// Open a block (takes some text and appends " {")
+// Open a block (takes some text and appends " {").
 coder.openBlock("const hello = (name) =>");
 
-// Write some more text
+// Write some more text.
 coder.line("console.log(`Hello, ${name}`);");
 
-// Close the block (*optionally* takes some text and prepends "}")
+// Close the block (*optionally* takes some text and prepends "}").
 coder.closeBlock(";");
 
 // Then take the code from the `coder.code` property

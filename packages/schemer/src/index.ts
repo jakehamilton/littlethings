@@ -107,8 +107,11 @@ class Schemer {
 			const key = Object.keys(this.emitters)[0];
 			const emitter = this.emitters[key];
 			const type = emitter(coder);
+
 			coder.line();
+
 			delete this.emitters[key];
+
 			if (type) {
 				this.types[key] = type;
 			}
@@ -127,11 +130,11 @@ class Schemer {
 		};
 	}
 
-	emit(name: string, schema: JSONSchema4): Type;
+	emit(name: string, schema?: JSONSchema4): Type;
 	emit(name: string, emitter: TypeEmitter): void;
 	emit(
 		name: string,
-		schemaOrEmitter: JSONSchema4 | TypeEmitter
+		schemaOrEmitter?: JSONSchema4 | TypeEmitter
 	): Type | void {
 		if (typeof schemaOrEmitter === "function") {
 			// type emitter
@@ -166,7 +169,11 @@ class Schemer {
 			}
 
 			// Renamed to make it clear we only have a schema here.
-			const schema = schemaOrEmitter;
+			const schema = schemaOrEmitter || this.schemas[name];
+
+			if (!schema) {
+				throw new Error(`No schema found for "${name}".`);
+			}
 
 			// @NOTE(jakehamilton): Handle $ref
 			if (isRef(schema)) {
@@ -410,4 +417,12 @@ class Schemer {
 
 export default Schemer;
 
-export { normalize, camel, pascal };
+export {
+	normalize,
+	camel,
+	pascal,
+	EnumGeneratorOptions,
+	UnionGeneratorOptions,
+	StructGeneratorOptions,
+	PatternGeneratorOptions,
+};

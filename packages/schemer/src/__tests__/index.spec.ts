@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 
-import Schemer from "..";
+import Schemer, { normalize } from "..";
+import { Type } from "../util/type";
 
 describe("Schemer", () => {
 	it("should instantiate", () => {
@@ -67,7 +68,7 @@ describe("Schemer", () => {
 				readonly date?: Date;
 				readonly array?: Array<string>;
 			}
-			
+
 			export const serializeTest = (options: Test | undefined) => {
 				if (options === undefined) return undefined;
 				const result = {
@@ -79,18 +80,74 @@ describe("Schemer", () => {
 				};
 				return result;
 			};
-			
+
 			export enum NamespaceTestEnum {
 				X = \\"x\\",
 				Y = \\"y\\",
 				Z = \\"z\\",
 			}
-			
+
 			export type NamespaceTestUnion = (string | boolean | number) & { __type: \\"NamespaceTestUnion\\" };
 			export const isNamespaceTestUnion = (input: any): input is NamespaceTestUnion => {
 				return [\\"string\\", \\"boolean\\", \\"number\\"].includes(typeof input);
 			};
-			
+
+			"
+		`);
+	});
+
+	it("should throw when no schema exists", () => {
+		expect(() => {
+			const schemer = new Schemer();
+
+			schemer.emit("MyType");
+		}).toThrow();
+	});
+
+	it("should emit aliased types", () => {
+		const schemer = new Schemer({
+			schemas: {
+				"a.b.c": {
+					properties: {
+						name: {
+							type: "string",
+						},
+					},
+				},
+			},
+		});
+
+		schemer.alias("MyType", "a.b.c");
+
+		schemer.emit("MyType");
+
+		expect(schemer.render()).toMatchInlineSnapshot(`
+			"export interface ABC {
+				readonly name?: string;
+			}
+
+			export const serializeABC = (options: ABC | undefined) => {
+				if (options === undefined) return undefined;
+				const result = {
+					\\"name\\": options.name,
+				};
+				return result;
+			};
+
+			"
+		`);
+	});
+
+	it("should emit custom types", () => {
+		const schemer = new Schemer();
+
+		schemer.emit("MyType", (coder) => {
+			coder.line("export interface MyType {}");
+		});
+
+		expect(schemer.render()).toMatchInlineSnapshot(`
+			"export interface MyType {}
+
 			"
 		`);
 	});
