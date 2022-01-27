@@ -31,9 +31,9 @@
     },
     "exports": {
         ".": {
-            "default": "./dist/schemer.es.js",
             "import": "./dist/schemer.es.js",
-            "require": "./dist/schemer.cjs.js"
+            "require": "./dist/schemer.cjs.js",
+            "default": "./dist/schemer.umd.js"
         }
     },
     "dependencies": {

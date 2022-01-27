@@ -30,9 +30,9 @@
     },
     "exports": {
         ".": {
-            "default": "./dist/coder.es.js",
             "import": "./dist/coder.es.js",
-            "require": "./dist/coder.cjs.js"
+            "require": "./dist/coder.cjs.js",
+            "default": "./dist/coder.umd.js"
         }
     }
 }
