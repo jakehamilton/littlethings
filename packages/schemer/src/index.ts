@@ -1,9 +1,14 @@
 import Coder from "@littlethings/coder";
 import { JSONSchema4 } from "json-schema";
-import { UnionGeneratorOptions } from "./generators/union";
 
 import * as serializers from "./serializers";
 import * as generators from "./generators";
+
+import type { UnionGeneratorOptions } from "./generators/union";
+import type { EnumGeneratorOptions } from "./generators/enum";
+import type { StructGeneratorOptions } from "./generators/struct";
+import type { PatternGeneratorOptions } from "./generators/pattern";
+
 import { isDate } from "./util/date";
 import { Enum, isEnum } from "./util/enum";
 import { camel, normalize, pascal } from "./util/formatting";
@@ -19,9 +24,6 @@ import {
 	isValidUnionOption,
 	Union,
 } from "./util/union";
-import { EnumGeneratorOptions } from "./generators/enum";
-import { StructGeneratorOptions } from "./generators/struct";
-import { PatternGeneratorOptions } from "./generators/pattern";
 import { isPattern, Pattern } from "./util/pattern";
 
 export type Schema = JSONSchema4;
@@ -417,12 +419,11 @@ class Schemer {
 
 export default Schemer;
 
-export {
-	normalize,
-	camel,
-	pascal,
-	EnumGeneratorOptions,
+export { normalize, camel, pascal };
+
+export type {
 	UnionGeneratorOptions,
+	EnumGeneratorOptions,
 	StructGeneratorOptions,
 	PatternGeneratorOptions,
 };
