@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.3
+
+### Fixes
+
+- add missing exports
+
+
 ## 1.0.2
 
 ### Fixes
