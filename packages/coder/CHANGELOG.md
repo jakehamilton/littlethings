@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.2
+
+### Fixes
+
+- tweak exports to be easier to use
+
+
 ## 1.0.1
 
 ### Other
