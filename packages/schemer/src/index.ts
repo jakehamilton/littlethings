@@ -419,9 +419,25 @@ class Schemer {
 
 export default Schemer;
 
-export { normalize, camel, pascal };
+export {
+	normalize,
+	camel,
+	pascal,
+	isEnum,
+	isStruct,
+	isUnion,
+	isPattern,
+	isDate,
+	isMap,
+	id,
+};
 
 export type {
+	Type,
+	Enum,
+	Struct,
+	Union,
+	Pattern,
 	UnionGeneratorOptions,
 	EnumGeneratorOptions,
 	StructGeneratorOptions,
