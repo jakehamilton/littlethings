@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.2
+
+### Fixes
+
+- bump base version of coder
+
+
 ## 1.0.1
 
 ### Fixes
