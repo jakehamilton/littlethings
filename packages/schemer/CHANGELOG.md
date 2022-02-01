@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.0
+
+### Features
+
+- support properties and additionalProperties on structs
+
+
 ## 1.1.0
 
 ### Features

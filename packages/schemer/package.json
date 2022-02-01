@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/schemer",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Generate TypeScript modules from JSON Schema.",
     "main": "./dist/schemer.umd.js",
     "types": "./dist/index.d.ts",
