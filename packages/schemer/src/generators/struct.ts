@@ -21,6 +21,22 @@ const generate = ({
 	serializers,
 	emit,
 }: StructGeneratorOptions) => {
+	let additionalPropertiesType: Type | null = null;
+
+	if (
+		schema.additionalProperties &&
+		typeof schema.additionalProperties === "object"
+	) {
+		const additionalPropertiesTypeName = normalize(
+			serializers.name(`${name}.additionalProperties`)
+		);
+
+		additionalPropertiesType = emit(
+			additionalPropertiesTypeName,
+			schema.additionalProperties
+		);
+	}
+
 	const props: Array<{
 		name: string;
 		safeName: string;
@@ -47,6 +63,9 @@ const generate = ({
 			};`
 		);
 	}
+	if (additionalPropertiesType) {
+		coder.line(`[key: string]: ${additionalPropertiesType.type};`);
+	}
 	coder.closeBlock();
 
 	coder.line();
@@ -55,6 +74,29 @@ const generate = ({
 		`export const serialize${name} = (options: ${name} | undefined) =>`
 	);
 	coder.line("if (options === undefined) return undefined;");
+	if (additionalPropertiesType) {
+		coder.line(
+			`const additionalPropertiesKeys = Object.keys(options).filter(key => ![${props
+				.map((prop) => `"${prop.safeName}"`)
+				.join(", ")}]).includes(key);`
+		);
+
+		coder.line();
+
+		coder.line(`const additionalProperties = {}`);
+
+		coder.line();
+
+		coder.openBlock(`for (const key of additionalPropertiesKeys)`);
+		coder.line(
+			`additionalProperties[key] = ${additionalPropertiesType.serialize(
+				"options[key]"
+			)};`
+		);
+		coder.closeBlock();
+
+		coder.line();
+	}
 	coder.openBlock("const result =");
 	for (const prop of props) {
 		coder.line(
@@ -63,7 +105,11 @@ const generate = ({
 			)},`
 		);
 	}
+	if (additionalPropertiesType) {
+		coder.line(`...additionalProperties,`);
+	}
 	coder.closeBlock(";");
+	coder.line();
 	coder.line("return result;");
 	coder.closeBlock(";");
 };
