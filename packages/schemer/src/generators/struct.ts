@@ -55,7 +55,7 @@ const generate = ({
 		});
 	}
 
-	coder.openBlock(`export interface ${name}`);
+	coder.openBlock(`export type ${name} =`);
 	for (const prop of props) {
 		coder.line(
 			`readonly ${prop.safeName}${prop.required ? "" : "?"}: ${
@@ -63,10 +63,11 @@ const generate = ({
 			};`
 		);
 	}
-	if (additionalPropertiesType) {
-		coder.line(`[key: string]: ${additionalPropertiesType.type};`);
-	}
-	coder.closeBlock();
+	coder.closeBlock(
+		additionalPropertiesType
+			? ` & Record<string, ${additionalPropertiesType.type}>;`
+			: ";"
+	);
 
 	coder.line();
 
@@ -78,21 +79,17 @@ const generate = ({
 		coder.line(
 			`const additionalPropertiesKeys = Object.keys(options).filter(key => ![${props
 				.map((prop) => `"${prop.safeName}"`)
-				.join(", ")}]).includes(key);`
+				.join(", ")}].includes(key));`
 		);
 
 		coder.line();
 
-		coder.line(`const additionalProperties = {}`);
+		coder.line(`const additionalProperties = {};`);
 
 		coder.line();
 
 		coder.openBlock(`for (const key of additionalPropertiesKeys)`);
-		coder.line(
-			`additionalProperties[key] = ${additionalPropertiesType.serialize(
-				"options[key]"
-			)};`
-		);
+		coder.line(`additionalProperties[key] = options[key];`);
 		coder.closeBlock();
 
 		coder.line();
@@ -106,7 +103,11 @@ const generate = ({
 		);
 	}
 	if (additionalPropertiesType) {
-		coder.line(`...additionalProperties,`);
+		coder.line(
+			`...(${additionalPropertiesType.serialize(
+				"additionalProperties"
+			)}),`
+		);
 	}
 	coder.closeBlock(";");
 	coder.line();

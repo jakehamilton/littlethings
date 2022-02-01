@@ -61,13 +61,13 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export interface Test {
+			"export type Test = {
 				readonly enum?: NamespaceTestEnum;
 				readonly union?: NamespaceTestUnion;
 				readonly map?: { [key: string]: any };
 				readonly date?: Date;
 				readonly array?: Array<string>;
-			}
+			};
 			
 			export const serializeTest = (options: Test | undefined) => {
 				if (options === undefined) return undefined;
@@ -123,9 +123,9 @@ describe("Schemer", () => {
 		schemer.emit("MyType");
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export interface ABC {
+			"export type ABC = {
 				readonly name?: string;
-			}
+			};
 			
 			export const serializeABC = (options: ABC | undefined) => {
 				if (options === undefined) return undefined;
@@ -170,9 +170,9 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export interface MyType {
+			"export type MyType = {
 				readonly arr?: Array<string>;
-			}
+			};
 			
 			export const serializeMyType = (options: MyType | undefined) => {
 				if (options === undefined) return undefined;
@@ -211,39 +211,37 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export interface MyType {
+			"export type MyType = {
 				readonly name?: string;
-				[key: string]: MyTypeAdditionalProperties;
-			}
+			} & Record<string, MyTypeAdditionalProperties>;
 			
 			export const serializeMyType = (options: MyType | undefined) => {
 				if (options === undefined) return undefined;
-				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"name\\"]).includes(key);
+				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"name\\"].includes(key));
 			
-				const additionalProperties = {}
+				const additionalProperties = {};
 			
 				for (const key of additionalPropertiesKeys) {
-					additionalProperties[key] = serializeMyTypeAdditionalProperties(options[key]);
+					additionalProperties[key] = options[key];
 				}
 			
 				const result = {
 					\\"name\\": options.name,
-					...additionalProperties,
+					...(serializeMyTypeAdditionalProperties(additionalProperties)),
 				};
 			
 				return result;
 			};
 			
-			export interface MyTypeAdditionalProperties {
+			export type MyTypeAdditionalProperties = {
 				readonly subname?: string;
-				[key: string]: number;
-			}
+			} & Record<string, number>;
 			
 			export const serializeMyTypeAdditionalProperties = (options: MyTypeAdditionalProperties | undefined) => {
 				if (options === undefined) return undefined;
-				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"subname\\"]).includes(key);
+				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"subname\\"].includes(key));
 			
-				const additionalProperties = {}
+				const additionalProperties = {};
 			
 				for (const key of additionalPropertiesKeys) {
 					additionalProperties[key] = options[key];
@@ -251,7 +249,7 @@ describe("Schemer", () => {
 			
 				const result = {
 					\\"subname\\": options.subname,
-					...additionalProperties,
+					...(additionalProperties),
 				};
 			
 				return result;
