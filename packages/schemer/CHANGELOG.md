@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.1
+
+### Fixes
+
+- replace interfaces with types and fix struct generation
+
+
 ## 1.2.0
 
 ### Features
