@@ -151,4 +151,36 @@ describe("Schemer", () => {
 			"
 		`);
 	});
+
+	it("should handle additionalItems", () => {
+		const schemer = new Schemer();
+
+		schemer.emit("MyType", {
+			type: "object",
+			properties: {
+				arr: {
+					type: "array",
+					additionalItems: {
+						type: "string",
+					},
+				},
+			},
+		});
+
+		expect(schemer.render()).toMatchInlineSnapshot(`
+			"export interface MyType {
+				readonly arr?: Array<string>;
+			}
+			
+			export const serializeMyType = (options: MyType | undefined) => {
+				if (options === undefined) return undefined;
+				const result = {
+					\\"arr\\": options.arr?.map(item => item),
+				};
+				return result;
+			};
+			
+			"
+		`);
+	});
 });

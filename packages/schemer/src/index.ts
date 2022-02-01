@@ -382,15 +382,22 @@ class Schemer {
 
 	array(name: string, schema: JSONSchema4): Type {
 		if (
-			!schema.hasOwnProperty("items") ||
-			typeof schema.items !== "object"
+			(!schema.hasOwnProperty("items") ||
+				typeof schema.items !== "object") &&
+			(!schema.hasOwnProperty("additionalItems") ||
+				typeof schema.additionalItems !== "object")
 		) {
 			throw new Error(
-				`Expected array items to be "object", but got "${typeof schema.items}".`
+				`Expected array items to be "object", but got "${typeof (
+					schema.items ?? schema.additionalItems
+				)}".`
 			);
 		}
 
-		const type = this.emit(name, schema.items);
+		const type = this.emit(
+			name,
+			(schema.additionalItems as JSONSchema4 | undefined) ?? schema.items
+		);
 
 		return {
 			type: `Array<${type.type}>`,
