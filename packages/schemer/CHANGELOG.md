@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.1.0
+
+### Features
+
+- support additionalItems in array schemas
+
+
 ## 1.0.4
 
 ### Fixes
