@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.3
+
+### Fixes
+
+- use optional chaining when serializing
+
+
 ## 1.2.2
 
 ### Fixes
