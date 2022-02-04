@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.2
+
+### Fixes
+
+- add type to pass strict mode
+
+
 ## 1.2.1
 
 ### Fixes
