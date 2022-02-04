@@ -84,7 +84,7 @@ const generate = ({
 
 		coder.line();
 
-		coder.line(`const additionalProperties = {};`);
+		coder.line(`const additionalProperties: Record<string, any> = {};`);
 
 		coder.line();
 

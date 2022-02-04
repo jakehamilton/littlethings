@@ -219,7 +219,7 @@ describe("Schemer", () => {
 				if (options === undefined) return undefined;
 				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"name\\"].includes(key));
 			
-				const additionalProperties = {};
+				const additionalProperties: Record<string, any> = {};
 			
 				for (const key of additionalPropertiesKeys) {
 					additionalProperties[key] = options[key];
@@ -241,7 +241,7 @@ describe("Schemer", () => {
 				if (options === undefined) return undefined;
 				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"subname\\"].includes(key));
 			
-				const additionalProperties = {};
+				const additionalProperties: Record<string, any> = {};
 			
 				for (const key of additionalPropertiesKeys) {
 					additionalProperties[key] = options[key];
