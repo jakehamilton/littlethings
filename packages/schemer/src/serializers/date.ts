@@ -1,5 +1,5 @@
 const serialize = (identifier: string) => {
-	return `${identifier}.toISOString()`;
+	return `${identifier}?.toISOString()`;
 };
 
 export default serialize;
