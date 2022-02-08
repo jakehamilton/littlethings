@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.4
+
+### Fixes
+
+- correct array types and support serialized type names
+
+
 ## 1.2.3
 
 ### Fixes
