@@ -61,7 +61,18 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export type Test = {
+			"const prelude = {
+				id: <T>(x: T) => x,
+				isNotUndefined: <T>(x: T | undefined): x is T => x !== undefined,
+				serialize: <T, U>(x: T, f: (x: T extends undefined ? never : T) => U): T extends undefined ? undefined : U => {
+					// @ts-ignore
+					if (x === undefined) return undefined;
+					//@ts-ignore
+					return f(x);
+				},
+			};
+			
+			export type Test = {
 				readonly enum?: NamespaceTestEnum;
 				readonly union?: NamespaceTestUnion;
 				readonly map?: { [key: string]: any };
@@ -69,9 +80,20 @@ describe("Schemer", () => {
 				readonly array?: Array<string>;
 			};
 			
-			export const serializeTest = (options: Test | undefined) => {
+			export type SerializedTest = {
+				\\"enum\\"?: NamespaceTestEnum,
+				\\"union\\"?: NamespaceTestUnion,
+				\\"map\\"?: { [key: string]: any },
+				\\"date\\"?: string,
+				\\"array\\"?: Array<string>,
+			};
+			
+			export function serializeTest(options: undefined): undefined;
+			export function serializeTest(options: Test): SerializedTest;
+			export function serializeTest(options: Test | undefined): SerializedTest | undefined;
+			export function serializeTest(options: Test | undefined): SerializedTest | undefined {
 				if (options === undefined) return undefined;
-				const result = {
+				const result: SerializedTest = {
 					\\"enum\\": <ENUM>,
 					\\"union\\": <UNION>,
 					\\"map\\": <MAP>,
@@ -80,7 +102,7 @@ describe("Schemer", () => {
 				};
 			
 				return result;
-			};
+			}
 			
 			export enum NamespaceTestEnum {
 				X = \\"x\\",
@@ -123,18 +145,36 @@ describe("Schemer", () => {
 		schemer.emit("MyType");
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export type ABC = {
+			"const prelude = {
+				id: <T>(x: T) => x,
+				isNotUndefined: <T>(x: T | undefined): x is T => x !== undefined,
+				serialize: <T, U>(x: T, f: (x: T extends undefined ? never : T) => U): T extends undefined ? undefined : U => {
+					// @ts-ignore
+					if (x === undefined) return undefined;
+					//@ts-ignore
+					return f(x);
+				},
+			};
+			
+			export type ABC = {
 				readonly name?: string;
 			};
 			
-			export const serializeABC = (options: ABC | undefined) => {
+			export type SerializedABC = {
+				\\"name\\"?: string,
+			};
+			
+			export function serializeABC(options: undefined): undefined;
+			export function serializeABC(options: ABC): SerializedABC;
+			export function serializeABC(options: ABC | undefined): SerializedABC | undefined;
+			export function serializeABC(options: ABC | undefined): SerializedABC | undefined {
 				if (options === undefined) return undefined;
-				const result = {
+				const result: SerializedABC = {
 					\\"name\\": options.name,
 				};
 			
 				return result;
-			};
+			}
 			
 			"
 		`);
@@ -148,8 +188,19 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export interface MyType {}
-
+			"const prelude = {
+				id: <T>(x: T) => x,
+				isNotUndefined: <T>(x: T | undefined): x is T => x !== undefined,
+				serialize: <T, U>(x: T, f: (x: T extends undefined ? never : T) => U): T extends undefined ? undefined : U => {
+					// @ts-ignore
+					if (x === undefined) return undefined;
+					//@ts-ignore
+					return f(x);
+				},
+			};
+			
+			export interface MyType {}
+			
 			"
 		`);
 	});
@@ -170,18 +221,36 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export type MyType = {
+			"const prelude = {
+				id: <T>(x: T) => x,
+				isNotUndefined: <T>(x: T | undefined): x is T => x !== undefined,
+				serialize: <T, U>(x: T, f: (x: T extends undefined ? never : T) => U): T extends undefined ? undefined : U => {
+					// @ts-ignore
+					if (x === undefined) return undefined;
+					//@ts-ignore
+					return f(x);
+				},
+			};
+			
+			export type MyType = {
 				readonly arr?: Array<string>;
 			};
 			
-			export const serializeMyType = (options: MyType | undefined) => {
+			export type SerializedMyType = {
+				\\"arr\\"?: Array<string>,
+			};
+			
+			export function serializeMyType(options: undefined): undefined;
+			export function serializeMyType(options: MyType): SerializedMyType;
+			export function serializeMyType(options: MyType | undefined): SerializedMyType | undefined;
+			export function serializeMyType(options: MyType | undefined): SerializedMyType | undefined {
 				if (options === undefined) return undefined;
-				const result = {
-					\\"arr\\": options.arr?.map(item => item),
+				const result: SerializedMyType = {
+					\\"arr\\": prelude.serialize(options.arr, items => items.map(item => item).filter(prelude.isNotUndefined)),
 				};
 			
 				return result;
-			};
+			}
 			
 			"
 		`);
@@ -211,11 +280,29 @@ describe("Schemer", () => {
 		});
 
 		expect(schemer.render()).toMatchInlineSnapshot(`
-			"export type MyType = {
+			"const prelude = {
+				id: <T>(x: T) => x,
+				isNotUndefined: <T>(x: T | undefined): x is T => x !== undefined,
+				serialize: <T, U>(x: T, f: (x: T extends undefined ? never : T) => U): T extends undefined ? undefined : U => {
+					// @ts-ignore
+					if (x === undefined) return undefined;
+					//@ts-ignore
+					return f(x);
+				},
+			};
+			
+			export type MyType = {
 				readonly name?: string;
 			} & Record<string, MyTypeAdditionalProperties>;
 			
-			export const serializeMyType = (options: MyType | undefined) => {
+			export type SerializedMyType = {
+				\\"name\\"?: string,
+			} & Record<string, MyTypeAdditionalProperties>
+			
+			export function serializeMyType(options: undefined): undefined;
+			export function serializeMyType(options: MyType): SerializedMyType;
+			export function serializeMyType(options: MyType | undefined): SerializedMyType | undefined;
+			export function serializeMyType(options: MyType | undefined): SerializedMyType | undefined {
 				if (options === undefined) return undefined;
 				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"name\\"].includes(key));
 			
@@ -225,19 +312,26 @@ describe("Schemer", () => {
 					additionalProperties[key] = options[key];
 				}
 			
-				const result = {
+				const result: SerializedMyType = {
 					\\"name\\": options.name,
 					...(serializeMyTypeAdditionalProperties(additionalProperties)),
 				};
 			
 				return result;
-			};
+			}
 			
 			export type MyTypeAdditionalProperties = {
 				readonly subname?: string;
 			} & Record<string, number>;
 			
-			export const serializeMyTypeAdditionalProperties = (options: MyTypeAdditionalProperties | undefined) => {
+			export type SerializedMyTypeAdditionalProperties = {
+				\\"subname\\"?: string,
+			} & Record<string, number>
+			
+			export function serializeMyTypeAdditionalProperties(options: undefined): undefined;
+			export function serializeMyTypeAdditionalProperties(options: MyTypeAdditionalProperties): SerializedMyTypeAdditionalProperties;
+			export function serializeMyTypeAdditionalProperties(options: MyTypeAdditionalProperties | undefined): SerializedMyTypeAdditionalProperties | undefined;
+			export function serializeMyTypeAdditionalProperties(options: MyTypeAdditionalProperties | undefined): SerializedMyTypeAdditionalProperties | undefined {
 				if (options === undefined) return undefined;
 				const additionalPropertiesKeys = Object.keys(options).filter(key => ![\\"subname\\"].includes(key));
 			
@@ -247,13 +341,13 @@ describe("Schemer", () => {
 					additionalProperties[key] = options[key];
 				}
 			
-				const result = {
+				const result: SerializedMyTypeAdditionalProperties = {
 					\\"subname\\": options.subname,
 					...(additionalProperties),
 				};
 			
 				return result;
-			};
+			}
 			
 			"
 		`);

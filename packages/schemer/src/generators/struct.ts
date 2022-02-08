@@ -71,8 +71,33 @@ const generate = ({
 
 	coder.line();
 
+	coder.openBlock(`export type Serialized${name} =`);
+	for (const prop of props) {
+		coder.line(
+			`"${prop.name}"${prop.required ? "" : "?"}: ${
+				prop.type.serializedType
+			},`
+		);
+	}
+	coder.closeBlock(
+		additionalPropertiesType
+			? ` & Record<string, ${additionalPropertiesType.type}>`
+			: ";"
+	);
+
+	coder.line();
+
+	coder.line(
+		`export function serialize${name}(options: undefined): undefined;`
+	);
+	coder.line(
+		`export function serialize${name}(options: ${name}): Serialized${name};`
+	);
+	coder.line(
+		`export function serialize${name}(options: ${name} | undefined): Serialized${name} | undefined;`
+	);
 	coder.openBlock(
-		`export const serialize${name} = (options: ${name} | undefined) =>`
+		`export function serialize${name}(options: ${name} | undefined): Serialized${name} | undefined`
 	);
 	coder.line("if (options === undefined) return undefined;");
 	if (additionalPropertiesType) {
@@ -94,7 +119,7 @@ const generate = ({
 
 		coder.line();
 	}
-	coder.openBlock("const result =");
+	coder.openBlock(`const result: Serialized${name} =`);
 	for (const prop of props) {
 		coder.line(
 			`"${prop.name}": ${prop.type.serialize(
@@ -112,7 +137,7 @@ const generate = ({
 	coder.closeBlock(";");
 	coder.line();
 	coder.line("return result;");
-	coder.closeBlock(";");
+	coder.closeBlock();
 };
 
 export default generate;

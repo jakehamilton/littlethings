@@ -1,7 +1,9 @@
 import camelcase from "camelcase";
 
 export const camel = (input: string) => {
-	return camelcase(input);
+	return camelcase(input, {
+		preserveConsecutiveUppercase: true,
+	});
 };
 
 export const pascal = (input: string) => {

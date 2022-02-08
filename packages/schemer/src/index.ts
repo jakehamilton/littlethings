@@ -105,6 +105,24 @@ class Schemer {
 	render() {
 		const coder = new Coder();
 
+		// Prelude
+		coder.openBlock(`const prelude =`);
+		coder.line(`id: <T>(x: T) => x,`);
+		coder.line(
+			`isNotUndefined: <T>(x: T | undefined): x is T => x !== undefined,`
+		);
+		coder.openBlock(
+			`serialize: <T, U>(x: T, f: (x: T extends undefined ? never : T) => U): T extends undefined ? undefined : U =>`
+		);
+		coder.line(`// @ts-ignore`);
+		coder.line(`if (x === undefined) return undefined;`);
+		coder.line(`//@ts-ignore`);
+		coder.line(`return f(x);`);
+		coder.closeBlock(",");
+		coder.closeBlock(";");
+
+		coder.line();
+
 		while (Object.keys(this.emitters).length > 0) {
 			const key = Object.keys(this.emitters)[0];
 			const emitter = this.emitters[key];
@@ -157,6 +175,7 @@ class Schemer {
 					return {
 						type: name,
 						serialize: id,
+						serializedType: name,
 					};
 				}
 			};
@@ -202,6 +221,7 @@ class Schemer {
 				return {
 					type: "Date",
 					serialize: this.serializers.date,
+					serializedType: "string",
 				};
 			}
 
@@ -239,6 +259,7 @@ class Schemer {
 				return {
 					type: `{ [key: string]: ${type.type} }`,
 					serialize: this.serializers.map(type),
+					serializedType: `{ [key: string]: ${type.type} }`,
 				};
 			}
 
@@ -253,6 +274,7 @@ class Schemer {
 					return {
 						type: "string",
 						serialize: id,
+						serializedType: "string",
 					};
 
 				// @NOTE(jakehamilton): Handle numbers & integers
@@ -261,6 +283,7 @@ class Schemer {
 					return {
 						type: "number",
 						serialize: id,
+						serializedType: "number",
 					};
 
 				// @NOTE(jakehamilton): Handle booleans
@@ -268,6 +291,7 @@ class Schemer {
 					return {
 						type: "boolean",
 						serialize: id,
+						serializedType: "boolean",
 					};
 
 				// @TODO(jakehamilton): Handle arrays
@@ -279,6 +303,7 @@ class Schemer {
 			return {
 				type: "any",
 				serialize: id,
+				serializedType: "any",
 			};
 		}
 	}
@@ -309,7 +334,7 @@ class Schemer {
 		return this.emit(name, resolvedSchema);
 	}
 
-	union(name: string, schema: Union) {
+	union(name: string, schema: Union): Type | undefined {
 		const options: Array<string> = [];
 
 		for (const option of getUnionOptions(schema)) {
@@ -326,6 +351,7 @@ class Schemer {
 		const type: Type = {
 			type: name,
 			serialize: this.serializers.union,
+			serializedType: name,
 		};
 
 		this.emit(name, (coder) => {
@@ -341,10 +367,11 @@ class Schemer {
 		return type;
 	}
 
-	enum(name: string, schema: Enum) {
+	enum(name: string, schema: Enum): Type {
 		const type: Type = {
 			type: name,
 			serialize: this.serializers.enum,
+			serializedType: name,
 		};
 
 		this.emit(name, (coder) => {
@@ -359,10 +386,11 @@ class Schemer {
 		return type;
 	}
 
-	struct(name: string, schema: Struct) {
+	struct(name: string, schema: Struct): Type {
 		const type: Type = {
 			type: name,
 			serialize: this.serializers.struct(name),
+			serializedType: `Serialized${name}`,
 		};
 
 		this.emit(name, (coder) => {
@@ -402,6 +430,7 @@ class Schemer {
 		return {
 			type: `Array<${type.type}>`,
 			serialize: this.serializers.array(type),
+			serializedType: `Array<${type.serializedType}>`,
 		};
 	}
 
@@ -409,6 +438,7 @@ class Schemer {
 		const type: Type = {
 			type: name,
 			serialize: id,
+			serializedType: name,
 		};
 
 		this.emit(name, (coder) => {
