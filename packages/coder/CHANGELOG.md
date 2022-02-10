@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.1.0
+
+### Features
+
+- expose getIndentText method
+
+
 ## 1.0.2
 
 ### Fixes
