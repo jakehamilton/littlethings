@@ -28,7 +28,7 @@ class Coder {
 		}
 	}
 
-	private getIndentText() {
+	getIndentText() {
 		let text = "";
 
 		for (let i = 0; i < this.currentIndent * this.indentAmount; i++) {
