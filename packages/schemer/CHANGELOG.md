@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.5
+
+### Fixes
+
+- remove __type from unions
+
+
 ## 1.2.4
 
 ### Fixes
