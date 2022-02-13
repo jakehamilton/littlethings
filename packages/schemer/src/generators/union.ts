@@ -7,11 +7,7 @@ export interface UnionGeneratorOptions {
 }
 
 const generate = ({ coder, name, options }: UnionGeneratorOptions) => {
-	coder.line(
-		`export type ${name} = (${options.join(
-			" | "
-		)}) & { __type: "${name}" };`
-	);
+	coder.line(`export type ${name} = ${options.join(" | ")};`);
 
 	coder.openBlock(
 		`export const is${name} = (input: any): input is ${name} =>`

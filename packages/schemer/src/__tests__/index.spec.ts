@@ -110,7 +110,7 @@ describe("Schemer", () => {
 				Z = \\"z\\",
 			}
 			
-			export type NamespaceTestUnion = (string | boolean | number) & { __type: \\"NamespaceTestUnion\\" };
+			export type NamespaceTestUnion = string | boolean | number;
 			export const isNamespaceTestUnion = (input: any): input is NamespaceTestUnion => {
 				return [\\"string\\", \\"boolean\\", \\"number\\"].includes(typeof input);
 			};
