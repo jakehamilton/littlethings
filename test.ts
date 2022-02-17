@@ -1,5 +1,6 @@
+// TODO convert this file into a normal test
 import * as assert from "assert";
-import { TestSuite } from "./index";
+import { TestSuite } from "./packages/test/src/index";
 
 async function main() {
 	const s = new TestSuite();
