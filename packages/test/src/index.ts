@@ -37,7 +37,7 @@ export class Test {
 		this.body = body;
 	}
 
-	befores() {
+	gatherBefores() {
 		const ancestors: Array<Describe> = [];
 		let currentParent = this.parent;
 		while (currentParent != null) {
@@ -46,19 +46,18 @@ export class Test {
 		}
 		ancestors.reverse();
 
-		return ancestors.map((describe) => describe.befores).flat(1);
+		return ancestors.map((describe) => describe.beforeEaches).flat(1);
 	}
 
-	afters() {
+	gatherAfters() {
 		const ancestors: Array<Describe> = [];
 		let currentParent = this.parent;
 		while (currentParent != null) {
 			ancestors.push(currentParent);
 			currentParent = currentParent.parent;
 		}
-		ancestors.reverse();
 
-		return ancestors.map((describe) => describe.afters).flat(1);
+		return ancestors.map((describe) => describe.afterEaches).flat(1);
 	}
 }
 
@@ -73,8 +72,10 @@ export class Describe {
 	rootDescribe: Describe;
 
 	children: Array<Test | Describe> = [];
-	befores: Array<LifecycleHook> = [];
-	afters: Array<LifecycleHook> = [];
+	beforeEaches: Array<LifecycleHook> = [];
+	beforeAlls: Array<LifecycleHook> = [];
+	afterEaches: Array<LifecycleHook> = [];
+	afterAlls: Array<LifecycleHook> = [];
 
 	api: TestAPI;
 
@@ -113,7 +114,7 @@ export class Describe {
 				this.children.push(child);
 			},
 			beforeEach: (body) => {
-				this.befores.push(
+				this.beforeEaches.push(
 					new LifecycleHook({
 						context: this.context.concat("beforeEach"),
 						body,
@@ -121,7 +122,7 @@ export class Describe {
 				);
 			},
 			beforeAll: (body) => {
-				this.rootDescribe.befores.push(
+				this.rootDescribe.beforeAlls.push(
 					new LifecycleHook({
 						context: this.context.concat("beforeAll"),
 						body,
@@ -129,7 +130,7 @@ export class Describe {
 				);
 			},
 			afterEach: (body) => {
-				this.afters.push(
+				this.afterEaches.push(
 					new LifecycleHook({
 						context: this.context.concat("afterEach"),
 						body,
@@ -137,7 +138,7 @@ export class Describe {
 				);
 			},
 			afterAll: (body) => {
-				this.rootDescribe.afters.push(
+				this.rootDescribe.afterAlls.push(
 					new LifecycleHook({
 						context: this.context.concat("afterAll"),
 						body,
@@ -173,7 +174,7 @@ export class LifecycleHook {
 
 export type TestEvent =
 	| {
-			type: "started";
+			type: "starting";
 			subject: Test | Describe | LifecycleHook;
 	  }
 	| {
@@ -256,7 +257,7 @@ export class TestSuite {
 		// TODO: concurrency
 		const prepareWork = async (describe: Describe) => {
 			emitEvent({
-				type: "started",
+				type: "starting",
 				subject: describe,
 			});
 			this._currentAPI = describe.api;
@@ -273,6 +274,12 @@ export class TestSuite {
 			for (const child of describe.children) {
 				if (child.type === "Describe") {
 					await prepareWork(child);
+				} else {
+					const afters = child.gatherAfters();
+					child.gatherAfters = () => afters;
+
+					const befores = child.gatherBefores();
+					child.gatherBefores = () => befores;
 				}
 			}
 		};
@@ -283,34 +290,29 @@ export class TestSuite {
 	}
 
 	summary(): string {
-		const lines = [];
-
-		const subjects: Array<[number, Describe | Test]> = [];
-
-		function addSubjects(children: Array<Describe | Test>, indent: number) {
-			subjects.push(
-				...children.map(
-					(child) => [indent, child] as [number, typeof child]
-				)
-			);
+		if (this.state === "INITIAL") {
+			return "<unassembled test suite>";
 		}
 
-		addSubjects(this.rootDescribe.children, 0);
+		const lines: Array<string> = [];
 
-		while (subjects.length > 0) {
-			const [indent, currentSubject] = subjects.shift()!;
-
+		function format(subject: Describe | Test, indent: number) {
 			const lastContext =
-				currentSubject.context[currentSubject.context.length - 1] || "";
+				subject.context[subject.context.length - 1] || "";
+
 			lines.push(
 				"  ".repeat(indent) +
-					[currentSubject.type, lastContext].filter(Boolean).join(" ")
+					[subject.type, lastContext].filter(Boolean).join(" ")
 			);
 
-			if (currentSubject.type === "Describe") {
-				addSubjects(currentSubject.children, indent + 1);
+			if (subject.type === "Describe") {
+				for (const child of subject.children) {
+					format(child, indent + 1);
+				}
 			}
 		}
+
+		format(this.rootDescribe, 0);
 
 		return lines.join("\n");
 	}
@@ -322,32 +324,47 @@ export class TestSuite {
 			throw new Error("This TestSuite has already been run");
 		}
 
-		const workToDo: Array<() => void | Promise<void>> = [];
 		const emitEvent = this._emitEvent.bind(this);
 
+		const beforeAllWork: Array<() => void | Promise<void>> = [];
+		const testWork: Array<() => void | Promise<void>> = [];
+		const afterAllWork: Array<() => void | Promise<void>> = [];
+
 		const prepareWork = (describe: Describe) => {
+			for (const before of describe.beforeAlls) {
+				beforeAllWork.push(async () => {
+					emitEvent({
+						type: "starting",
+						subject: before,
+					});
+					const maybeError = await runOrError(before.body);
+					if (maybeError != null) {
+						emitEvent({
+							type: "result",
+							subject: before,
+							status: "ERRORED",
+							error: maybeError,
+						});
+					}
+				});
+			}
+
 			for (const child of describe.children) {
 				if (child.type === "Describe") {
 					prepareWork(child);
 					continue;
 				}
 
-				workToDo.push(async () => {
+				testWork.push(async () => {
 					this._currentAPI = describe.api;
 
-					for (const before of child.befores()) {
+					for (const before of child.gatherBefores()) {
 						emitEvent({
-							type: "started",
+							type: "starting",
 							subject: before,
 						});
 						const maybeError = await runOrError(before.body);
-						if (maybeError == null) {
-							emitEvent({
-								type: "result",
-								subject: before,
-								status: "PASSED",
-							});
-						} else {
+						if (maybeError != null) {
 							emitEvent({
 								type: "result",
 								subject: before,
@@ -373,10 +390,37 @@ export class TestSuite {
 						});
 					}
 
-					for (const after of child.afters()) {
+					for (const after of child.gatherAfters()) {
 						emitEvent({
-							type: "started",
+							type: "starting",
 							subject: after,
+						});
+						const maybeError = await runOrError(after.body);
+						if (maybeError != null) {
+							emitEvent({
+								type: "result",
+								subject: after,
+								status: "ERRORED",
+								error: maybeError,
+							});
+						}
+					}
+				});
+			}
+
+			for (const after of describe.afterAlls) {
+				afterAllWork.push(async () => {
+					emitEvent({
+						type: "starting",
+						subject: after,
+					});
+					const maybeError = await runOrError(after.body);
+					if (maybeError != null) {
+						emitEvent({
+							type: "result",
+							subject: after,
+							status: "ERRORED",
+							error: maybeError,
 						});
 					}
 				});
@@ -385,8 +429,16 @@ export class TestSuite {
 
 		prepareWork(this.rootDescribe);
 
+		for (const work of beforeAllWork) {
+			await work();
+		}
+
 		// TODO: concurrency
-		for (const work of workToDo) {
+		for (const work of testWork) {
+			await work();
+		}
+
+		for (const work of afterAllWork) {
 			await work();
 		}
 
