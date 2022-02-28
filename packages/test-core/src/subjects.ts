@@ -100,7 +100,7 @@ export class Describe {
 	}
 
 	runBody() {
-		this.body(this.api);
+		return this.body(this.api);
 	}
 }
 
