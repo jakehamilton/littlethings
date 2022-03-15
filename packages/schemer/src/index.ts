@@ -116,7 +116,7 @@ class Schemer {
 		);
 		coder.line(`// @ts-ignore`);
 		coder.line(`if (x === undefined) return undefined;`);
-		coder.line(`//@ts-ignore`);
+		coder.line(`// @ts-ignore`);
 		coder.line(`return f(x);`);
 		coder.closeBlock(",");
 		coder.closeBlock(";");
