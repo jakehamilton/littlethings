@@ -16,7 +16,7 @@ import { id } from "./util/id";
 import { isMap } from "./util/map";
 import { DEFINITIONS_PREFIX, isRef, Ref, removeRefPrefix } from "./util/ref";
 import { Serialize } from "./util/serializer";
-import { isStruct, Struct } from "./util/struct";
+import { isStruct, isRequired, Struct } from "./util/struct";
 import { Type } from "./util/type";
 import {
 	getUnionOptions,
@@ -462,6 +462,7 @@ export {
 	pascal,
 	isEnum,
 	isStruct,
+	isRequired,
 	isUnion,
 	isPattern,
 	isDate,
