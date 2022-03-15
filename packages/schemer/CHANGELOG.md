@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.3.0
+
+### Features
+
+- expose isRequired for struct generators
+
+
 ## 1.2.5
 
 ### Fixes
