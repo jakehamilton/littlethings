@@ -34,12 +34,16 @@ export interface Schemas {
 
 export interface Serializers {
 	name: Serialize;
+	string: Serialize;
+	boolean: Serialize;
+	number: Serialize;
 	union: Serialize;
 	date: Serialize;
 	enum: Serialize;
 	struct: (name: string) => Serialize;
 	array: (type: Type) => Serialize;
 	map: (type: Type) => Serialize;
+	any: Serialize;
 }
 
 export interface Generators {
@@ -273,7 +277,7 @@ class Schemer {
 				case "string":
 					return {
 						type: "string",
-						serialize: id,
+						serialize: this.serializers.string,
 						serializedType: "string",
 					};
 
@@ -282,7 +286,7 @@ class Schemer {
 				case "integer":
 					return {
 						type: "number",
-						serialize: id,
+						serialize: this.serializers.number,
 						serializedType: "number",
 					};
 
@@ -290,7 +294,7 @@ class Schemer {
 				case "boolean":
 					return {
 						type: "boolean",
-						serialize: id,
+						serialize: this.serializers.boolean,
 						serializedType: "boolean",
 					};
 
@@ -302,7 +306,7 @@ class Schemer {
 			// @NOTE(jakehamilton): Handle `any` fallthrough
 			return {
 				type: "any",
-				serialize: id,
+				serialize: this.serializers.any,
 				serializedType: "any",
 			};
 		}
