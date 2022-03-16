@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.4.0
+
+### Features
+
+- add serializers for all types
+
+
 ## 1.3.1
 
 ### Other
