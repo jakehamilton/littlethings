@@ -18,7 +18,7 @@ const generate = ({ coder, name, members }: EnumGeneratorOptions) => {
 			member = "_" + member;
 		}
 
-		coder.line(`${member} = "${value}",`);
+		coder.line(`"${member}" = "${value}",`);
 	}
 
 	coder.closeBlock();

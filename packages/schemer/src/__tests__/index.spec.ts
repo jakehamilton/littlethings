@@ -90,7 +90,7 @@ describe("Schemer", () => {
 					return f(x);
 				},
 			};
-
+			
 			export type Test = {
 				readonly enum?: NamespaceTestEnum;
 				readonly union?: NamespaceTestUnion;
@@ -103,7 +103,7 @@ describe("Schemer", () => {
 				readonly integer?: number;
 				readonly any?: any;
 			};
-
+			
 			export type SerializedTest = {
 				\\"enum\\"?: NamespaceTestEnum,
 				\\"union\\"?: NamespaceTestUnion,
@@ -116,7 +116,7 @@ describe("Schemer", () => {
 				\\"integer\\"?: number,
 				\\"any\\"?: any,
 			};
-
+			
 			export function serializeTest(options: undefined): undefined;
 			export function serializeTest(options: Test): SerializedTest;
 			export function serializeTest(options: Test | undefined): SerializedTest | undefined;
@@ -134,21 +134,21 @@ describe("Schemer", () => {
 					\\"integer\\": <NUMBER>,
 					\\"any\\": <ANY>,
 				};
-
+			
 				return result;
 			}
-
+			
 			export enum NamespaceTestEnum {
-				X = \\"x\\",
-				Y = \\"y\\",
-				Z = \\"z\\",
+				\\"X\\" = \\"x\\",
+				\\"Y\\" = \\"y\\",
+				\\"Z\\" = \\"z\\",
 			}
-
+			
 			export type NamespaceTestUnion = string | boolean | number;
 			export const isNamespaceTestUnion = (input: any): input is NamespaceTestUnion => {
 				return [\\"string\\", \\"boolean\\", \\"number\\"].includes(typeof input);
 			};
-
+			
 			"
 		`);
 	});
