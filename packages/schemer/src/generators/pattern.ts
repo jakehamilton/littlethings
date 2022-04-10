@@ -12,7 +12,9 @@ const generate = ({ coder, name, pattern }: PatternGeneratorOptions) => {
 	coder.openBlock(
 		`export const is${name} = (input: string): input is ${name} =>`
 	);
-	coder.line(`const regex = new RegExp("${pattern}");`);
+	coder.line(
+		`const regex = new RegExp("${pattern.replaceAll('"', '\\"')}");`
+	);
 	coder.line(`return regex.test(input);`);
 	coder.closeBlock(";");
 };
