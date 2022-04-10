@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.6.1
+
+### Chores
+
+- bump dependencies
+
+
 ## 2.6.0
 
 ### Features

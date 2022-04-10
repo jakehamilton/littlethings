@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.4.1
+
+### Fixes
+
+- allow enum members to use non-safe characters
+
+
 ## 1.4.0
 
 ### Features

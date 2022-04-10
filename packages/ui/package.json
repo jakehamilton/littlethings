@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/ui",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A small, Preact-based UI library",
     "main": "src/index.js",
     "private": true,
