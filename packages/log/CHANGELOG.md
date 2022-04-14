@@ -1,5 +1,12 @@
 # Change Log
 
+## 3.0.0
+
+### Features
+
+- **BREAKING CHANGE** typescript overhaul
+
+
 ## 2.6.1
 
 ### Chores

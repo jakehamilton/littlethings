@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/log",
-    "version": "2.6.1",
+    "version": "3.0.0",
     "description": "A simple logging utility.",
     "main": "./dist/littlelog.cjs.js",
     "types": "./dist/index.d.ts",
