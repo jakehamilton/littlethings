@@ -1,38 +1,55 @@
-const log = require("../src");
+const {
+	default: littlelog,
+	configure,
+	LogLevel,
+} = require("../dist/littlelog.cjs.js");
 
-try {
-    log.setVerbosity(
-        process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : "TRACE"
-    );
-    log.info({
-        name: "littlelog",
-        likes: ["logging", "javascript"],
-        pets: [
-            {
-                name: "scruffles",
-                getsTreats: true,
-                traits: ["gray", "small", "curly"],
-            },
-        ],
-        null: null,
-        undefined: undefined,
-    });
-    log.info("This is an info log.");
-    log.warn("This is an warn log.");
-    log.debug("This is a debug log.");
-    log.trace("This is a trace log.");
-    log.error("This is an error log.");
-    log.fatal("This is a fatal log.");
+configure({
+	level: LogLevel.Trace,
+	icons: true,
+});
 
-    const custom = log.create("my-app");
-    custom.info("This is a custom info log.");
-    custom.warn("This is a custom warn log.");
-    custom.debug("This is a custom debug log.");
-    custom.trace("This is a custom trace log.");
-    custom.error("This is an error log.");
-    custom.fatal("This is a fatal log.");
-} catch (error) {
-    console.error("An unexpected error occurred.");
-    console.log(error);
-    process.exit(1);
-}
+const scruffles = {
+	name: "scruffles",
+	getsTreats: true,
+	traits: ["gray", "small", "curly"],
+};
+
+scruffles.self = scruffles;
+
+const message = {
+	name: "LittleLog",
+	pets: [scruffles],
+	null: null,
+	undefined: undefined,
+	"the answer": 42,
+	"bool?": false,
+};
+
+littlelog.info(message);
+littlelog.warn(message);
+littlelog.debug(message);
+littlelog.trace(message);
+littlelog.error(message);
+littlelog.fatal(message);
+
+const child = littlelog.child("Child");
+
+child.info(message);
+child.warn(message);
+child.debug(message);
+child.trace(message);
+child.error(message);
+child.fatal(message);
+
+const subchild = child.child("SubChild");
+
+subchild.info(message);
+subchild.warn(message);
+subchild.debug(message);
+subchild.trace(message);
+subchild.error(message);
+subchild.fatal(message);
+
+littlelog.trace([[[[[[[[[[]]]]]]]]]]);
+littlelog.trace({ x: { x: { x: { x: { x: { x: {} } } } } } });

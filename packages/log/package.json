@@ -2,7 +2,8 @@
     "name": "@littlethings/log",
     "version": "2.6.1",
     "description": "A simple logging utility.",
-    "main": "./src/index.js",
+    "main": "./dist/littlelog.cjs.js",
+    "types": "./dist/index.d.ts",
     "repository": "git@github.com:jakehamilton/littlethings.git",
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "license": "Apache-2.0",
@@ -10,17 +11,30 @@
         "access": "public"
     },
     "files": [
-        "src",
+        "dist/**/*",
+        "CHANGELOG.md",
         "LICENSE",
         "README.md"
     ],
     "scripts": {
-        "test": "node test/index.js"
+        "test": "node test/index.js",
+        "build": "npm run build:lib && npm run build:types",
+        "build:lib": "vite build",
+        "build:types": "tsc -p . --emitDeclarationOnly"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/littlelog.es.js",
+            "require": "./dist/littlelog.cjs.js",
+            "default": "./dist/littlelog.umd.js"
+        }
     },
     "dependencies": {
         "kleur": "^4.1.3"
     },
     "devDependencies": {
-        "@types/node": "^13.13.32"
+        "@types/node": "^13.13.32",
+        "vite": "^2.9.4",
+        "typescript": "^4.6.3"
     }
 }
