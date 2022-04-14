@@ -1,5 +1,12 @@
 # Change Log
 
+## 3.0.1
+
+### Fixes
+
+- pass single string logs through without styling
+
+
 ## 3.0.0
 
 ### Features
