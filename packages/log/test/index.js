@@ -51,5 +51,6 @@ subchild.trace(message);
 subchild.error(message);
 subchild.fatal(message);
 
+littlelog.trace("Hello, World");
 littlelog.trace([[[[[[[[[[]]]]]]]]]]);
 littlelog.trace({ x: { x: { x: { x: { x: { x: {} } } } } } });

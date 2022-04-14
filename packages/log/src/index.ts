@@ -282,7 +282,11 @@ function renderMessage(message: any, depth = 0, known = new Set()): string {
 }
 
 function renderMessages(messages: Array<any>) {
-	return messages.map((message) => renderMessage(message, 0)).join(" ");
+	if (messages.length === 1 && typeof messages[0] === "string") {
+		return messages[0];
+	} else {
+		return messages.map((message) => renderMessage(message, 0)).join(" ");
+	}
 }
 
 function render(name: LogKind, prefix: Array<string>, ...messages: Array<any>) {
