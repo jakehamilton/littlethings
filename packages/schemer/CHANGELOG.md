@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.4.3
+
+### Chores
+
+- update package metadata
+
+
 ## 1.4.2
 
 ### Fixes

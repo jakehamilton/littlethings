@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.3
+
+### Chores
+
+- update package metadata
+
+
 ## 1.0.2
 
 ### Chores
