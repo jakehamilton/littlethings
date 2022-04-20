@@ -4,7 +4,10 @@
     "description": "A simple logging utility.",
     "main": "./dist/littlelog.cjs.js",
     "types": "./dist/index.d.ts",
-    "repository": "git@github.com:jakehamilton/littlethings.git",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "license": "Apache-2.0",
     "publishConfig": {
@@ -36,5 +39,9 @@
         "@types/node": "^13.13.32",
         "vite": "^2.9.4",
         "typescript": "^4.6.3"
+    },
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
     }
 }

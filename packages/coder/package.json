@@ -34,5 +34,13 @@
             "require": "./dist/coder.cjs.js",
             "default": "./dist/coder.umd.js"
         }
+    },
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
     }
 }

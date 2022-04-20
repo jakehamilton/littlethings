@@ -46,5 +46,13 @@
         "@types/tinycolor2": "^1.4.3",
         "@storybook/addon-storysource": "^6.4.0-alpha.33",
         "preact-feather": "^4.2.1"
+    },
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
     }
 }
