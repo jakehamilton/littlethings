@@ -297,7 +297,7 @@ function render(name: LogKind, prefix: Array<string>, ...messages: Array<any>) {
 }
 
 class LittleLog {
-	prefix: Array<string>;
+	private prefix: Array<string>;
 
 	constructor(prefix: Array<string>) {
 		this.prefix = prefix;
@@ -324,5 +324,7 @@ class LittleLog {
 	error = this.log.bind(this, LogKind.Error);
 	fatal = this.log.bind(this, LogKind.Fatal);
 }
+
+export type { LittleLog };
 
 export default LittleLog.create();
