@@ -1,5 +1,12 @@
 # Change Log
 
+## 3.0.3
+
+### Fixes
+
+- export littlelog class type
+
+
 ## 3.0.2
 
 ### Chores
