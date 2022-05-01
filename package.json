@@ -1,23 +1,21 @@
 {
 	"name": "littlethings",
-	"author": "Jake Hamilton <jake.hamilton@hey.com>",
 	"private": true,
+	"license": "Apache-2.0",
+	"author": "Jake Hamilton <jake.hamilton@hey.com>",
 	"scripts": {
 		"bootstrap": "titan install --no-save",
-		"bootstrap:changed": "titan install --changed --no-save",
+		"bootstrap:changed": "titan install --changed --with-deps --no-save",
 		"build": "titan run build --ordered",
-		"build:changed": "titan run build --changed --ordered",
+		"build:changed": "titan run build --changed --with-deps --ordered",
 		"build:storybook": "titan run build:storybook",
 		"build:storybook:changed": "titan run build:storybook --changed",
 		"dev": "titan run dev",
-		"storybook": "titan run storybook",
 		"publish": "titan publish",
+		"storybook": "titan run storybook",
+		"test": "titan run test",
+		"test:changed": "titan run test --changed --with-deps",
 		"version": "titan version"
-	},
-	"titan": {
-		"packages": [
-			"./packages"
-		]
 	},
 	"husky": {
 		"hooks": {
@@ -31,11 +29,15 @@
 		]
 	},
 	"lint-staged": {
+		"package.json": "sort-package-json",
 		"*.{md,json,ts,tsx,js,jsx,mjs}": "prettier --write"
 	},
 	"prettier": {
-		"useTabs": true,
-		"tabWidth": 4
+		"tabWidth": 4,
+		"useTabs": true
+	},
+	"dependencies": {
+		"sort-package-json": "^1.55.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^16.2.1",
@@ -45,5 +47,9 @@
 		"lint-staged": "^10.3.0",
 		"prettier": "^2.3.2"
 	},
-	"license": "Apache-2.0"
+	"titan": {
+		"packages": [
+			"./packages"
+		]
+	}
 }

@@ -2,29 +2,16 @@
     "name": "@littlethings/log",
     "version": "3.0.3",
     "description": "A simple logging utility.",
-    "main": "./dist/littlelog.cjs.js",
-    "types": "./dist/index.d.ts",
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/jakehamilton/littlethings.git"
     },
-    "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "license": "Apache-2.0",
-    "publishConfig": {
-        "access": "public"
-    },
-    "files": [
-        "dist/**/*",
-        "CHANGELOG.md",
-        "LICENSE",
-        "README.md"
-    ],
-    "scripts": {
-        "test": "node test/index.js",
-        "build": "npm run build:lib && npm run build:types",
-        "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly"
-    },
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "exports": {
         ".": {
             "import": "./dist/littlelog.es.js",
@@ -32,16 +19,29 @@
             "default": "./dist/littlelog.umd.js"
         }
     },
+    "main": "./dist/littlelog.cjs.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist/**/*",
+        "CHANGELOG.md",
+        "LICENSE",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "npm run build:lib && npm run build:types",
+        "build:lib": "vite build",
+        "build:types": "tsc -p . --emitDeclarationOnly",
+        "test": "node test/index.js"
+    },
     "dependencies": {
         "kleur": "^4.1.3"
     },
     "devDependencies": {
         "@types/node": "^13.13.32",
-        "vite": "^2.9.4",
-        "typescript": "^4.6.3"
+        "typescript": "^4.6.3",
+        "vite": "^2.9.4"
     },
-    "homepage": "https://github.com/jakehamilton/littlethings",
-    "bugs": {
-        "url": "https://github.com/jakehamilton/littlethings/issues"
+    "publishConfig": {
+        "access": "public"
     }
 }

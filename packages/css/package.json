@@ -2,29 +2,22 @@
     "name": "@littlethings/css",
     "version": "1.0.4",
     "description": "A small css-in-js utility.",
-    "main": "./dist/css.umd.js",
-    "types": "./dist/index.d.ts",
-    "publishConfig": {
-        "access": "public"
-    },
-    "scripts": {
-        "build": "npm run build:lib && npm run build:types",
-        "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly"
-    },
     "keywords": [
         "css",
         "css-in-js",
         "utility",
         "library"
     ],
-    "author": "Jake Hamilton <jake.hamilton@hey.com>",
-    "license": "MIT",
-    "devDependencies": {
-        "vite": "^2.5.3",
-        "typescript": "^4.5.0-dev.20210904"
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
     },
-    "dependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
+    "license": "MIT",
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "exports": {
         ".": {
             "default": "./dist/css.es.js",
@@ -32,12 +25,19 @@
             "require": "./dist/css.cjs.js"
         }
     },
-    "homepage": "https://github.com/jakehamilton/littlethings",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jakehamilton/littlethings.git"
+    "main": "./dist/css.umd.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "npm run build:lib && npm run build:types",
+        "build:lib": "vite build",
+        "build:types": "tsc -p . --emitDeclarationOnly"
     },
-    "bugs": {
-        "url": "https://github.com/jakehamilton/littlethings/issues"
+    "dependencies": {},
+    "devDependencies": {
+        "typescript": "^4.5.0-dev.20210904",
+        "vite": "^2.5.3"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

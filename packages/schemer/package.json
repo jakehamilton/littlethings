@@ -2,18 +2,6 @@
     "name": "@littlethings/schemer",
     "version": "1.4.3",
     "description": "Generate TypeScript modules from JSON Schema.",
-    "main": "./dist/schemer.umd.js",
-    "types": "./dist/index.d.ts",
-    "publishConfig": {
-        "access": "public"
-    },
-    "scripts": {
-        "build": "npm run build:lib && npm run build:types",
-        "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly",
-        "test": "vitest",
-        "test:coverage": "vitest --coverage"
-    },
     "keywords": [
         "code",
         "generator",
@@ -21,14 +9,16 @@
         "utility",
         "library"
     ],
-    "author": "Jake Hamilton <jake.hamilton@hey.com>",
-    "license": "Apache-2.0",
-    "devDependencies": {
-        "vite": "^2.8.0-beta.3",
-        "typescript": "^4.6.0-dev.20220123",
-        "vitest": "^0.2.0",
-        "@types/json-schema": "^7.0.9"
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
+    "license": "Apache-2.0",
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "exports": {
         ".": {
             "import": "./dist/schemer.es.js",
@@ -36,17 +26,27 @@
             "default": "./dist/schemer.umd.js"
         }
     },
+    "main": "./dist/schemer.umd.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "npm run build:lib && npm run build:types",
+        "build:lib": "vite build",
+        "build:types": "tsc -p . --emitDeclarationOnly",
+        "test": "vitest",
+        "test:coverage": "vitest --coverage"
+    },
     "dependencies": {
-        "json-schema": "^0.4.0",
+        "@littlethings/coder": "^1.0.1",
         "camelcase": "^6.3.0",
-        "@littlethings/coder": "^1.0.1"
+        "json-schema": "^0.4.0"
     },
-    "homepage": "https://github.com/jakehamilton/littlethings",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jakehamilton/littlethings.git"
+    "devDependencies": {
+        "@types/json-schema": "^7.0.9",
+        "typescript": "^4.6.0-dev.20220123",
+        "vite": "^2.8.0-beta.3",
+        "vitest": "^0.2.0"
     },
-    "bugs": {
-        "url": "https://github.com/jakehamilton/littlethings/issues"
+    "publishConfig": {
+        "access": "public"
     }
 }

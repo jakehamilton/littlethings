@@ -1,58 +1,58 @@
 {
     "name": "@littlethings/ui",
     "version": "1.0.3",
-    "description": "A small, Preact-based UI library",
-    "main": "src/index.js",
     "private": true,
-    "scripts": {
-        "clean": "rm -rf ./dist/*",
-        "xbuild": "npm run clean && npm run build:lib && npm run build:types",
-        "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly",
-        "build:storybook": "build-storybook",
-        "storybook": "start-storybook -p 6006",
-        "dev": "vite"
-    },
+    "description": "A small, Preact-based UI library",
     "keywords": [
         "ui",
         "preact",
         "components"
     ],
-    "author": "Jake Hamilton <jake.hamilton@hey.com>",
-    "license": "Apache-2.0",
-    "dependencies": {
-        "@littlethings/css": "^1.0.0"
-    },
-    "peerDependencies": {
-        "preact": "^10.5.14",
-        "tinycolor2": "^1.4.2",
-        "@popperjs/core": "^2.10.2",
-        "react-fast-compare": "^3.2.0"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.15.0",
-        "@storybook/addon-actions": "^6.4.0-alpha.33",
-        "@storybook/addon-essentials": "^6.4.0-alpha.33",
-        "@storybook/addon-links": "^6.4.0-alpha.33",
-        "@storybook/preact": "^6.4.0-alpha.33",
-        "babel-loader": "^8.2.2",
-        "core-js": "^3.16.4",
-        "storybook-builder-vite": "^0.1.2",
-        "typescript": "^4.5.0-dev.20210831",
-        "vite": "^2.6.7",
-        "@littlethings/log": "^2.5.0",
-        "@preact/preset-vite": "^2.1.0",
-        "@mdx-js/preact": "^2.0.0-next.9",
-        "@types/tinycolor2": "^1.4.3",
-        "@storybook/addon-storysource": "^6.4.0-alpha.33",
-        "preact-feather": "^4.2.1"
-    },
     "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/jakehamilton/littlethings.git"
     },
-    "bugs": {
-        "url": "https://github.com/jakehamilton/littlethings/issues"
+    "license": "Apache-2.0",
+    "author": "Jake Hamilton <jake.hamilton@hey.com>",
+    "main": "src/index.js",
+    "scripts": {
+        "build:lib": "vite build",
+        "build:storybook": "build-storybook",
+        "build:types": "tsc -p . --emitDeclarationOnly",
+        "clean": "rm -rf ./dist/*",
+        "dev": "vite",
+        "storybook": "start-storybook -p 6006",
+        "xbuild": "npm run clean && npm run build:lib && npm run build:types"
+    },
+    "dependencies": {
+        "@littlethings/css": "^1.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.15.0",
+        "@littlethings/log": "^2.5.0",
+        "@mdx-js/preact": "^2.0.0-next.9",
+        "@preact/preset-vite": "^2.1.0",
+        "@storybook/addon-actions": "^6.4.0-alpha.33",
+        "@storybook/addon-essentials": "^6.4.0-alpha.33",
+        "@storybook/addon-links": "^6.4.0-alpha.33",
+        "@storybook/addon-storysource": "^6.4.0-alpha.33",
+        "@storybook/preact": "^6.4.0-alpha.33",
+        "@types/tinycolor2": "^1.4.3",
+        "babel-loader": "^8.2.2",
+        "core-js": "^3.16.4",
+        "preact-feather": "^4.2.1",
+        "storybook-builder-vite": "^0.1.2",
+        "typescript": "^4.5.0-dev.20210831",
+        "vite": "^2.6.7"
+    },
+    "peerDependencies": {
+        "@popperjs/core": "^2.10.2",
+        "preact": "^10.5.14",
+        "react-fast-compare": "^3.2.0",
+        "tinycolor2": "^1.4.2"
     }
 }
