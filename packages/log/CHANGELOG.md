@@ -1,5 +1,14 @@
 # Change Log
 
+## 3.0.4
+
+### Chores
+
+- enable tests in CI and sort package keys
+
+- update dependencies
+
+
 ## 3.0.3
 
 ### Fixes

@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.1.3
+
+### Chores
+
+- enable tests in CI and sort package keys
+
+- update dependencies
+
+
 ## 1.1.2
 
 ### Chores

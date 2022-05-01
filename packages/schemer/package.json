@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/schemer",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "description": "Generate TypeScript modules from JSON Schema.",
     "keywords": [
         "code",
