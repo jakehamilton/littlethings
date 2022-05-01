@@ -12,6 +12,7 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+            FORCE_COLOR: "1"
         steps:
             - name: Turnstyle
               uses: softprops/turnstyle@v1
