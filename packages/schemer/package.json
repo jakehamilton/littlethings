@@ -36,7 +36,7 @@
         "test:coverage": "vitest --coverage"
     },
     "dependencies": {
-        "@littlethings/coder": "^1.0.1",
+        "@littlethings/coder": "1.1.4",
         "camelcase": "^6.3.0",
         "json-schema": "^0.4.0"
     },
