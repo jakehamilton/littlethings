@@ -1,15 +1,13 @@
 import { defineConfig, Logger } from "vite";
 import preact from "@preact/preset-vite";
+import log from "@littlethings/log";
 
 const createLogger = async () => {
 	// Customize logging behavior
 	global.process.env.LOG_TIMESTAMP =
 		global.process.env.LOG_TIMESTAMP || "true";
 
-	// @ts-expect-error
-	const { default: littlelog } = await import("@littlethings/log");
-
-	const logger = (littlelog.create("vite") as unknown) as Logger;
+	const logger = log.child("vite") as unknown as Logger;
 
 	for (const key of ["info", "warn", "error"] as const) {
 		const method = logger[key];
