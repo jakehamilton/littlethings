@@ -11,13 +11,12 @@ export type RippleAction = "add" | "remove";
 
 const useRippleEvent = (
 	ref: Ref<RippleHandle | null>,
-	type: RippleAction,
 	options?: AddOptions,
 	callback?: RippleCallback,
 	duration: number = 50
 ) => {
-	const handler = useMemo(() => {
-		const handleEvent = (event: RippleEvent) => {
+	const handlers = useMemo(() => {
+		const createHandler = (type: RippleAction) => (event: RippleEvent) => {
 			if (!ref.current) {
 				return;
 			}
@@ -29,10 +28,13 @@ const useRippleEvent = (
 			}
 		};
 
-		return throttle(handleEvent, duration);
-	}, [ref, type, options, callback]);
+		return {
+			add: throttle(createHandler("add"), duration),
+			remove: throttle(createHandler("remove"), duration),
+		};
+	}, [ref, options, callback]);
 
-	return handler;
+	return handlers;
 };
 
 export default useRippleEvent;

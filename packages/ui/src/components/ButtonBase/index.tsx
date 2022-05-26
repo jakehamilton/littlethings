@@ -6,9 +6,9 @@ import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
 import useTheme from "../../hooks/useTheme";
 import { CSSClass } from "../../types/css";
-import Dynamic, { DynamicComponent, DynamicProps } from "../Dynamic";
+import { Dynamic, dynamic, DynamicProps } from "../Dynamic";
 import Loading, { LoadingProps } from "../Loading";
-import Ripple, { RippleHandle } from "../Ripple";
+import Ripple from "../Ripple";
 import useButtonBaseStyles, {
 	ButtonBaseStylesOptions,
 } from "./useButtonBaseStyles";
@@ -40,169 +40,174 @@ export interface ButtonBaseProps {
 	onClick?: (event: MouseEvent | KeyboardEvent) => void;
 }
 
-const ButtonBase: DynamicComponent<ButtonBaseProps, "button"> = ({
-	as = "button",
-	children,
-	ripple = true,
-	color = "text",
-	size = "md",
-	loading = false,
-	disabled = false,
-	prefixIcon,
-	PrefixIconProps,
-	postfixIcon,
-	PostfixIconProps,
-	LoadingProps,
-	onKeyDown,
-	onKeyUp,
-	onMouseDown,
-	onMouseUp,
-	onMouseLeave,
-	onClick,
-	...props
-}) => {
-	const rippleRef = useRippleRef();
+const ButtonBase = dynamic<"button", ButtonBaseProps>(
+	"button",
+	({
+		as = "button",
+		children,
+		ripple = true,
+		color = "text",
+		size = "md",
+		loading = false,
+		disabled = false,
+		prefixIcon,
+		PrefixIconProps,
+		postfixIcon,
+		PostfixIconProps,
+		LoadingProps,
+		onKeyDown,
+		onKeyUp,
+		onMouseDown,
+		onMouseUp,
+		onMouseLeave,
+		onClick,
+		...props
+	}) => {
+		const rippleRef = useRippleRef();
 
-	const { theme, util } = useTheme();
+		const { theme, util } = useTheme();
 
-	const classes = useButtonBaseStyles(
-		color,
-		size,
-		loading,
-		disabled,
-		Boolean(prefixIcon),
-		Boolean(postfixIcon)
-	);
+		const classes = useButtonBaseStyles(
+			color,
+			size,
+			loading,
+			disabled,
+			Boolean(prefixIcon),
+			Boolean(postfixIcon)
+		);
 
-	const loadingColor = useMemo(() => {
-		if (color === "text") {
-			return util.color("background.text");
-		} else if (typeof color === "string") {
-			const [name] = color.split(".");
+		const loadingColor = useMemo(() => {
+			if (color === "text") {
+				return util.color("background.text");
+			} else if (typeof color === "string") {
+				const [name] = color.split(".");
 
-			return util.color(`${name as ThemePaletteColorName}.text`);
-		} else {
-			return util.color(color);
-		}
-	}, [theme, color]);
-
-	const handleRippleMouseDown = useRippleEvent(rippleRef, "add");
-	const handleRippleMouseUp = useRippleEvent(rippleRef, "remove");
-	const handleRippleMouseLeave = useRippleEvent(rippleRef, "remove");
-
-	const handleMouseDown = useCallback(
-		(event: MouseEvent) => {
-			onMouseDown?.(event);
-			handleRippleMouseDown(event);
-		},
-		[onMouseDown]
-	);
-
-	const handleMouseUp = useCallback(
-		(event: MouseEvent) => {
-			onMouseUp?.(event);
-			handleRippleMouseUp(event);
-		},
-		[onMouseUp]
-	);
-
-	const handleMouseLeave = useCallback(
-		(event: MouseEvent) => {
-			onMouseLeave?.(event);
-			handleRippleMouseLeave(event);
-		},
-		[onMouseLeave]
-	);
-
-	const handleKeyDown = useCallback(
-		(event: KeyboardEvent) => {
-			onKeyDown?.(event);
-
-			if (
-				!event.repeat &&
-				!disabled &&
-				(event.key === "Enter" || event.key === " ")
-			) {
-				rippleRef.current?.remove(event, () => {
-					rippleRef.current?.add(event);
-				});
-				onClick?.(event);
+				return util.color(`${name as ThemePaletteColorName}.text`);
+			} else {
+				return util.color(color);
 			}
-		},
-		[disabled]
-	);
+		}, [theme, color]);
 
-	const handleKeyUp = useCallback(
-		(event: KeyboardEvent) => {
-			onKeyUp?.(event);
+		const { add: addRipple, remove: removeRipple } =
+			useRippleEvent(rippleRef);
 
-			if (
-				!event.repeat &&
-				!disabled &&
-				(event.key === "Enter" || event.key === " ")
-			) {
-				rippleRef.current?.remove(event);
-			}
-		},
-		[disabled]
-	);
+		const handleMouseDown = useCallback(
+			(event: MouseEvent) => {
+				onMouseDown?.(event);
+				addRipple(event);
+			},
+			[onMouseDown]
+		);
 
-	return (
-		<Dynamic
-			as={as}
-			{...props}
-			class={clsx(
-				classes.root,
-				props.class,
-				props.classes?.root,
-				disabled ? props.classes?.disabled : null
-			)}
-			onClick={disabled ? undefined : onClick}
-			onMouseDown={disabled ? undefined : handleMouseDown}
-			onMouseUp={disabled ? undefined : handleMouseUp}
-			onMouseLeave={disabled ? undefined : handleMouseLeave}
-			onKeyDown={disabled ? undefined : handleKeyDown}
-			onKeyUp={disabled ? undefined : handleKeyUp}
-			disabled={disabled}
-			aria-disabled={disabled}
-		>
-			{prefixIcon ? (
-				<Dynamic
-					as="span"
-					{...PrefixIconProps}
-					class={clsx(classes.prefixIcon, PrefixIconProps?.class)}
-				>
-					{prefixIcon}
-				</Dynamic>
-			) : null}
-			<span class={clsx(classes.container, props.classes?.container)}>
-				{loading ? (
-					<Loading
-						size={size}
-						color={loadingColor}
-						class={classes.loading}
-						{...LoadingProps}
-					/>
+		const handleMouseUp = useCallback(
+			(event: MouseEvent) => {
+				onMouseUp?.(event);
+				removeRipple(event);
+			},
+			[onMouseUp]
+		);
+
+		const handleMouseLeave = useCallback(
+			(event: MouseEvent) => {
+				onMouseLeave?.(event);
+				removeRipple(event);
+			},
+			[onMouseLeave]
+		);
+
+		const handleKeyDown = useCallback(
+			(event: KeyboardEvent) => {
+				onKeyDown?.(event);
+
+				if (
+					!event.repeat &&
+					!disabled &&
+					(event.key === "Enter" || event.key === " ")
+				) {
+					rippleRef.current?.remove(event, () => {
+						rippleRef.current?.add(event);
+					});
+					onClick?.(event);
+				}
+			},
+			[disabled]
+		);
+
+		const handleKeyUp = useCallback(
+			(event: KeyboardEvent) => {
+				onKeyUp?.(event);
+
+				if (
+					!event.repeat &&
+					!disabled &&
+					(event.key === "Enter" || event.key === " ")
+				) {
+					rippleRef.current?.remove(event);
+				}
+			},
+			[disabled]
+		);
+
+		return (
+			<Dynamic
+				as={as}
+				{...props}
+				class={clsx(
+					classes.root,
+					props.class,
+					props.classes?.root,
+					disabled ? props.classes?.disabled : null
+				)}
+				onClick={disabled ? undefined : onClick}
+				onMouseDown={disabled ? undefined : handleMouseDown}
+				onMouseUp={disabled ? undefined : handleMouseUp}
+				onMouseLeave={disabled ? undefined : handleMouseLeave}
+				onKeyDown={disabled ? undefined : handleKeyDown}
+				onKeyUp={disabled ? undefined : handleKeyUp}
+				disabled={disabled}
+				aria-disabled={disabled}
+			>
+				{prefixIcon ? (
+					<Dynamic
+						as="span"
+						{...PrefixIconProps}
+						class={clsx(classes.prefixIcon, PrefixIconProps?.class)}
+					>
+						{prefixIcon}
+					</Dynamic>
 				) : null}
-				<span
-					aria-hidden={loading}
-					class={clsx(classes.content, props.classes?.content)}
-				>
-					{children}
+				<span class={clsx(classes.container, props.classes?.container)}>
+					{loading ? (
+						<Loading
+							size={size}
+							color={loadingColor}
+							class={classes.loading}
+							{...LoadingProps}
+						/>
+					) : null}
+					<span
+						aria-hidden={loading}
+						class={clsx(classes.content, props.classes?.content)}
+					>
+						{children}
+					</span>
 				</span>
-			</span>
-			{postfixIcon ? (
-				<Dynamic
-					as="span"
-					{...PostfixIconProps}
-					class={clsx(classes.postfixIcon, PostfixIconProps?.class)}
-				>
-					{postfixIcon}
-				</Dynamic>
-			) : null}
-			{ripple ? <Ripple handleRef={rippleRef} /> : null}
-		</Dynamic>
-	);
-};
+				{postfixIcon ? (
+					<Dynamic
+						as="span"
+						{...PostfixIconProps}
+						class={clsx(
+							classes.postfixIcon,
+							PostfixIconProps?.class
+						)}
+					>
+						{postfixIcon}
+					</Dynamic>
+				) : null}
+				{ripple ? <Ripple handleRef={rippleRef} /> : null}
+			</Dynamic>
+		);
+	}
+);
 
 export default ButtonBase;

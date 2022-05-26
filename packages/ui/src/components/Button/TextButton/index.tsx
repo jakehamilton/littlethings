@@ -3,7 +3,7 @@ import useClasses from "../../../hooks/useClasses";
 import useOverrides from "../../../hooks/useOverrides";
 import { CSSClass } from "../../../types/css";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
-import { DynamicComponent } from "../../Dynamic";
+import { dynamic } from "../../Dynamic";
 import useTextButtonStyles from "./useTextButtonStyles";
 
 export interface TextButtonClasses {
@@ -15,7 +15,7 @@ export interface TextButtonProps extends ButtonBaseProps {
 	classes?: Partial<ButtonBaseProps["classes"] & TextButtonClasses>;
 }
 
-const TextButton: DynamicComponent<TextButtonProps, "button"> = (props) => {
+const TextButton = dynamic<"button", TextButtonProps>("button", (props) => {
 	const {
 		children,
 		as = "button",
@@ -61,6 +61,6 @@ const TextButton: DynamicComponent<TextButtonProps, "button"> = (props) => {
 			{children}
 		</ButtonBase>
 	);
-};
+});
 
 export default TextButton;

@@ -1,10 +1,8 @@
-import { VNode } from "preact";
+import { FunctionComponent, VNode } from "preact";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { TransitionGroupContext } from "../../contexts/TransitionGroup";
 import useDeferredEffect from "../../hooks/useDeferredEffect";
 import useLatest from "../../hooks/useLatest";
-import { DynamicComponent } from "../Dynamic";
-import { TransitionProps } from "../Transition";
 import {
 	ChildMapping,
 	getChildMapping,
@@ -20,7 +18,7 @@ export interface TransitionGroupProps {
 	exit?: boolean;
 }
 
-const TransitionGroup: DynamicComponent<TransitionGroupProps> = (props) => {
+const TransitionGroup: FunctionComponent<TransitionGroupProps> = (props) => {
 	const propsRef = useLatest(props);
 	const isMountedRef = useRef(true);
 	const [isMounting, setIsMounting] = useState(true);

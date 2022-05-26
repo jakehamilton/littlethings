@@ -3,7 +3,7 @@ import { cloneElement, isValidElement, toChildArray } from "preact";
 import useClasses from "../../../hooks/useClasses";
 import useOverrides from "../../../hooks/useOverrides";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
-import { DynamicComponent } from "../../Dynamic";
+import { dynamic } from "../../Dynamic";
 import useIconButtonStyles from "./useIconButtonStyles";
 
 const getIconSize = (size: NonNullable<ButtonBaseProps["size"]>): number => {
@@ -26,7 +26,7 @@ export interface IconButtonClasses {
 
 export interface IconButtonProps extends ButtonBaseProps {}
 
-const IconButton: DynamicComponent<IconButtonProps, "button"> = (props) => {
+const IconButton = dynamic<"button", IconButtonProps>("button", (props) => {
 	const {
 		children,
 		as = "button",
@@ -73,6 +73,6 @@ const IconButton: DynamicComponent<IconButtonProps, "button"> = (props) => {
 				: child}
 		</ButtonBase>
 	);
-};
+});
 
 export default IconButton;

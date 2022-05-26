@@ -10,7 +10,6 @@ import { TransitionGroupContext } from "../../contexts/TransitionGroup";
 import useAsyncState from "../../hooks/useAsyncState";
 import useCancellableCallback from "../../hooks/useCancellableCallback";
 import useDeferredEffect from "../../hooks/useDeferredEffect";
-import { DynamicComponent } from "../Dynamic";
 
 export enum TransitionStatus {
 	ENTERING = "entering",

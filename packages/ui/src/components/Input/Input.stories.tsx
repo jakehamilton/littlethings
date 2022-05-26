@@ -4,26 +4,14 @@ import { ChevronDown, DollarSign, Eye, EyeOff, Gift } from "preact-feather";
 import {
 	action,
 	boolean,
-	disable,
 	select,
 	themeColor,
 } from "../../../.storybook/controls";
 
 import Input, { InputProps } from ".";
-import {
-	useEffect,
-	useLayoutEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "preact/hooks";
+import { useMemo, useRef, useState } from "preact/hooks";
 import { useCSS } from "../..";
-import Dynamic, {
-	DynamicComponent,
-	DynamicProps,
-	PropsFromAs,
-	WithDynamicProps,
-} from "../Dynamic";
+import { Dynamic, dynamic, DynamicProps } from "../Dynamic";
 import usePopper from "../../hooks/usePopper";
 import Surface from "../Surface";
 import { Modifier } from "@popperjs/core";
@@ -56,7 +44,7 @@ export default {
 } as Meta<InputProps>;
 
 const Template: Story<
-	WithDynamicProps<"input" | "textarea" | "select", InputProps>
+	DynamicProps<"input" | "textarea" | "select"> & InputProps
 > = (args) => {
 	return <Input {...args} />;
 };
@@ -182,15 +170,12 @@ export const Select: Story<InputProps> = (args) => {
 		};
 	});
 
-	const CustomInput: DynamicComponent<{}, "div"> = ({
-		children,
-		...props
-	}) => {
+	const CustomInput = dynamic("div", ({ children, ...props }) => {
 		const options = toChildArray(children);
 
 		const selected = useState(
 			isValidElement(options[0])
-				? (options[0].props as PropsFromAs<"option">).value
+				? (options[0].props as DynamicProps<"option">).value
 				: options[0]
 		);
 
@@ -198,7 +183,7 @@ export const Select: Story<InputProps> = (args) => {
 			return (
 				options.find((option) =>
 					isValidElement(option)
-						? (option.props as PropsFromAs<"option">).value ===
+						? (option.props as DynamicProps<"option">).value ===
 						  value
 						: option === value
 				) ?? "Select"
@@ -206,7 +191,6 @@ export const Select: Story<InputProps> = (args) => {
 		};
 
 		return (
-			// @ts-ignore
 			<Dynamic as="div" {...props}>
 				<Prose size="sm">{getOption(selected)}</Prose>
 				<select aria-hidden class={classes.hidden} value={selected}>
@@ -214,7 +198,7 @@ export const Select: Story<InputProps> = (args) => {
 				</select>
 			</Dynamic>
 		);
-	};
+	});
 
 	return (
 		<div>

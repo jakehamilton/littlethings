@@ -2,7 +2,7 @@ import { clsx } from "@littlethings/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
 import { CSSClass } from "../../types/css";
-import Dynamic, { DynamicComponent } from "../Dynamic";
+import { Dynamic, dynamic } from "../Dynamic";
 import useSurfaceStyles, { SurfaceStylesOptions } from "./useSurfaceStyles";
 
 export interface SurfaceClasses {
@@ -15,7 +15,7 @@ export interface SurfaceProps {
 	elevation?: SurfaceStylesOptions["elevation"];
 }
 
-const Surface: DynamicComponent<SurfaceProps, "div"> = (props) => {
+const Surface = dynamic<"div", SurfaceProps>("div", (props) => {
 	const {
 		as = "div",
 		color = "background",
@@ -38,6 +38,6 @@ const Surface: DynamicComponent<SurfaceProps, "div"> = (props) => {
 			class={clsx(classes.root, baseProps.class)}
 		/>
 	);
-};
+});
 
 export default Surface;

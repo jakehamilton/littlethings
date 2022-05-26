@@ -2,7 +2,7 @@ import { clsx } from "@littlethings/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
 import { CSSClass } from "../../types/css";
-import Dynamic, { DynamicComponent } from "../Dynamic";
+import { Dynamic, dynamic } from "../Dynamic";
 import useProseStyles, { ProseStylesConfig } from "./useProseStyles";
 
 export interface ProseClasses {
@@ -17,7 +17,7 @@ export interface ProseProps {
 	size?: ProseStylesConfig["size"];
 }
 
-const Prose: DynamicComponent<ProseProps, "span"> = (props) => {
+const Prose = dynamic<"span", ProseProps>("span", (props) => {
 	const {
 		children,
 		as = "span",
@@ -39,6 +39,6 @@ const Prose: DynamicComponent<ProseProps, "span"> = (props) => {
 			{children}
 		</Dynamic>
 	);
-};
+});
 
 export default Prose;

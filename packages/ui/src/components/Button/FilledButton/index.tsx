@@ -3,7 +3,7 @@ import useClasses from "../../../hooks/useClasses";
 import useOverrides from "../../../hooks/useOverrides";
 import { CSSClass } from "../../../types/css";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
-import { DynamicComponent } from "../../Dynamic";
+import { dynamic } from "../../Dynamic";
 import useFilledButtonStyles from "./useFilledButtonStyles";
 
 export interface FilledButtonClasses {
@@ -17,7 +17,7 @@ export interface FilledButtonProps extends ButtonBaseProps {
 	float?: boolean;
 }
 
-const FilledButton: DynamicComponent<FilledButtonProps, "button"> = (props) => {
+const FilledButton = dynamic<"button", FilledButtonProps>("button", (props) => {
 	const {
 		children,
 		as = "button",
@@ -72,6 +72,6 @@ const FilledButton: DynamicComponent<FilledButtonProps, "button"> = (props) => {
 			{children}
 		</ButtonBase>
 	);
-};
+});
 
 export default FilledButton;

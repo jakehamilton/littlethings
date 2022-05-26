@@ -36,6 +36,7 @@ const getProp = <
 	prop: Prop,
 	props: Props
 ): [Props[Prop]] extends [undefined] ? Child["props"][Prop] : Props[Prop] => {
+	// @ts-expect-error
 	return props[prop] === undefined ? child.props[prop] : props[prop];
 };
 
@@ -134,6 +135,7 @@ export const getNextChildMapping = (
 		const isLeaving = isValidElement(prevChild) && !prevChild.props.in;
 
 		if (isInNext && (!isInPrev || isLeaving)) {
+			// @ts-expect-error
 			childMapping[key] = cloneElement(child, {
 				in: true,
 				enter: getProp(child, "enter", nextProps),
@@ -141,10 +143,12 @@ export const getNextChildMapping = (
 				onExited: onExited.bind(null, child),
 			});
 		} else if (!isInNext && isInPrev && !isLeaving) {
+			// @ts-expect-error
 			childMapping[key] = cloneElement(child, {
 				in: false,
 			});
 		} else if (isInNext && isInPrev && isValidElement(prevChild)) {
+			// @ts-expect-error
 			childMapping[key] = cloneElement(child, {
 				in: prevChild.props.in,
 				enter: getProp(child, "enter", nextProps),

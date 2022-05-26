@@ -4,7 +4,7 @@ import useClasses from "../../hooks/useClasses";
 import useCSS from "../../hooks/useCSS";
 import useOverrides from "../../hooks/useOverrides";
 import { CSSClass } from "../../types/css";
-import { DynamicComponent } from "../Dynamic";
+import { dynamic } from "../Dynamic";
 import useLoadingStyles, { LoadingStylesOptions } from "./useLoadingStyles";
 
 export interface LoadingClasses {
@@ -19,7 +19,7 @@ export interface LoadingProps {
 	classes?: Partial<LoadingClasses>;
 }
 
-const Loading: DynamicComponent<LoadingProps, "div"> = (props) => {
+const Loading = dynamic<"div", LoadingProps>("div", (props) => {
 	const { color = "primary", size = "md" } = props;
 
 	const styles = useLoadingStyles(color, size);
@@ -38,6 +38,6 @@ const Loading: DynamicComponent<LoadingProps, "div"> = (props) => {
 			</div>
 		</div>
 	);
-};
+});
 
 export default Loading;

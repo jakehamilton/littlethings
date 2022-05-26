@@ -2,10 +2,10 @@ import { clsx } from "@littlethings/css";
 import { CSSClass } from "../../types/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
-import Dynamic, { DynamicComponent, DynamicProps } from "../Dynamic";
 import useTextInputStyles, { TextInputStylesOptions } from "./useInputStyles";
 import { cloneElement, ComponentChildren, isValidElement } from "preact";
 import useTheme from "../../hooks/useTheme";
+import { Dynamic, dynamic, DynamicProps } from "../Dynamic";
 
 export interface InputClasses {
 	root: CSSClass;
@@ -28,7 +28,7 @@ export interface InputProps {
 	PostfixIconProps?: Omit<DynamicProps<"div">, "as">;
 }
 
-const TextInput: DynamicComponent<InputProps, "input"> = (props) => {
+const TextInput = dynamic<"input", InputProps>("input", (props) => {
 	const {
 		as = "input",
 		color = "background.light",
@@ -111,6 +111,6 @@ const TextInput: DynamicComponent<InputProps, "input"> = (props) => {
 			) : null}
 		</Dynamic>
 	);
-};
+});
 
 export default TextInput;

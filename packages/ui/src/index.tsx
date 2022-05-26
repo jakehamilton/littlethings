@@ -51,8 +51,20 @@ export type {
 
 export { default as CSSBase } from "./components/CSSBase";
 
-export { default as Dynamic } from "./components/Dynamic";
-export type { DynamicComponent, DynamicAs } from "./components/Dynamic";
+export { Dynamic, dynamic } from "./components/Dynamic";
+export type {
+	DynamicComponent,
+	DynamicComponentProps,
+	OptionalDynamicComponentProps,
+	DynamicAs,
+	OptionalDynamicAs,
+	DynamicProps,
+	CustomElements,
+	CustomElementNames,
+	Elements,
+	ElementNames,
+	KnownElement,
+} from "./components/Dynamic";
 
 export { default as Gap } from "./components/Gap";
 export type { GapProps, GapClasses } from "./components/Gap";
