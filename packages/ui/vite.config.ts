@@ -35,6 +35,9 @@ export default async () => {
 	return defineConfig({
 		customLogger: await createLogger(),
 		plugins: [preact()],
+		server: {
+			host: "0.0.0.0",
+		},
 		build: {
 			lib: {
 				name: "LittleUI",
