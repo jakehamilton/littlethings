@@ -1,11 +1,11 @@
 import { clsx } from "@littlethings/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
-import { CSSClass } from "../../types/css";
+import { CSSClass, CSSClasses } from "../../types/css";
 import { Dynamic, dynamic } from "../Dynamic";
 import useGapStyles, { GapStylesOptions } from "./useGapStyles";
 
-export interface GapClasses {
+export interface GapClasses extends CSSClasses {
 	root: CSSClass;
 	horizontal: CSSClass;
 	vertical: CSSClass;

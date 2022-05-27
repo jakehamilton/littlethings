@@ -2,6 +2,7 @@ import { clsx } from "@littlethings/css";
 import { cloneElement, isValidElement, toChildArray } from "preact";
 import useClasses from "../../../hooks/useClasses";
 import useOverrides from "../../../hooks/useOverrides";
+import { CSSClasses } from "../../../types/css";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import { dynamic } from "../../Dynamic";
 import useIconButtonStyles from "./useIconButtonStyles";
@@ -20,7 +21,7 @@ const getIconSize = (size: NonNullable<ButtonBaseProps["size"]>): number => {
 	}
 };
 
-export interface IconButtonClasses {
+export interface IconButtonClasses extends CSSClasses {
 	root: string;
 }
 

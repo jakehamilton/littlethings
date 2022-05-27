@@ -34,7 +34,7 @@ export interface ThemeUtil {
 	mostReadable: (
 		background: string,
 		colors: Array<string>,
-		options: {
+		options?: {
 			level?: "AA" | "AAA";
 			fallback?: boolean;
 			size?: "large" | "small";

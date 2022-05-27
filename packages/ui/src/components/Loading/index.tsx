@@ -3,11 +3,11 @@ import { FunctionComponent } from "preact";
 import useClasses from "../../hooks/useClasses";
 import useCSS from "../../hooks/useCSS";
 import useOverrides from "../../hooks/useOverrides";
-import { CSSClass } from "../../types/css";
+import { CSSClass, CSSClasses } from "../../types/css";
 import { dynamic } from "../Dynamic";
 import useLoadingStyles, { LoadingStylesOptions } from "./useLoadingStyles";
 
-export interface LoadingClasses {
+export interface LoadingClasses extends CSSClasses {
 	root: CSSClass;
 	container: CSSClass;
 	dot: CSSClass;

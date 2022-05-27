@@ -1,4 +1,4 @@
-import { ClassAttributes, ComponentChildren } from "preact";
+import { ComponentChildren } from "preact";
 
 export interface CommonProps {
 	class?: string;

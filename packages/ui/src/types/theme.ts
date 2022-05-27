@@ -21,6 +21,8 @@ import { CSSFactory, CSSFactoryInput } from "../hooks/useCSS";
 import { CSSClasses } from "./css";
 import { ProseClasses, ProseProps } from "../components/Prose";
 import { InputClasses, InputProps } from "../components/Input";
+import { ThemeContextValue } from "../contexts/Theme";
+import { StylesValue, StyleUtil } from "../theme/style";
 
 export type ThemeMode = "light" | "dark";
 
@@ -63,7 +65,8 @@ export interface ThemePalette {
 
 export type ThemePaletteColorName = keyof ThemePalette;
 
-export type DynamicThemePaletteColorNames = `${keyof ThemePalette}.${keyof ThemePaletteColor}`;
+export type DynamicThemePaletteColorNames =
+	`${keyof ThemePalette}.${keyof ThemePaletteColor}`;
 
 export type ThemeColorName =
 	| ThemePaletteColorName
@@ -165,8 +168,14 @@ export interface ThemeShadowsConfig {
 
 export type ThemeOverride<
 	Classes extends CSSClasses = {},
-	Props extends object = {}
-> = (input: CSSFactoryInput, props: Props) => Partial<Classes>;
+	Props extends object | undefined = undefined
+> = (
+	theme: ThemeContextValue,
+	util: StyleUtil,
+	props: Props
+) => {
+	[key in keyof Classes]?: StylesValue;
+};
 
 export interface ThemeOverrides {
 	Gap?: ThemeOverride<GapClasses, GapProps>;

@@ -1,12 +1,12 @@
 import { clsx } from "@littlethings/css";
 import useClasses from "../../../hooks/useClasses";
 import useOverrides from "../../../hooks/useOverrides";
-import { CSSClass } from "../../../types/css";
+import { CSSClass, CSSClasses } from "../../../types/css";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import { dynamic } from "../../Dynamic";
 import useFilledButtonStyles from "./useFilledButtonStyles";
 
-export interface FilledButtonClasses {
+export interface FilledButtonClasses extends CSSClasses {
 	root: CSSClass;
 	float: CSSClass;
 	disabled: CSSClass;

@@ -1,11 +1,11 @@
 import { clsx } from "@littlethings/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
-import { CSSClass } from "../../types/css";
+import { CSSClass, CSSClasses } from "../../types/css";
 import { Dynamic, dynamic } from "../Dynamic";
 import useProseStyles, { ProseStylesConfig } from "./useProseStyles";
 
-export interface ProseClasses {
+export interface ProseClasses extends CSSClasses {
 	root: CSSClass;
 }
 

@@ -1,5 +1,5 @@
 import { clsx } from "@littlethings/css";
-import { CSSClass } from "../../types/css";
+import { CSSClass, CSSClasses } from "../../types/css";
 import useClasses from "../../hooks/useClasses";
 import useOverrides from "../../hooks/useOverrides";
 import useTextInputStyles, { TextInputStylesOptions } from "./useInputStyles";
@@ -7,7 +7,7 @@ import { cloneElement, ComponentChildren, isValidElement } from "preact";
 import useTheme from "../../hooks/useTheme";
 import { Dynamic, dynamic, DynamicProps } from "../Dynamic";
 
-export interface InputClasses {
+export interface InputClasses extends CSSClasses {
 	root: CSSClass;
 	input: CSSClass;
 	disabled: CSSClass;

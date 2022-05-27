@@ -5,7 +5,7 @@ import { ThemePaletteColorName } from "../..";
 import useRippleEvent from "../../hooks/useRippleEvent";
 import useRippleRef from "../../hooks/useRippleRef";
 import useTheme from "../../hooks/useTheme";
-import { CSSClass } from "../../types/css";
+import { CSSClass, CSSClasses } from "../../types/css";
 import { Dynamic, dynamic, DynamicProps } from "../Dynamic";
 import Loading, { LoadingProps } from "../Loading";
 import Ripple from "../Ripple";
@@ -13,7 +13,7 @@ import useButtonBaseStyles, {
 	ButtonBaseStylesOptions,
 } from "./useButtonBaseStyles";
 
-export interface ButtonBaseClasses {
+export interface ButtonBaseClasses extends CSSClasses {
 	root: CSSClass;
 	container: CSSClass;
 	content: CSSClass;
