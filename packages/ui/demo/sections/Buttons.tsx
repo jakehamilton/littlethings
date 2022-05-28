@@ -1,24 +1,26 @@
-import useCSS from "../../src/hooks/useCSS";
 import Button from "../../src/components/Button";
 import Prose from "../../src/components/Prose";
 import Gap from "../../src/components/Gap";
 import { Github } from "preact-feather";
+import { style } from "../../src/theme/style";
+
+const { useStyles } = style((theme) => {
+	return {
+		root: {
+			display: "flex",
+			flexDirection: "column",
+			padding: `${theme.space(4)}px`,
+		},
+		example: {
+			display: "flex",
+			flexWrap: "wrap",
+			gap: `${theme.space(1)}px`,
+		},
+	};
+});
 
 const Buttons = () => {
-	const classes = useCSS(Buttons, ({ css, util }) => {
-		return {
-			root: css({
-				display: "flex",
-				flexDirection: "column",
-				padding: `${util.space(4)}px`,
-			}),
-			example: css({
-				display: "flex",
-				flexWrap: "wrap",
-				gap: `${util.space(1)}px`,
-			}),
-		};
-	});
+	const classes = useStyles();
 
 	return (
 		<div class={classes.root}>

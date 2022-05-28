@@ -1,28 +1,30 @@
-import useCSS from "../../src/hooks/useCSS";
 import Prose from "../../src/components/Prose";
 import Gap from "../../src/components/Gap";
 import Surface from "../../src/components/Surface";
+import { style } from "../../src/theme/style";
+
+const { useStyles } = style((theme) => {
+	return {
+		root: {
+			display: "flex",
+			flexDirection: "column",
+			padding: `${theme.space(4)}px`,
+		},
+		example: {
+			display: "flex",
+			flexWrap: "wrap",
+			gap: `${theme.space(1)}px`,
+		},
+		surface: {
+			width: `${theme.space(8)}px`,
+			height: `${theme.space(8)}px`,
+			borderRadius: `${theme.round("md")}px`,
+		},
+	};
+});
 
 const Surfaces = () => {
-	const classes = useCSS(Surfaces, ({ css, util }) => {
-		return {
-			root: css({
-				display: "flex",
-				flexDirection: "column",
-				padding: `${util.space(4)}px`,
-			}),
-			example: css({
-				display: "flex",
-				flexWrap: "wrap",
-				gap: `${util.space(1)}px`,
-			}),
-			surface: css({
-				width: `${util.space(8)}px`,
-				height: `${util.space(8)}px`,
-				borderRadius: `${util.round("md")}px`,
-			}),
-		};
-	});
+	const classes = useStyles();
 
 	return (
 		<div class={classes.root}>

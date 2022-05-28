@@ -1,10 +1,9 @@
 import { clsx } from "@littlethings/css";
-import useClasses from "../../../hooks/useClasses";
-import useOverrides from "../../../hooks/useOverrides";
+import { style } from "../../../theme/style";
 import { CSSClass, CSSClasses } from "../../../types/css";
+import { Theme } from "../../../types/theme";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import { dynamic } from "../../Dynamic";
-import useTextButtonStyles from "./useTextButtonStyles";
 
 export interface TextButtonClasses extends CSSClasses {
 	root: CSSClass;
@@ -14,6 +13,31 @@ export interface TextButtonClasses extends CSSClasses {
 export interface TextButtonProps extends ButtonBaseProps {
 	classes?: Partial<ButtonBaseProps["classes"] & TextButtonClasses>;
 }
+
+const { useStyles, useOverrides, useClasses } = style(
+	(theme: Theme, props: TextButtonProps) => {
+		const color =
+			props.color === undefined ||
+			props.color === "text" ||
+			props.color === "background"
+				? theme.typography.color.light.primary
+				: theme.color(props.color);
+
+		const disabledColor = theme.color("disabled.text");
+
+		return {
+			root: {
+				color,
+			},
+			disabled: {
+				color: disabledColor,
+			},
+			dot: {
+				background: props.disabled ? disabledColor : color,
+			},
+		};
+	}
+);
 
 const TextButton = dynamic<"button", TextButtonProps>("button", (props) => {
 	const {
@@ -25,7 +49,7 @@ const TextButton = dynamic<"button", TextButtonProps>("button", (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useTextButtonStyles(color, disabled);
+	const styles = useStyles(props, [color, disabled]);
 
 	const overrides = useOverrides("TextButton", props, [
 		as,

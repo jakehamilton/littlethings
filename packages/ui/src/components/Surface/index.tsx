@@ -1,9 +1,8 @@
 import { clsx } from "@littlethings/css";
-import { ThemeContextValue } from "../../contexts/Theme";
-import { style, StyleUtil } from "../../theme/style";
+import { style } from "../../theme/style";
 import { CSSClass, CSSClasses } from "../../types/css";
+import { Theme, ThemeColorName, ThemeShadows } from "../../types/theme";
 import { Dynamic, dynamic } from "../Dynamic";
-import useSurfaceStyles, { SurfaceStylesOptions } from "./useSurfaceStyles";
 
 export interface SurfaceClasses extends CSSClasses {
 	root: CSSClass;
@@ -11,23 +10,20 @@ export interface SurfaceClasses extends CSSClasses {
 
 export interface SurfaceProps {
 	classes?: Partial<SurfaceClasses>;
-	color?: SurfaceStylesOptions["color"];
-	elevation?: SurfaceStylesOptions["elevation"];
+	color?: ThemeColorName;
+	elevation?: keyof ThemeShadows | "none";
 }
 
 const { useStyles, useOverrides, useClasses } = style(
-	(theme: ThemeContextValue, util: StyleUtil, props: SurfaceProps) => {
-		const color = theme.util.color(props.color!);
-		const elevation = props.elevation!;
-
-		const shadow =
-			elevation === "none" ? "none" : theme.util.shadow(elevation);
-
+	(theme: Theme, props: SurfaceProps) => {
 		return {
 			root: {
-				color: color.text,
-				background: color.main,
-				boxShadow: shadow,
+				color: theme.color(props.color!, { variant: "text" }),
+				background: theme.color(props.color!, { variant: "main" }),
+				boxShadow:
+					props.elevation === undefined || props.elevation === "none"
+						? "none"
+						: theme.shadow(props.elevation),
 			},
 		};
 	}
@@ -46,7 +42,7 @@ const Surface = dynamic<"div", SurfaceProps>("div", (props) => {
 		elevation,
 	};
 
-	const [styles] = useStyles(styleProps, [as, elevation]);
+	const styles = useStyles(styleProps, [as, elevation]);
 
 	const overrides = useOverrides("Surface", styleProps, [as, elevation]);
 

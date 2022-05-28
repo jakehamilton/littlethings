@@ -1,24 +1,26 @@
-import useCSS from "../../src/hooks/useCSS";
 import Prose from "../../src/components/Prose";
 import Gap from "../../src/components/Gap";
 import Loading from "../../src/components/Loading";
+import { style } from "../../src/theme/style";
+
+const { useStyles } = style((theme) => {
+	return {
+		root: {
+			display: "flex",
+			flexDirection: "column",
+			padding: `${theme.space(4)}px`,
+		},
+		example: {
+			display: "flex",
+			flexWrap: "wrap",
+			gap: `${theme.space(3)}px`,
+			paddingLeft: `${theme.space(1)}px`,
+		},
+	};
+});
 
 const Loadings = () => {
-	const classes = useCSS(Loadings, ({ css, util }) => {
-		return {
-			root: css({
-				display: "flex",
-				flexDirection: "column",
-				padding: `${util.space(4)}px`,
-			}),
-			example: css({
-				display: "flex",
-				flexWrap: "wrap",
-				gap: `${util.space(3)}px`,
-				paddingLeft: `${util.space(1)}px`,
-			}),
-		};
-	});
+	const classes = useStyles();
 
 	return (
 		<div class={classes.root}>
@@ -33,7 +35,7 @@ const Loadings = () => {
 			<div class={classes.example}>
 				<Loading color="primary" />
 				<Loading color="secondary" />
-				<Loading color="text" />
+				{/* <Loading color="text" /> */}
 			</div>
 		</div>
 	);

@@ -6,9 +6,10 @@ import TextInputs from "./sections/TextInputs";
 import Selects from "./sections/Selects";
 import Gap from "../src/components/Gap";
 
-const App = () => {
+const App = (props) => {
+	console.log(props);
 	return (
-		<div>
+		<div class={props.classes?.root}>
 			<Header />
 			<Surfaces />
 			<Loadings />

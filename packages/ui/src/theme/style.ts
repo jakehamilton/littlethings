@@ -23,19 +23,11 @@ export type StyleClasses = {
 	[key: string]: StylesValue;
 };
 
-export type StyleUtil = {
-	css: typeof css;
-	keyframes: typeof css;
-	clsx: typeof clsx;
-};
-
 export type StyleFactory<Classes extends StyleClasses> = (
-	theme: ThemeContextValue,
-	util: StyleUtil
+	theme: Theme
 ) => Classes;
 export type StyleFactoryWithProps<Props, Classes extends StyleClasses> = (
-	theme: ThemeContextValue,
-	util: StyleUtil,
+	theme: Theme,
 	props: Props
 ) => Classes;
 
@@ -43,14 +35,11 @@ type CompiledClasses<Classes extends StyleClasses> = {
 	[key in keyof Classes]: Classes[key] extends undefined ? never : string;
 };
 
-type StyleHook<Classes extends StyleClasses> = () => [
-	CompiledClasses<Classes>,
-	typeof clsx
-];
+type StyleHook<Classes extends StyleClasses> = () => CompiledClasses<Classes>;
 type StyleHookWithProps<Props, Classes extends StyleClasses> = (
 	props: Props,
 	inputs?: Inputs
-) => [CompiledClasses<Classes>, typeof clsx];
+) => CompiledClasses<Classes>;
 
 type OverridesHook<Classes extends StyleClasses> = (
 	name: keyof ThemeOverrides
@@ -126,6 +115,10 @@ export function style<Classes extends StyleClasses>(
 	useStyles: StyleHook<Classes>;
 	useOverrides: OverridesHook<Classes>;
 	useClasses: ClassesHook<Classes>;
+	css: typeof css;
+	keyframes: typeof css;
+	glob: typeof css;
+	clsx: typeof clsx;
 };
 export function style<Props, Classes extends StyleClasses>(
 	factory: StyleFactoryWithProps<Props, Classes>
@@ -133,6 +126,10 @@ export function style<Props, Classes extends StyleClasses>(
 	useStyles: StyleHookWithProps<Props, Classes>;
 	useOverrides: OverridesHookWithProps<Props, Classes>;
 	useClasses: ClassesHook<Classes>;
+	css: typeof css;
+	keyframes: typeof css;
+	glob: typeof css;
+	clsx: typeof clsx;
 };
 
 export function style<Props, Classes extends StyleClasses>(
@@ -159,15 +156,14 @@ export function style<Props, Classes extends StyleClasses>(
 		keyframes: true,
 	});
 
+	const scopedGlob = css.bind({
+		target: stylesheet,
+		global: true,
+	});
+
 	const scopedCLSX = clsx.bind({
 		target: stylesheet,
 	});
-
-	const util: StyleUtil = {
-		css: scopedCSS,
-		keyframes: scopedKeyframes,
-		clsx: scopedCLSX,
-	};
 
 	const caches = {
 		light: new Map<Inputs, CompiledClasses<Classes>>(),
@@ -219,7 +215,7 @@ export function style<Props, Classes extends StyleClasses>(
 		const deps = [theme.spec, ...inputs];
 
 		const generated = useMemo(() => {
-			return factory(theme, util, props!);
+			return factory(theme.theme, props!);
 		}, deps);
 
 		const normalized = useMemo(() => {
@@ -238,7 +234,7 @@ export function style<Props, Classes extends StyleClasses>(
 
 		const classes = theme.mode === "light" ? rendered.light : rendered.dark;
 
-		return [classes, scopedCLSX];
+		return classes;
 	};
 
 	const useOverrides = (
@@ -257,7 +253,8 @@ export function style<Props, Classes extends StyleClasses>(
 				return {};
 			}
 
-			return override(theme, util, props!);
+			// @ts-expect-error
+			return override(theme.theme, props!);
 		}, deps);
 
 		const normalized = useMemo(() => {
@@ -334,5 +331,9 @@ export function style<Props, Classes extends StyleClasses>(
 		useStyles,
 		useOverrides,
 		useClasses,
+		css: scopedCSS,
+		keyframes: scopedKeyframes,
+		glob: scopedGlob,
+		clsx: scopedCLSX,
 	};
 }

@@ -1,32 +1,34 @@
-import useCSS from "../../src/hooks/useCSS";
 import Prose from "../../src/components/Prose";
 import Gap from "../../src/components/Gap";
 import { Airplay, Eye, Feather, Save } from "preact-feather";
 import Input from "../../src/components/Input";
+import { style } from "../../src/theme/style";
+
+const { useStyles } = style((theme) => {
+	return {
+		root: {
+			display: "flex",
+			flexDirection: "column",
+			padding: `${theme.space(4)}px`,
+		},
+		example: {
+			display: "flex",
+			flexDirection: "column",
+			flexWrap: "wrap",
+			gap: `${theme.space(1)}px`,
+		},
+		input: {
+			minWidth: "400px",
+			[`& textarea`]: {
+				height: "150px",
+				resize: "none",
+			},
+		},
+	};
+});
 
 const Selects = () => {
-	const classes = useCSS(Selects, ({ css, util }) => {
-		return {
-			root: css({
-				display: "flex",
-				flexDirection: "column",
-				padding: `${util.space(4)}px`,
-			}),
-			example: css({
-				display: "flex",
-				flexDirection: "column",
-				flexWrap: "wrap",
-				gap: `${util.space(1)}px`,
-			}),
-			input: css({
-				minWidth: "400px",
-				[`& textarea`]: {
-					height: "150px",
-					resize: "none",
-				},
-			}),
-		};
-	});
+	const classes = useStyles();
 
 	return (
 		<div class={classes.root}>

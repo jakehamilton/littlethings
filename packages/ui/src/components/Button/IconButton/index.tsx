@@ -1,13 +1,14 @@
 import { clsx } from "@littlethings/css";
 import { cloneElement, isValidElement, toChildArray } from "preact";
-import useClasses from "../../../hooks/useClasses";
-import useOverrides from "../../../hooks/useOverrides";
+import { style } from "../../../theme/style";
 import { CSSClasses } from "../../../types/css";
+import { Theme } from "../../../types/theme";
 import ButtonBase, { ButtonBaseProps } from "../../ButtonBase";
 import { dynamic } from "../../Dynamic";
-import useIconButtonStyles from "./useIconButtonStyles";
 
-const getIconSize = (size: NonNullable<ButtonBaseProps["size"]>): number => {
+type Size = NonNullable<ButtonBaseProps["size"]>;
+
+const getIconSize = (size: Size): number => {
 	switch (size) {
 		case "sm":
 			return 16;
@@ -21,11 +22,67 @@ const getIconSize = (size: NonNullable<ButtonBaseProps["size"]>): number => {
 	}
 };
 
+const getSize = (size: Size): number => {
+	switch (size) {
+		case "sm":
+			return 36;
+		default:
+		case "md":
+			return 42;
+		case "lg":
+			return 52;
+		case "xl":
+			return 64;
+	}
+};
+
 export interface IconButtonClasses extends CSSClasses {
 	root: string;
 }
 
 export interface IconButtonProps extends ButtonBaseProps {}
+
+const { useStyles, useOverrides, useClasses } = style(
+	(theme: Theme, props: IconButtonProps) => {
+		const size = getSize(props.size ?? "md");
+		const color =
+			props.color === undefined ||
+			props.color === "text" ||
+			props.color === "background"
+				? theme.typography.color.light.primary
+				: theme.color(props.color);
+
+		const disabledColor = theme.color("disabled.text");
+
+		return {
+			root: {
+				color,
+				borderRadius: "50%",
+				width: `${size}px`,
+				height: `${size}px`,
+				padding: "0",
+
+				"&::before": {
+					borderRadius: "50%",
+				},
+			},
+			content: {
+				display: "inline-flex",
+				alignItems: "center",
+				justifyContent: "center",
+				width: `${size}px`,
+				height: `${size}px`,
+				overflow: "hidden",
+			},
+			disabled: {
+				color: disabledColor,
+			},
+			dot: {
+				background: props.disabled ? disabledColor : color,
+			},
+		};
+	}
+);
 
 const IconButton = dynamic<"button", IconButtonProps>("button", (props) => {
 	const {
@@ -37,10 +94,9 @@ const IconButton = dynamic<"button", IconButtonProps>("button", (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useIconButtonStyles(size, color, disabled);
+	const styles = useStyles(props, [size, color, disabled]);
 
 	const overrides = useOverrides("IconButton", props, [
-		as,
 		color,
 		size,
 		disabled,

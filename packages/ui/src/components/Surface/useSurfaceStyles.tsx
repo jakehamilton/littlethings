@@ -7,7 +7,7 @@ import {
 } from "../../types/theme";
 
 export interface SurfaceStylesOptions {
-	color: ThemeColorName | ThemePaletteColor;
+	color: ThemeColorName;
 	elevation: keyof ThemeShadows | "none";
 }
 

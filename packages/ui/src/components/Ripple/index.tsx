@@ -9,10 +9,11 @@ import {
 	useImperativeHandle,
 } from "preact/hooks";
 import useLatest from "../../hooks/useLatest";
+import { style } from "../../theme/style";
+import { Theme } from "../../types/theme";
 import { isKeyboardEvent, isMouseEvent, isTouchEvent } from "../../util/events";
 import TransitionGroup, { TransitionGroupProps } from "../TransitionGroup";
 import RippleDot, { RippleDotProps } from "./RippleDot";
-import useRippleStyles from "./useRippleStyles";
 
 /**
  * How long it takes for the ripple to grow (and fade).
@@ -87,6 +88,25 @@ export interface RippleProps {
 	TransitionGroupProps?: Partial<TransitionGroupProps>;
 }
 
+const { useStyles } = style((theme: Theme) => {
+	return {
+		root: {
+			position: "absolute",
+			overflow: "hidden",
+
+			top: "0",
+			left: "0",
+			right: "0",
+			bottom: "0",
+
+			zIndex: "0",
+			borderRadius: "inherit",
+
+			pointerEvents: "none",
+		},
+	};
+});
+
 const Ripple: FunctionComponent<RippleProps> = ({
 	center = false,
 	duration = DEFAULT_DURATION,
@@ -96,7 +116,7 @@ const Ripple: FunctionComponent<RippleProps> = ({
 	TransitionGroupProps,
 	...props
 }) => {
-	const classes = useRippleStyles();
+	const classes = useStyles();
 
 	// The root element is used for size and position measurements
 	const rootElementRef = useRef<HTMLSpanElement>(null);
@@ -115,9 +135,8 @@ const Ripple: FunctionComponent<RippleProps> = ({
 	// delayed callback.
 	const delayedUpdateRipplesCallback = useRef<() => void>(null);
 	// The timeout used to call the delayed update callback is also saved.
-	const delayedUpdateRipplesTimeout = useRef<ReturnType<typeof setTimeout>>(
-		null
-	);
+	const delayedUpdateRipplesTimeout =
+		useRef<ReturnType<typeof setTimeout>>(null);
 
 	useEffect(() => {
 		// When we unmount, remove all callbacks and timeouts
@@ -279,15 +298,12 @@ const Ripple: FunctionComponent<RippleProps> = ({
 		}
 	}, []);
 
-	useImperativeHandle(
-		handleRef,
-		(): RippleHandle => {
-			return {
-				add,
-				remove,
-			};
-		}
-	);
+	useImperativeHandle(handleRef, (): RippleHandle => {
+		return {
+			add,
+			remove,
+		};
+	});
 
 	return (
 		<span

@@ -3,18 +3,11 @@ export { isKeyboardEvent, isMouseEvent, isTouchEvent } from "./util/events";
 
 export { ThemeContext, ThemeProvider } from "./contexts/Theme";
 
-export type {
-	ThemeContextValue,
-	ThemeProviderProps,
-	ThemeUtil,
-} from "./contexts/Theme";
+export type { ThemeContextValue, ThemeProviderProps } from "./contexts/Theme";
 
 export { TransitionGroupContext } from "./contexts/TransitionGroup";
 
 export type { TransitionGroupContextValue } from "./contexts/TransitionGroup";
-
-export { default as useCSS } from "./hooks/useCSS";
-export type { CSSFactory, CSSFactoryInput } from "./hooks/useCSS";
 
 export { default as Button } from "./components/Button";
 export type { ButtonProps } from "./components/Button";

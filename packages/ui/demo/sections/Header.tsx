@@ -5,8 +5,39 @@ import FilledButton from "../../src/components/Button/FilledButton";
 import ButtonBase from "../../src/components/ButtonBase";
 import Prose from "../../src/components/Prose";
 import Surface from "../../src/components/Surface";
-import useCSS from "../../src/hooks/useCSS";
 import useTheme from "../../src/hooks/useTheme";
+import { style } from "../../src/theme/style";
+
+const { useStyles } = style((theme) => {
+	const primaryColor = theme.color("primary.text");
+	const primaryBackground = theme.color("primary.main");
+	const secondaryBackground = theme.color("secondary.main");
+
+	return {
+		root: {
+			display: "flex",
+			flexDirection: "column",
+			padding: `${theme.space(8)}px ${theme.space(4)}px`,
+			backgroundImage: `linear-gradient(80deg, ${primaryBackground}, ${secondaryBackground})`,
+		},
+		toggle: {
+			position: "absolute",
+			justifyContent: "center",
+			top: `${theme.space(2)}px`,
+			right: `${theme.space(2)}px`,
+			width: `${theme.space(8)}px`,
+			height: `${theme.space(8)}px`,
+			borderRadius: `${theme.round("lg")}px`,
+		},
+		title: {
+			fontSize: "4.25rem",
+			lineHeight: "1",
+		},
+		text: {
+			color: primaryColor,
+		},
+	};
+});
 
 const Header = () => {
 	const { mode, setMode } = useTheme();
@@ -15,35 +46,7 @@ const Header = () => {
 		setMode(mode === "light" ? "dark" : "light");
 	};
 
-	const classes = useCSS(Header, ({ css, util }) => {
-		const primary = util.color("primary");
-		const secondary = util.color("secondary");
-
-		return {
-			root: css({
-				display: "flex",
-				flexDirection: "column",
-				padding: `${util.space(8)}px ${util.space(4)}px`,
-				backgroundImage: `linear-gradient(80deg, ${primary.main}, ${secondary.main})`,
-			}),
-			toggle: css({
-				position: "absolute",
-				justifyContent: "center",
-				top: `${util.space(2)}px`,
-				right: `${util.space(2)}px`,
-				width: `${util.space(8)}px`,
-				height: `${util.space(8)}px`,
-				borderRadius: `${util.round("lg")}px`,
-			}),
-			title: css({
-				fontSize: "4.25rem",
-				lineHeight: "1",
-			}),
-			text: css({
-				color: primary.text,
-			}),
-		};
-	});
+	const classes = useStyles();
 
 	return (
 		<Surface classes={{ root: classes.root }}>

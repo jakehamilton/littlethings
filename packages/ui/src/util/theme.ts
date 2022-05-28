@@ -1,15 +1,18 @@
 import {
 	Theme,
 	ThemeBreakpoints,
-	ThemeConfig,
-	ThemeMode,
 	ThemePalette,
 	ThemePaletteColor,
-	ThemePaletteConfig,
 	ThemeRounding,
-	ThemeSpec,
+	ThemeConfig,
 	ThemeTypography,
-	ThemeTypographyColor,
+	ThemeTypographyColors,
+	ThemeColorHelperRawOptions,
+	ThemeColorHelperVariantOptions,
+	ThemeColorName,
+	ThemePaletteColorName,
+	ThemeFontNames,
+	ThemeFontSizeNames,
 } from "../types/theme";
 
 import White from "../colors/white";
@@ -17,11 +20,8 @@ import Black from "../colors/black";
 import Light from "../colors/light";
 import Dark from "../colors/dark";
 import Gray from "../colors/gray";
-import CoolGray from "../colors/coolGray";
 import Purple from "../colors/purple";
-import tinycolor from "tinycolor2";
 import Orange from "../colors/orange";
-import WarmGray from "../colors/warmGray";
 
 const DEFAULT_SPACING: number = 8;
 
@@ -41,13 +41,13 @@ const DEFAULT_BREAKPOINTS: ThemeBreakpoints = {
 	xl: 1920,
 };
 
-const DEFAULT_LIGHT_TYPOGRAPHY_COLORS: ThemeTypographyColor = {
+const DEFAULT_LIGHT_TYPOGRAPHY_COLORS: ThemeTypographyColors = {
 	primary: Black["200"],
 	secondary: Gray["600"],
 	disabled: Gray["400"],
 };
 
-const DEFAULT_DARK_TYPOGRAPHY_COLORS: ThemeTypographyColor = {
+const DEFAULT_DARK_TYPOGRAPHY_COLORS: ThemeTypographyColors = {
 	primary: White["900"],
 	secondary: Light["700"],
 	disabled: Gray["400"],
@@ -56,8 +56,7 @@ const DEFAULT_DARK_TYPOGRAPHY_COLORS: ThemeTypographyColor = {
 const DEFAULT_TYPOGRAPHY: Omit<ThemeTypography, "color"> = {
 	base: 14,
 	primary: {
-		family:
-			"Inter, Helvetica Neue, Helvetica, -apple-system, Arial, sans-serif",
+		family: "Inter, Helvetica Neue, Helvetica, -apple-system, Arial, sans-serif",
 		sizes: {
 			xs: {
 				size: 1,
@@ -87,8 +86,7 @@ const DEFAULT_TYPOGRAPHY: Omit<ThemeTypography, "color"> = {
 		},
 	},
 	secondary: {
-		family:
-			"Staatliches, Helvetica Neue, Helvetica, -apple-system, Arial, sans-serif",
+		family: "Staatliches, Helvetica Neue, Helvetica, -apple-system, Arial, sans-serif",
 		sizes: {
 			xs: {
 				size: 1,
@@ -185,59 +183,19 @@ const DEFAULT_DARK_PALETTE: ThemePalette = {
 	},
 };
 
-const normalizePalette = (
-	palette: ThemePaletteConfig | undefined,
-	background: ThemePaletteColor
-): ThemePalette | undefined => {
-	if (palette === undefined) {
-		return palette;
-	}
-
-	const normalized = {} as ThemePalette;
-
-	for (const _key in palette) {
-		const key = _key as keyof ThemePaletteConfig;
-
-		if (palette.hasOwnProperty(key)) {
-			const color = palette[key];
-
-			if (color === undefined) {
-				continue;
-			}
-
-			const { main, light, dark, text } = color;
-
-			if (light === undefined) {
-				color.light = "#" + tinycolor(main).lighten().toHex();
-			}
-
-			if (dark === undefined) {
-				color.dark = "#" + tinycolor(main).darken().toHex();
-			}
-
-			if (text === undefined) {
-				color.text =
-					"#" +
-					tinycolor
-						.mostReadable(main, [
-							background.text,
-							Black["900"],
-							White["900"],
-						])
-						.toHex();
-			}
-
-			normalized[key] = color as ThemePaletteColor;
-		}
-	}
-
-	return normalized;
+const isThemeColorHelperRawOptions = (
+	options: any
+): options is ThemeColorHelperRawOptions => {
+	return options !== null && typeof options === "object" && options.raw;
 };
 
-const configToTheme = (
-	config: ThemeConfig | undefined,
-	mode: ThemeMode
-): Theme => {
+const isThemeColorHelperVariantOptions = <Color extends ThemeColorName>(
+	options: any
+): options is ThemeColorHelperVariantOptions<Color> => {
+	return options !== null && typeof options === "object" && options.variant;
+};
+
+export const createTheme = (config: ThemeConfig = {}): Theme => {
 	const theme: Theme = {
 		spacing: config?.spacing ?? DEFAULT_SPACING,
 		rounding: {
@@ -245,30 +203,41 @@ const configToTheme = (
 			...config?.rounding,
 		},
 		palette: {
-			...(mode === "dark" ? DEFAULT_DARK_PALETTE : DEFAULT_LIGHT_PALETTE),
-			...normalizePalette(
-				config?.palette,
-				mode === "dark"
-					? DEFAULT_DARK_PALETTE.background
-					: DEFAULT_LIGHT_PALETTE.background
-			),
+			light: {
+				...DEFAULT_LIGHT_PALETTE,
+				...config?.palette?.light,
+			},
+			dark: {
+				...DEFAULT_DARK_PALETTE,
+				...config?.palette?.dark,
+			},
 		},
 		breakpoints: {
 			...DEFAULT_BREAKPOINTS,
 			...config?.breakpoints,
 		},
 		shadows: {
-			...DEFAULT_SHADOWS,
-			...config?.shadows,
+			light: {
+				...DEFAULT_SHADOWS,
+				...config?.shadows?.light,
+			},
+			dark: {
+				...DEFAULT_SHADOWS,
+				...config?.shadows?.dark,
+			},
 		},
 		typography: {
 			...DEFAULT_TYPOGRAPHY,
 			...config?.typography,
 			color: {
-				...(mode === "dark"
-					? DEFAULT_DARK_TYPOGRAPHY_COLORS
-					: DEFAULT_LIGHT_TYPOGRAPHY_COLORS),
-				...config?.typography?.color,
+				light: {
+					...DEFAULT_LIGHT_TYPOGRAPHY_COLORS,
+					...config?.typography?.color?.light,
+				},
+				dark: {
+					...DEFAULT_LIGHT_TYPOGRAPHY_COLORS,
+					...config?.typography?.color?.dark,
+				},
 			},
 			primary: {
 				...DEFAULT_TYPOGRAPHY.primary,
@@ -290,14 +259,60 @@ const configToTheme = (
 		overrides: {
 			...config?.overrides,
 		},
+		space(size) {
+			return this.spacing * size;
+		},
+		round(size) {
+			return this.rounding[size];
+		},
+		shadow(name) {
+			return `var(--ui-shadow-${name})`;
+		},
+		// @ts-expect-error
+		color(name, options) {
+			if (isThemeColorHelperRawOptions(options)) {
+				const [key, variant = "main"] = name.split(".");
+
+				return this.palette[options.mode][key as keyof ThemePalette][
+					variant as keyof ThemePaletteColor
+				];
+			} else if (isThemeColorHelperVariantOptions(options)) {
+				const [key] = name.split(".");
+
+				return `var(--ui-color-${key as ThemePaletteColorName}-${
+					options.variant
+				})`;
+			} else {
+				const [key, variant = "main"] = name.split(".");
+
+				return `var(--ui-color-${key as ThemePaletteColorName}-${
+					variant as keyof ThemePaletteColor
+				})`;
+			}
+		},
+		font(name) {
+			const [key, variant = "sm"] = name.split(".");
+
+			const font = this.typography[key as ThemeFontNames];
+			const { size, weight, height } =
+				font.sizes[variant as ThemeFontSizeNames];
+
+			return {
+				family: font.family,
+				size,
+				weight,
+				height,
+			};
+		},
+		// @ts-expect-error
+		text(name, options) {
+			if (options?.raw) {
+				return this.typography.color[options.mode][name];
+			} else {
+				return `var(--ui-text-${name})`;
+			}
+		},
 	};
 
 	return theme;
-};
-
-export const createTheme = (spec?: ThemeSpec) => {
-	const light = configToTheme(spec?.light, "light");
-	const dark = configToTheme(spec?.dark, "dark");
-
-	return { light, dark } as const;
 };

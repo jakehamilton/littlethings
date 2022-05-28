@@ -1,11 +1,10 @@
 import { clsx } from "@littlethings/css";
 import { CSSClass, CSSClasses } from "../../types/css";
-import useClasses from "../../hooks/useClasses";
-import useOverrides from "../../hooks/useOverrides";
-import useTextInputStyles, { TextInputStylesOptions } from "./useInputStyles";
 import { cloneElement, ComponentChildren, isValidElement } from "preact";
 import useTheme from "../../hooks/useTheme";
 import { Dynamic, dynamic, DynamicProps } from "../Dynamic";
+import { Theme, ThemeColorName } from "../../types/theme";
+import { style } from "../../theme/style";
 
 export interface InputClasses extends CSSClasses {
 	root: CSSClass;
@@ -17,9 +16,9 @@ export interface InputClasses extends CSSClasses {
 
 export interface InputProps {
 	classes?: Partial<InputClasses>;
-	color?: TextInputStylesOptions["color"];
-	focus?: TextInputStylesOptions["focus"];
-	border?: TextInputStylesOptions["border"];
+	color?: ThemeColorName;
+	focus?: ThemeColorName;
+	border?: ThemeColorName;
 	disabled?: boolean;
 	RootProps?: Omit<DynamicProps<"div">, "as">;
 	prefixIcon?: ComponentChildren;
@@ -27,6 +26,19 @@ export interface InputProps {
 	postfixIcon?: ComponentChildren;
 	PostfixIconProps?: Omit<DynamicProps<"div">, "as">;
 }
+
+const { useStyles, useOverrides, useClasses } = style(
+	(theme: Theme, props: InputProps) => {
+		return {
+			root: {},
+			input: {},
+			icon: {},
+			disabled: {},
+			prefixIcon: {},
+			postfixIcon: {},
+		};
+	}
+);
 
 const TextInput = dynamic<"input", InputProps>("input", (props) => {
 	const {
@@ -44,17 +56,23 @@ const TextInput = dynamic<"input", InputProps>("input", (props) => {
 		...baseProps
 	} = props;
 
-	const { util } = useTheme();
+	const { theme } = useTheme();
 
-	const styles = useTextInputStyles(
+	const styles = useStyles(props, [
 		color,
 		focus,
 		border,
 		Boolean(prefixIcon),
-		Boolean(postfixIcon)
-	);
+		Boolean(postfixIcon),
+	]);
 
-	const overrides = useOverrides("TextInput", props);
+	const overrides = useOverrides("TextInput", props, [
+		color,
+		focus,
+		border,
+		Boolean(prefixIcon),
+		Boolean(postfixIcon),
+	]);
 
 	const classes = useClasses(styles, overrides, props.classes);
 
@@ -79,7 +97,7 @@ const TextInput = dynamic<"input", InputProps>("input", (props) => {
 				>
 					{isValidElement(prefixIcon)
 						? cloneElement(prefixIcon, {
-								size: util.space(2.5),
+								size: theme.space(2.5),
 								color: "currentColor",
 						  })
 						: prefixIcon}
@@ -103,7 +121,7 @@ const TextInput = dynamic<"input", InputProps>("input", (props) => {
 				>
 					{isValidElement(postfixIcon)
 						? cloneElement(postfixIcon, {
-								size: util.space(2.5),
+								size: theme.space(2.5),
 								color: "currentColor",
 						  })
 						: postfixIcon}

@@ -7,33 +7,30 @@ export const parameters = {
 	actions: { argTypesRegex: "^on[A-Z].*" },
 };
 
-/** @type {import("../src").ThemeOverrides} */
-const overrides = {
-	Surface: (theme, props) => {
-		return {
-			root: {
-				"@dark": {
-					backgroundColor: theme.util.color("secondary").main,
+/** @type {import("../src").ThemeConfig} */
+const theme = {
+	overrides: {
+		Surface: (theme, props) => {
+			return {
+				root: {
+					backgroundColor: theme.color("primary"),
 				},
-				"@light": {
-					backgroundColor: theme.util.color("primary").main,
-				},
-			},
-		};
+			};
+		},
 	},
-};
-
-/** @type {import("../src").ThemeSpec} */
-const spec = {
-	light: { overrides },
-	dark: { overrides },
 };
 
 export const decorators = [
 	(Story) => (
-		<ThemeProvider mode="dark" spec={spec}>
+		<ThemeProvider mode="dark" theme={theme}>
 			<CSSBase />
-			<Story />
+			{(props) => {
+				return (
+					<div class={props.classes.root}>
+						<Story />
+					</div>
+				);
+			}}
 		</ThemeProvider>
 	),
 ];

@@ -4,13 +4,13 @@ import {
 	ThemeFontSizeNames,
 	ThemePaletteColor,
 	ThemePaletteColorName,
-	ThemeTypographyColor,
+	ThemeTypographyColors,
 	ThemeTypographyName,
 } from "../../types/theme";
 
 export interface ProseStylesConfig {
 	color?: ThemeColorName | ThemePaletteColor;
-	variant?: keyof ThemeTypographyColor;
+	variant?: keyof ThemeTypographyColors;
 	font: ThemeTypographyName;
 	size: ThemeFontSizeNames;
 }
@@ -41,14 +41,7 @@ const useProseStyles = (
 			const sizeVariant = themeFont.sizes[size];
 
 			return {
-				root: css({
-					color: themeColor ? themeColor.main : "currentColor",
-
-					fontFamily: themeFont.family,
-					fontSize: `${sizeVariant.size}rem`,
-					fontWeight: String(sizeVariant.weight),
-					lineHeight: `${sizeVariant.height}rem`,
-				}),
+				root: css({}),
 			};
 		},
 		[color, variant, font, size]

@@ -1,9 +1,14 @@
 import { clsx } from "@littlethings/css";
-import useClasses from "../../hooks/useClasses";
-import useOverrides from "../../hooks/useOverrides";
+import { style } from "../../theme/style";
 import { CSSClass, CSSClasses } from "../../types/css";
+import {
+	Theme,
+	ThemeColorName,
+	ThemeFontSizeNames,
+	ThemeTypographyColors,
+	ThemeTypographyName,
+} from "../../types/theme";
 import { Dynamic, dynamic } from "../Dynamic";
-import useProseStyles, { ProseStylesConfig } from "./useProseStyles";
 
 export interface ProseClasses extends CSSClasses {
 	root: CSSClass;
@@ -11,11 +16,31 @@ export interface ProseClasses extends CSSClasses {
 
 export interface ProseProps {
 	classes?: Partial<ProseClasses>;
-	color?: ProseStylesConfig["color"];
-	variant?: ProseStylesConfig["variant"];
-	font?: ProseStylesConfig["font"];
-	size?: ProseStylesConfig["size"];
+	color?: ThemeColorName;
+	variant?: keyof ThemeTypographyColors;
+	font?: ThemeTypographyName;
+	size?: ThemeFontSizeNames;
 }
+
+const { useStyles, useOverrides, useClasses } = style(
+	(theme: Theme, props: ProseProps) => {
+		const color = props.color
+			? theme.color(props.color)
+			: theme.typography.color.light[props.variant ?? "primary"];
+
+		const font = theme.font(props.font ?? "primary");
+
+		return {
+			root: {
+				color,
+				fontFamily: font.family,
+				fontSize: `${font.size}rem`,
+				fontWeight: String(font.weight),
+				lineHeight: `${font.height}rem`,
+			},
+		};
+	}
+);
 
 const Prose = dynamic<"span", ProseProps>("span", (props) => {
 	const {
@@ -28,7 +53,7 @@ const Prose = dynamic<"span", ProseProps>("span", (props) => {
 		...baseProps
 	} = props;
 
-	const styles = useProseStyles(color, variant, font, size);
+	const styles = useStyles(props, [color, variant, font, size]);
 
 	const overrides = useOverrides("Prose", props);
 

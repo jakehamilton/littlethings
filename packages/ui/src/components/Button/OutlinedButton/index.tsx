@@ -1,13 +1,12 @@
 import { clsx } from "@littlethings/css";
-import useClasses from "../../../hooks/useClasses";
-import useOverrides from "../../../hooks/useOverrides";
+import { style } from "../../../theme/style";
 import { CSSClass } from "../../../types/css";
+import { Theme } from "../../../types/theme";
 import ButtonBase, {
 	ButtonBaseClasses,
 	ButtonBaseProps,
 } from "../../ButtonBase";
 import { dynamic } from "../../Dynamic";
-import useOutlinedButtonStyles from "./useOutlinedButtonStyles";
 
 export interface OutlinedButtonClasses extends ButtonBaseClasses {
 	root: CSSClass;
@@ -17,6 +16,33 @@ export interface OutlinedButtonClasses extends ButtonBaseClasses {
 export interface OutlinedButtonProps extends ButtonBaseProps {
 	classes?: Partial<OutlinedButtonClasses>;
 }
+
+const { useStyles, useOverrides, useClasses } = style(
+	(theme: Theme, props: OutlinedButtonProps) => {
+		const color =
+			props.color === undefined ||
+			props.color === "text" ||
+			props.color === "background"
+				? theme.typography.color.light.primary
+				: theme.color(props.color);
+
+		const disabledColor = theme.color("disabled.text");
+
+		return {
+			root: {
+				color,
+				border: `2px solid ${color}`,
+			},
+			disabled: {
+				color: disabledColor,
+				border: `2px solid ${disabledColor}`,
+			},
+			dot: {
+				background: props.disabled ? disabledColor : color,
+			},
+		};
+	}
+);
 
 const OutlinedButton = dynamic<"button", OutlinedButtonProps>(
 	"button",
@@ -30,12 +56,10 @@ const OutlinedButton = dynamic<"button", OutlinedButtonProps>(
 			...baseProps
 		} = props;
 
-		const styles = useOutlinedButtonStyles(color, disabled);
+		const styles = useStyles(props, [color, disabled]);
 
 		const overrides = useOverrides("OutlinedButton", props, [
-			as,
 			color,
-			size,
 			disabled,
 		]);
 

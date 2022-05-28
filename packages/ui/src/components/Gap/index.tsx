@@ -1,7 +1,7 @@
 import { clsx } from "@littlethings/css";
-import useClasses from "../../hooks/useClasses";
-import useOverrides from "../../hooks/useOverrides";
+import { style } from "../../theme/style";
 import { CSSClass, CSSClasses } from "../../types/css";
+import { Theme } from "../../types/theme";
 import { Dynamic, dynamic } from "../Dynamic";
 import useGapStyles, { GapStylesOptions } from "./useGapStyles";
 
@@ -18,10 +18,26 @@ export interface GapProps {
 	horizontal?: GapStylesOptions["horizontal"];
 }
 
+const { useStyles, useOverrides, useClasses } = style(
+	(theme: Theme, props: GapProps) => {
+		const margin = theme.space(props.size ?? 1);
+
+		return {
+			root: {},
+			vertical: {
+				marginTop: `${margin}px`,
+			},
+			horizontal: {
+				marginTop: `${margin}px`,
+			},
+		};
+	}
+);
+
 const Gap = dynamic<"div", GapProps>("div", (props) => {
 	const { as = "div", size = 1, vertical, horizontal, ...baseProps } = props;
 
-	const styles = useGapStyles(size);
+	const styles = useStyles(props, [size]);
 
 	const overrides = useOverrides("Gap", props, [size, vertical, horizontal]);
 
