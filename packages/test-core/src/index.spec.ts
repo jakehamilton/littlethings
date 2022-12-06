@@ -12,46 +12,50 @@ vitest.test("basic functionality", async () => {
 
 	const output: Array<any> = [];
 
-	const startTime = Date.now();
-	function writeTime() {
-		const now = Date.now();
-		const elapsedTime = now - startTime;
-		output.push(Math.round(elapsedTime / 50) * 50);
+	let asyncTestFinished = false;
+
+	function write(msg: string) {
+		output.push([msg, { asyncTestFinished }]);
 	}
 
 	it("is here", async () => {
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		write("is here");
+		await new Promise((resolve) => setTimeout(resolve, 50));
+		asyncTestFinished = true;
 	});
 
 	beforeAll(() => {
-		writeTime();
+		write("beforeAll");
 	});
 
 	afterAll(() => {
-		writeTime();
+		write("afterAll");
 	});
 
 	describe("something", () => {
 		beforeEach(() => {
-			writeTime();
+			write("something -> beforeEach");
 		});
 
 		afterEach(() => {
-			writeTime();
+			write("something -> afterEach");
 		});
 
 		it("works", () => {
 			assert(2 + 2 === 4);
+			write("something -> works -> after assertion");
 		});
 
 		it("fails", () => {
 			assert(2 + 2 === 5);
+			write("shouldn't be written due to failure");
 		});
 
 		it(
 			"gets skipped",
 			() => {
 				assert(Infinity > 3);
+				write("shouldn't be written due to skip");
 			},
 			["skip"]
 		);
@@ -59,7 +63,7 @@ vitest.test("basic functionality", async () => {
 
 	describe("bad", () => {
 		afterEach(() => {
-			writeTime();
+			write("bad -> afterEach");
 		});
 
 		throw new Error("no :)");
@@ -89,12 +93,54 @@ vitest.test("basic functionality", async () => {
 
 	vitest.expect(output).toMatchInlineSnapshot(`
 		[
-		  0,
-		  100,
-		  100,
-		  100,
-		  100,
-		  100,
+		  [
+		    "beforeAll",
+		    {
+		      "asyncTestFinished": false,
+		    },
+		  ],
+		  [
+		    "is here",
+		    {
+		      "asyncTestFinished": false,
+		    },
+		  ],
+		  [
+		    "something -> beforeEach",
+		    {
+		      "asyncTestFinished": true,
+		    },
+		  ],
+		  [
+		    "something -> works -> after assertion",
+		    {
+		      "asyncTestFinished": true,
+		    },
+		  ],
+		  [
+		    "something -> afterEach",
+		    {
+		      "asyncTestFinished": true,
+		    },
+		  ],
+		  [
+		    "something -> beforeEach",
+		    {
+		      "asyncTestFinished": true,
+		    },
+		  ],
+		  [
+		    "something -> afterEach",
+		    {
+		      "asyncTestFinished": true,
+		    },
+		  ],
+		  [
+		    "afterAll",
+		    {
+		      "asyncTestFinished": true,
+		    },
+		  ],
 		  [
 		    {
 		      "type": "assembly_started",
@@ -163,7 +209,7 @@ vitest.test("basic functionality", async () => {
 		    },
 		    {
 		      "error": [AssertionError: The expression evaluated to a falsy value:
-		
+
 		  assert(2 + 2 === 4)
 		],
 		      "status": "FAILED",
