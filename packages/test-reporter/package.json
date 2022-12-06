@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/test-reporter",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Event reporter for @littlethings/test",
     "keywords": [
         "test",
@@ -28,7 +28,7 @@
         "test": "vitest"
     },
     "dependencies": {
-        "@littlethings/test-core": "^1.0.0",
+        "@littlethings/test-core": "^2.0.0",
         "code-preview-from-error": "^1.0.2",
         "kleur": "^4.1.4",
         "pretty-print-error": "^1.1.0"
