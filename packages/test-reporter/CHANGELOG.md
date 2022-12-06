@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.0.1
+
+### Chores
+
+- don't bundle test-{reporter,core}
+
+- bump devdeps of test packages
+
+### Notes
+
+Updated local dependencies.
+
 ## 2.0.0
 
 ### Notes
