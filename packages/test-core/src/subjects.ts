@@ -3,6 +3,7 @@ import type { TestAPI } from "./types";
 export class Describe {
 	type = "Describe" as const;
 
+	flags: Set<string>;
 	context: Array<string>;
 	body: (api: TestAPI) => void | Promise<void>;
 	parent: Describe | null = null;
@@ -21,44 +22,50 @@ export class Describe {
 		context,
 		body,
 		rootDescribe,
+		flags,
 	}: {
 		context: Array<string>;
 		body: (api: TestAPI) => void | Promise<void>;
 		rootDescribe?: Describe;
+		flags?: Iterable<string>;
 	}) {
 		this.context = context;
 		this.body = body;
 		this.rootDescribe = rootDescribe || this;
+		this.flags = new Set(flags || []);
 
 		this.api = {
-			describe: (description, body) => {
+			describe: (description, body, flags) => {
 				const child = new Describe({
 					context: this.context.concat(description),
 					body,
+					flags,
 					rootDescribe: this.rootDescribe,
 				});
 				child.parent = this;
 				this.children.push(child);
 			},
-			it: (description, body) => {
+			it: (description, body, flags) => {
 				const child = new Test({
 					context: this.context.concat(description),
 					body,
+					flags,
 				});
 				child.parent = this;
 				this.children.push(child);
 			},
-			beforeEach: (body) => {
+			beforeEach: (body, flags) => {
 				this.beforeEaches.push(
 					new LifecycleHook({
 						context: this.context.concat(
 							`beforeEach #${this.beforeEaches.length + 1}`
 						),
 						body,
+						flags,
 					})
 				);
 			},
-			beforeAll: (body) => {
+			beforeAll: (body, flags) => {
 				this.rootDescribe.beforeAlls.push(
 					new LifecycleHook({
 						context: this.context.concat(
@@ -67,20 +74,22 @@ export class Describe {
 							}`
 						),
 						body,
+						flags,
 					})
 				);
 			},
-			afterEach: (body) => {
+			afterEach: (body, flags) => {
 				this.afterEaches.push(
 					new LifecycleHook({
 						context: this.context.concat(
 							`afterEach #${this.afterEaches.length + 1}`
 						),
 						body,
+						flags,
 					})
 				);
 			},
-			afterAll: (body) => {
+			afterAll: (body, flags) => {
 				this.rootDescribe.afterAlls.push(
 					new LifecycleHook({
 						context: this.context.concat(
@@ -89,6 +98,7 @@ export class Describe {
 							}`
 						),
 						body,
+						flags,
 					})
 				);
 			},
@@ -103,6 +113,7 @@ export class Describe {
 export class LifecycleHook {
 	type = "LifecycleHook" as const;
 
+	flags: Set<string>;
 	context: Array<string>;
 	body: () => void | Promise<void>;
 	parent: Describe | null = null;
@@ -110,18 +121,22 @@ export class LifecycleHook {
 	constructor({
 		context,
 		body,
+		flags,
 	}: {
 		context: Array<string>;
 		body: () => void | Promise<void>;
+		flags?: Iterable<string>;
 	}) {
 		this.context = context;
 		this.body = body;
+		this.flags = new Set(flags || []);
 	}
 }
 
 export class Test {
 	type = "Test" as const;
 
+	flags: Set<string>;
 	context: Array<string>;
 	body: () => void | Promise<void>;
 	parent: Describe | null = null;
@@ -129,12 +144,15 @@ export class Test {
 	constructor({
 		context,
 		body,
+		flags,
 	}: {
 		context: Array<string>;
 		body: () => void | Promise<void>;
+		flags?: Iterable<string>;
 	}) {
 		this.context = context;
 		this.body = body;
+		this.flags = new Set(flags || []);
 	}
 
 	gatherBefores() {

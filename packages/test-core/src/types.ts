@@ -3,16 +3,30 @@ import type { Test, Describe, LifecycleHook } from "./subjects";
 export type TestAPI = {
 	readonly describe: (
 		description: string,
-		body: (api: TestAPI) => void | Promise<void>
+		body: (api: TestAPI) => void | Promise<void>,
+		flags?: Array<string>
 	) => void;
 	readonly it: (
 		description: string,
-		body: () => void | Promise<void>
+		body: () => void | Promise<void>,
+		flags?: Array<string>
 	) => void;
-	readonly beforeEach: (body: () => void | Promise<void>) => void;
-	readonly beforeAll: (body: () => void | Promise<void>) => void;
-	readonly afterEach: (body: () => void | Promise<void>) => void;
-	readonly afterAll: (body: () => void | Promise<void>) => void;
+	readonly beforeEach: (
+		body: () => void | Promise<void>,
+		flags?: Array<string>
+	) => void;
+	readonly beforeAll: (
+		body: () => void | Promise<void>,
+		flags?: Array<string>
+	) => void;
+	readonly afterEach: (
+		body: () => void | Promise<void>,
+		flags?: Array<string>
+	) => void;
+	readonly afterAll: (
+		body: () => void | Promise<void>,
+		flags?: Array<string>
+	) => void;
 };
 
 export type TestEvent =

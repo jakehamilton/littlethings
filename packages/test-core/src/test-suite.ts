@@ -39,23 +39,23 @@ export class TestSuite {
 		});
 		this[CURRENT_API] = this.rootDescribe.api;
 		this.api = {
-			describe: (description, body) => {
-				this[CURRENT_API].describe(description, body);
+			describe: (description, body, flags) => {
+				this[CURRENT_API].describe(description, body, flags);
 			},
-			it: (description, body) => {
-				this[CURRENT_API].it(description, body);
+			it: (description, body, flags) => {
+				this[CURRENT_API].it(description, body, flags);
 			},
-			beforeEach: (body) => {
-				this[CURRENT_API].beforeEach(body);
+			beforeEach: (body, flags) => {
+				this[CURRENT_API].beforeEach(body, flags);
 			},
-			beforeAll: (body) => {
-				this[CURRENT_API].beforeAll(body);
+			beforeAll: (body, flags) => {
+				this[CURRENT_API].beforeAll(body, flags);
 			},
-			afterEach: (body) => {
-				this[CURRENT_API].afterEach(body);
+			afterEach: (body, flags) => {
+				this[CURRENT_API].afterEach(body, flags);
 			},
-			afterAll: (body) => {
-				this[CURRENT_API].afterAll(body);
+			afterAll: (body, flags) => {
+				this[CURRENT_API].afterAll(body, flags);
 			},
 		};
 	}

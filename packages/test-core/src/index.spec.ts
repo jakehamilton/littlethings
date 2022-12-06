@@ -5,11 +5,7 @@ import { TestSuite } from ".";
 vitest.test("basic functionality", async () => {
 	const s = new TestSuite({
 		filter(subject) {
-			if (/gets skipped/.test(subject.context.join(" "))) {
-				return false;
-			} else {
-				return true;
-			}
+			return !subject.flags.has("skip");
 		},
 	});
 	const { describe, it, beforeEach, beforeAll, afterEach, afterAll } = s.api;
@@ -52,9 +48,13 @@ vitest.test("basic functionality", async () => {
 			assert(2 + 2 === 5);
 		});
 
-		it("gets skipped", () => {
-			assert(Infinity > 3);
-		});
+		it(
+			"gets skipped",
+			() => {
+				assert(Infinity > 3);
+			},
+			["skip"]
+		);
 	});
 
 	describe("bad", () => {
