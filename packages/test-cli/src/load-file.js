@@ -1,10 +1,11 @@
 const path = require("path");
 
+let esbuildRegistered = false;
+
 /**
  * Run a JavaScript file.
  *
  * @param {string} filename The absolute path to the file to load.
- * @returns {Promise<void>}
  */
 exports.loadFile = function loadFile(filename) {
 	if (!path.isAbsolute(filename)) {
@@ -13,12 +14,14 @@ exports.loadFile = function loadFile(filename) {
 		);
 	}
 
-	// TODO: esm support, typescript support? kame would work but it's far from "little"
-	delete require.cache[filename];
-	try {
-		require(filename);
-		return Promise.resolve();
-	} catch (err) {
-		return import(filename).then(() => {});
+	if (!esbuildRegistered) {
+		require("esbuild-register/dist/node").register({
+			target: `node${process.version.slice(1)}`,
+			format: "cjs",
+		});
+		esbuildRegistered = true;
 	}
+
+	delete require.cache[filename];
+	require(filename);
 };

@@ -1,7 +1,7 @@
 {
     "name": "@littlethings/test",
     "version": "1.0.0",
-    "description": "Command-line interface for @littlethings/test-core",
+    "description": "A barebones zeroconf testing library",
     "keywords": [
         "test",
         "framework",
@@ -11,7 +11,7 @@
         "suite"
     ],
     "license": "Apache-2.0",
-    "author": "Lily Scott <me@suchipi.com>",
+    "author": "Lily Skye <me@suchipi.com>",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "bin": {
@@ -24,6 +24,8 @@
         "@babel/highlight": "^7.16.10",
         "@littlethings/test-core": "^1.0.0",
         "clefairy": "^0.4.0",
+        "code-preview-from-error": "^1.0.2",
+        "esbuild-register": "^3.4.1",
         "glomp": "^3.1.0",
         "kleur": "^4.1.4",
         "pretty-print-error": "^1.1.0"

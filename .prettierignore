@@ -1,2 +1,5 @@
 package-lock.json
 package.json
+
+# intentionally has a syntax error
+packages/test-cli/sample-tests/errored.test.jsx

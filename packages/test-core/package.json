@@ -1,7 +1,7 @@
 {
     "name": "@littlethings/test-core",
     "version": "1.0.0",
-    "description": "A barebones testing library: Core APIs",
+    "description": "APIs for describing and running automated test suites",
     "keywords": [
         "test",
         "framework",
@@ -11,7 +11,7 @@
         "suite"
     ],
     "license": "Apache-2.0",
-    "author": "Lily Scott <me@suchipi.com>",
+    "author": "Lily Skye <me@suchipi.com>",
     "exports": {
         ".": {
             "default": "./dist/test-core.umd.js",

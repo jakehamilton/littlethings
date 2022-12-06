@@ -61,6 +61,7 @@ export class Describe {
 							`beforeEach #${this.beforeEaches.length + 1}`
 						),
 						body,
+						kind: "beforeEach",
 						flags,
 					})
 				);
@@ -74,6 +75,7 @@ export class Describe {
 							}`
 						),
 						body,
+						kind: "beforeAll",
 						flags,
 					})
 				);
@@ -85,6 +87,7 @@ export class Describe {
 							`afterEach #${this.afterEaches.length + 1}`
 						),
 						body,
+						kind: "afterEach",
 						flags,
 					})
 				);
@@ -98,6 +101,7 @@ export class Describe {
 							}`
 						),
 						body,
+						kind: "afterAll",
 						flags,
 					})
 				);
@@ -112,6 +116,7 @@ export class Describe {
 
 export class LifecycleHook {
 	type = "LifecycleHook" as const;
+	kind: "beforeEach" | "afterEach" | "beforeAll" | "afterAll";
 
 	flags: Set<string>;
 	context: Array<string>;
@@ -121,14 +126,17 @@ export class LifecycleHook {
 	constructor({
 		context,
 		body,
+		kind,
 		flags,
 	}: {
 		context: Array<string>;
 		body: () => void | Promise<void>;
+		kind: "beforeEach" | "afterEach" | "beforeAll" | "afterAll";
 		flags?: Iterable<string>;
 	}) {
 		this.context = context;
 		this.body = body;
+		this.kind = kind;
 		this.flags = new Set(flags || []);
 	}
 }
