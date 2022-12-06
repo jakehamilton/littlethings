@@ -11,14 +11,11 @@ import { loadFile } from "./load-file";
 import { formatError } from "pretty-print-error";
 import highlight from "@babel/highlight";
 
-function parsePath<Path extends string | undefined>(filepath: Path): Path {
-	// @ts-ignore could be instantiated with different subtype constraint
-	if (!filepath) return undefined;
+function parsePath(filepath: string): string {
 	if (path.isAbsolute(filepath)) return filepath;
 
 	const absoluteFromCwd = path.resolve(process.cwd(), filepath);
 	if (fs.existsSync(absoluteFromCwd)) {
-		// @ts-ignore could be instantiated with different subtype constraint
 		return absoluteFromCwd;
 	}
 
@@ -27,9 +24,9 @@ function parsePath<Path extends string | undefined>(filepath: Path): Path {
 
 clefairy.run(
 	{
-		setupFile: clefairy.optionalString,
-		perTestSetupFile: clefairy.optionalString,
-		r: clefairy.optionalString,
+		setupFile: clefairy.optionalPath,
+		perTestSetupFile: clefairy.optionalPath,
+		r: clefairy.optionalPath,
 		help: clefairy.optionalBoolean,
 		h: clefairy.optionalBoolean,
 	},
@@ -40,8 +37,8 @@ clefairy.run(
 			process.exit(0);
 		}
 
-		const setupFile = parsePath(options.setupFile || options.r);
-		const perTestSetupFile = parsePath(options.perTestSetupFile);
+		const setupFile = options.setupFile || options.r;
+		const perTestSetupFile = options.perTestSetupFile;
 
 		let filesToRun = args.map(parsePath);
 
@@ -76,41 +73,39 @@ clefairy.run(
 			);
 		}
 
-		const colorForStatus = {
-			PASSED: kleur.green,
-			SKIPPED: kleur.yellow,
-			ERRORED: kleur.red,
-			FAILED: kleur.red,
-		};
-		const colorForContextString = {
-			PASSED: kleur.dim,
-			SKIPPED: kleur.yellow,
-			ERRORED: kleur.red,
-			FAILED: kleur.red,
-		};
-
 		function onEvent(event: TestEvent) {
-			const contextString = event.subject.context.join(" ");
-
 			switch (event.type) {
-				case "starting": {
-					if (event.subject.type === "Test") {
-						console.log(kleur.dim());
-					}
+				case "skipping": {
+					const contextString = event.subject.context.join(" ");
+
+					console.log(
+						`${kleur.bold(kleur.yellow("SKIPPED"))} ${kleur.dim(
+							contextString
+						)}`
+					);
 					break;
 				}
 				case "result": {
 					const { status } = event;
 
-					console.log(
-						`${kleur.bold(
-							colorForStatus[status](status)
-						)} ${colorForContextString[status](contextString)}`
-					);
-
+					const contextString = event.subject.context.join(" ");
 					switch (status) {
+						case "PASSED": {
+							console.log(
+								`${kleur.bold(kleur.green(status))} ${kleur.dim(
+									contextString
+								)}`
+							);
+							break;
+						}
 						case "FAILED":
 						case "ERRORED": {
+							console.log(
+								`${kleur.bold(kleur.red(status))} ${kleur.red(
+									contextString
+								)}`
+							);
+
 							let filePreview = "";
 							try {
 								const firstTrace = (
@@ -250,6 +245,54 @@ clefairy.run(
 						}
 					}
 					break;
+				}
+				case "run_finished": {
+					const { events } = event;
+					const passed = events.filter(
+						(event) =>
+							event.type === "result" && event.status === "PASSED"
+					);
+					const failed = events.filter(
+						(event) =>
+							event.type === "result" && event.status === "FAILED"
+					);
+					const errored = events.filter(
+						(event) =>
+							event.type === "result" &&
+							event.status === "ERRORED"
+					);
+					const skipped = events.filter(
+						(event) => event.type === "skipping"
+					);
+
+					const categories = {
+						passed,
+						failed,
+						errored,
+						skipped,
+					};
+
+					const categoryColors = {
+						passed: passed.length === 0 ? kleur.dim : kleur.green,
+						failed: failed.length === 0 ? kleur.dim : kleur.red,
+						errored: errored.length === 0 ? kleur.dim : kleur.red,
+						skipped:
+							skipped.length === 0 ? kleur.dim : kleur.yellow,
+					};
+
+					console.log("\n");
+					Object.entries(categories).forEach(
+						([key, value], index, all) => {
+							const message = `${value.length} ${key}`;
+							const colorFn = categoryColors[key];
+							process.stdout.write(colorFn(message));
+							if (index === all.length - 1) {
+								process.stdout.write(kleur.dim(".\n"));
+							} else {
+								process.stdout.write(kleur.dim(", "));
+							}
+						}
+					);
 				}
 			}
 		}

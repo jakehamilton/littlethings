@@ -2,14 +2,6 @@
     "name": "@littlethings/test",
     "version": "1.0.0",
     "description": "Command-line interface for @littlethings/test-core",
-    "publishConfig": {
-        "access": "public"
-    },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "bin": {
-        "littletest": "./dist/cli.js"
-    },
     "keywords": [
         "test",
         "framework",
@@ -18,21 +10,29 @@
         "library",
         "suite"
     ],
-    "author": "Lily Scott <me@suchipi.com>",
     "license": "Apache-2.0",
+    "author": "Lily Scott <me@suchipi.com>",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "bin": {
+        "littletest": "./dist/cli.js"
+    },
     "scripts": {
         "build": "rm -rf ./dist/* && tsc -p . && chmod +x ./dist/cli.js && cp ./src/load-file.js ./dist/"
+    },
+    "dependencies": {
+        "@babel/highlight": "^7.16.10",
+        "@littlethings/test-core": "^1.0.0",
+        "clefairy": "^0.4.0",
+        "glomp": "^3.1.0",
+        "kleur": "^4.1.4",
+        "pretty-print-error": "^1.1.0"
     },
     "devDependencies": {
         "@types/node": "^17.0.21",
         "typescript": "^4.5.5"
     },
-    "dependencies": {
-        "@babel/highlight": "^7.16.10",
-        "@littlethings/test-core": "^1.0.0",
-        "clefairy": "^0.1.0",
-        "glomp": "^3.0.0",
-        "kleur": "^4.1.4",
-        "pretty-print-error": "^1.1.0"
+    "publishConfig": {
+        "access": "public"
     }
 }

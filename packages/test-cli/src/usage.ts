@@ -1,5 +1,6 @@
 export function getUsage() {
-	return `
+	return (
+		`
 
 littletest - A little JavaScript test runner
 
@@ -20,7 +21,8 @@ Examples:
   littletest ./src/index.test.js
   littletest -r ./setup.js ./src/index.test.js
   littletest ./src/index.test.js ./src/dog.test.js
-  littletest ./src/**/*.test.js # Relies on your shell's globstar expansion
+  littletest ./src/**/*.test.js # Relies on your shell's glob expansion
 
-  `.trim();
+  `.trim() + "\n"
+	);
 }

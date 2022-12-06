@@ -54,7 +54,7 @@ export type TestEvent =
 	| {
 			type: "result";
 			subject: Test | LifecycleHook;
-			status: "PASSED" | "SKIPPED";
+			status: "PASSED";
 	  }
 	| {
 			type: "result";
