@@ -63,13 +63,3 @@ export const afterAll: TestAPI["afterAll"] = (...args) => {
 	}
 	return currentSuite.api.afterAll(...args);
 };
-
-// This one is exported so that stuff that uses the core APIs but doesn't use
-// this CLI can still benefit from the reporting that this CLI has
-import reportEvent from "./report-event";
-export { reportEvent };
-
-// And this is exported so that external tools can identify whether
-// littletest's default test patterns will match a particular file
-import testFilesMatcher from "./test-files-matcher";
-export { testFilesMatcher };

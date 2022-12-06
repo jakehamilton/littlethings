@@ -3,11 +3,11 @@ import fs from "fs";
 import path from "path";
 import * as clefairy from "clefairy";
 import { TestEvent, TestSuite } from "@littlethings/test-core";
+import reportEvent from "@littlethings/test-reporter";
 import { setCurrentSuite } from "./current-suite";
 import { getUsage } from "./usage";
 import { loadFile } from "./load-file";
 import testFilesMatcher from "./test-files-matcher";
-import reportEvent from "./report-event";
 
 function parsePath(filepath: string): string {
 	if (path.isAbsolute(filepath)) return filepath;

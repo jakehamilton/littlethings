@@ -22,12 +22,10 @@
     },
     "dependencies": {
         "@littlethings/test-core": "^1.0.0",
+        "@littlethings/test-reporter": "^1.0.0",
         "clefairy": "^0.4.0",
-        "code-preview-from-error": "^1.0.2",
         "esbuild-register": "^3.4.1",
-        "glomp": "^3.1.0",
-        "kleur": "^4.1.4",
-        "pretty-print-error": "^1.1.0"
+        "glomp": "^3.1.0"
     },
     "devDependencies": {
         "@types/node": "^17.0.21",
