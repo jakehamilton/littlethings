@@ -1,0 +1,42 @@
+{
+    "name": "@littlethings/test-reporter",
+    "version": "2.0.0",
+    "description": "Event reporter for @littlethings/test",
+    "keywords": [
+        "test",
+        "framework",
+        "littlethings",
+        "utility",
+        "library",
+        "suite"
+    ],
+    "license": "Apache-2.0",
+    "author": "Lily Skye <me@suchipi.com>",
+    "exports": {
+        ".": {
+            "default": "./dist/test-reporter.umd.js",
+            "import": "./dist/test-reporter.es.js",
+            "require": "./dist/test-reporter.cjs.js"
+        }
+    },
+    "main": "./dist/test-reporter.umd.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "npm run build:lib && npm run build:types",
+        "build:lib": "vite build",
+        "build:types": "tsc -p . --emitDeclarationOnly"
+    },
+    "dependencies": {
+        "@littlethings/test-core": "^2.0.0",
+        "code-preview-from-error": "^1.0.2",
+        "kleur": "^4.1.4",
+        "pretty-print-error": "^1.1.0"
+    },
+    "devDependencies": {
+        "typescript": "^4.5.5",
+        "vite": "^2.8.2"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
