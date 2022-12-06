@@ -20,6 +20,19 @@ export type RunMode = "NORMAL" | "IGNORED" | "FOCUSED";
 
 export type TestEvent =
 	| {
+			type: "run_started";
+	  }
+	| {
+			type: "run_finished";
+			events: Array<TestEvent>;
+	  }
+	| {
+			type: "assembly_started";
+	  }
+	| {
+			type: "assembly_finished";
+	  }
+	| {
 			type: "starting";
 			subject: Test | Describe | LifecycleHook;
 	  }

@@ -98,9 +98,13 @@ export class TestSuite {
 			}
 		};
 
+		emitEvent({ type: "assembly_started" });
+
 		await prepareWork(this.rootDescribe);
 
 		this.state = "ASSEMBLED";
+
+		emitEvent({ type: "assembly_finished" });
 	}
 
 	summary(): string {
@@ -243,6 +247,8 @@ export class TestSuite {
 
 		prepareWork(this.rootDescribe);
 
+		emitEvent({ type: "run_started" });
+
 		for (const work of beforeAllWork) {
 			await work();
 		}
@@ -257,6 +263,12 @@ export class TestSuite {
 		}
 
 		this.state = "HAS_RUN";
+
+		emitEvent({
+			type: "run_finished",
+			events: this.events,
+		});
+
 		return this.events;
 	}
 }

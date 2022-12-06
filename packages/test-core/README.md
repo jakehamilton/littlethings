@@ -1,3 +1,3 @@
-# @littlethings/test
+# @littlethings/test-core
 
-> A barebones testing library.
+> A barebones testing library: Core APIs

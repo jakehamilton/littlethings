@@ -6,7 +6,7 @@ vitest.test("basic functionality", async () => {
 	const s = new TestSuite();
 	const { describe, it, beforeEach, beforeAll, afterEach, afterAll } = s.api;
 
-	const output = [];
+	const output: Array<any> = [];
 
 	const startTime = Date.now();
 	function writeTime() {
@@ -56,12 +56,23 @@ vitest.test("basic functionality", async () => {
 	const events = await s.run();
 
 	output.push(
-		events.map((event) => ({
-			...event,
-			subject: `${event.subject.type} ${JSON.stringify(
-				event.subject.context
-			)}`,
-		}))
+		events.map((event: any) => {
+			const copy = {
+				...event,
+			};
+
+			if (event.subject) {
+				copy.subject = `${event.subject.type} ${JSON.stringify(
+					event.subject.context
+				)}`;
+			}
+
+			if (event.events) {
+				copy.events = `${event.events.length} Events`;
+			}
+
+			return copy;
+		})
 	);
 
 	vitest.expect(output).toMatchInlineSnapshot(`
@@ -73,6 +84,9 @@ vitest.test("basic functionality", async () => {
 		  100,
 		  100,
 		  [
+		    {
+		      "type": "assembly_started",
+		    },
 		    {
 		      "subject": "Describe []",
 		      "type": "starting",
@@ -90,6 +104,12 @@ vitest.test("basic functionality", async () => {
 		      "status": "ERRORED",
 		      "subject": "Describe [\\"bad\\"]",
 		      "type": "result",
+		    },
+		    {
+		      "type": "assembly_finished",
+		    },
+		    {
+		      "type": "run_started",
 		    },
 		    {
 		      "subject": "LifecycleHook [\\"beforeAll #1\\"]",
@@ -133,6 +153,10 @@ vitest.test("basic functionality", async () => {
 		    {
 		      "subject": "LifecycleHook [\\"afterAll #1\\"]",
 		      "type": "starting",
+		    },
+		    {
+		      "events": "17 Events",
+		      "type": "run_finished",
 		    },
 		  ],
 		]
