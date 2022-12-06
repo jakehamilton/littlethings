@@ -34,6 +34,10 @@ export type TestEvent =
 			subject: Test | Describe | LifecycleHook;
 	  }
 	| {
+			type: "skipping";
+			subject: Test | Describe | LifecycleHook;
+	  }
+	| {
 			type: "result";
 			subject: Test | LifecycleHook;
 			status: "PASSED" | "SKIPPED";

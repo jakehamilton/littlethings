@@ -3,7 +3,15 @@ import * as vitest from "vitest";
 import { TestSuite } from ".";
 
 vitest.test("basic functionality", async () => {
-	const s = new TestSuite();
+	const s = new TestSuite({
+		filter(subject) {
+			if (/gets skipped/.test(subject.context.join(" "))) {
+				return false;
+			} else {
+				return true;
+			}
+		},
+	});
 	const { describe, it, beforeEach, beforeAll, afterEach, afterAll } = s.api;
 
 	const output: Array<any> = [];
@@ -42,6 +50,10 @@ vitest.test("basic functionality", async () => {
 
 		it("fails", () => {
 			assert(2 + 2 === 5);
+		});
+
+		it("gets skipped", () => {
+			assert(Infinity > 3);
 		});
 	});
 
@@ -116,12 +128,20 @@ vitest.test("basic functionality", async () => {
 		      "type": "starting",
 		    },
 		    {
+		      "subject": "Test [\\"is here\\"]",
+		      "type": "starting",
+		    },
+		    {
 		      "status": "PASSED",
 		      "subject": "Test [\\"is here\\"]",
 		      "type": "result",
 		    },
 		    {
 		      "subject": "LifecycleHook [\\"something\\",\\"beforeEach #1\\"]",
+		      "type": "starting",
+		    },
+		    {
+		      "subject": "Test [\\"something\\",\\"works\\"]",
 		      "type": "starting",
 		    },
 		    {
@@ -138,6 +158,10 @@ vitest.test("basic functionality", async () => {
 		      "type": "starting",
 		    },
 		    {
+		      "subject": "Test [\\"something\\",\\"fails\\"]",
+		      "type": "starting",
+		    },
+		    {
 		      "error": [AssertionError: The expression evaluated to a falsy value:
 		
 		  assert(2 + 2 === 4)
@@ -151,11 +175,15 @@ vitest.test("basic functionality", async () => {
 		      "type": "starting",
 		    },
 		    {
+		      "subject": "Test [\\"something\\",\\"gets skipped\\"]",
+		      "type": "skipping",
+		    },
+		    {
 		      "subject": "LifecycleHook [\\"afterAll #1\\"]",
 		      "type": "starting",
 		    },
 		    {
-		      "events": "17 Events",
+		      "events": "21 Events",
 		      "type": "run_finished",
 		    },
 		  ],

@@ -19,16 +19,20 @@ export class TestSuite {
 	api: TestAPI;
 	[CURRENT_API]: TestAPI;
 	onEvent: (event: TestEvent) => void;
+	filter: (subject: Test | Describe | LifecycleHook) => boolean;
 
 	state: "INITIAL" | "ASSEMBLED" | "HAS_RUN" = "INITIAL";
 	events: Array<TestEvent> = [];
 
 	constructor({
 		onEvent = () => {},
+		filter = () => true,
 	}: {
 		onEvent?: (event: TestEvent) => void;
+		filter?: (subject: Test | Describe | LifecycleHook) => boolean;
 	} = {}) {
 		this.onEvent = onEvent;
+		this.filter = filter;
 		this.rootDescribe = new Describe({
 			context: [],
 			body: () => {},
@@ -61,6 +65,10 @@ export class TestSuite {
 		this.onEvent(event);
 	}
 
+	/**
+	 * Goes through and runs all the `describe` callbacks, in order to figure out
+	 * all the stuff to run
+	 */
 	async assemble(): Promise<void> {
 		if (this.state !== "INITIAL") {
 			throw new Error("This TestSuite has already been assembled");
@@ -70,10 +78,19 @@ export class TestSuite {
 
 		// TODO: concurrency?
 		const prepareWork = async (describe: Describe) => {
-			emitEvent({
-				type: "starting",
-				subject: describe,
-			});
+			if (!this.filter(describe)) {
+				emitEvent({
+					type: "skipping",
+					subject: describe,
+				});
+				return;
+			} else {
+				emitEvent({
+					type: "starting",
+					subject: describe,
+				});
+			}
+
 			this[CURRENT_API] = describe.api;
 			const maybeError = await runOrError(() => describe.runBody());
 			if (maybeError != null) {
@@ -89,11 +106,16 @@ export class TestSuite {
 				if (child.type === "Describe") {
 					await prepareWork(child);
 				} else {
-					const afters = child.gatherAfters();
-					child.gatherAfters = () => afters;
+					if (!this.filter(child)) {
+						child.gatherBefores = () => [];
+						child.gatherAfters = () => [];
+					} else {
+						const afters = child.gatherAfters();
+						child.gatherAfters = () => afters;
 
-					const befores = child.gatherBefores();
-					child.gatherBefores = () => befores;
+						const befores = child.gatherBefores();
+						child.gatherBefores = () => befores;
+					}
 				}
 			}
 		};
@@ -107,6 +129,9 @@ export class TestSuite {
 		emitEvent({ type: "assembly_finished" });
 	}
 
+	/**
+	 * Creates a human-readable string describing the contents of this test suite
+	 */
 	summary(): string {
 		if (this.state === "INITIAL") {
 			return "<unassembled test suite>";
@@ -135,6 +160,9 @@ export class TestSuite {
 		return lines.join("\n");
 	}
 
+	/**
+	 * Runs all the work that was previously discovered by a call to {@link assemble}
+	 */
 	async run(): Promise<Array<TestEvent>> {
 		if (this.state === "INITIAL") {
 			await this.assemble();
@@ -151,10 +179,18 @@ export class TestSuite {
 		const prepareWork = (describe: Describe) => {
 			for (const before of describe.beforeAlls) {
 				beforeAllWork.push(async () => {
-					emitEvent({
-						type: "starting",
-						subject: before,
-					});
+					if (!this.filter(before)) {
+						emitEvent({
+							type: "skipping",
+							subject: before,
+						});
+						return;
+					} else {
+						emitEvent({
+							type: "starting",
+							subject: before,
+						});
+					}
 					const maybeError = await runOrError(before.body);
 					if (maybeError != null) {
 						emitEvent({
@@ -177,10 +213,18 @@ export class TestSuite {
 					this[CURRENT_API] = describe.api;
 
 					for (const before of child.gatherBefores()) {
-						emitEvent({
-							type: "starting",
-							subject: before,
-						});
+						if (!this.filter(before)) {
+							emitEvent({
+								type: "skipping",
+								subject: before,
+							});
+							continue;
+						} else {
+							emitEvent({
+								type: "starting",
+								subject: before,
+							});
+						}
 						const maybeError = await runOrError(before.body);
 						if (maybeError != null) {
 							emitEvent({
@@ -192,6 +236,18 @@ export class TestSuite {
 						}
 					}
 
+					if (!this.filter(child)) {
+						emitEvent({
+							type: "skipping",
+							subject: child,
+						});
+						return;
+					} else {
+						emitEvent({
+							type: "starting",
+							subject: child,
+						});
+					}
 					const maybeError = await runOrError(child.body);
 					if (maybeError == null) {
 						emitEvent({
@@ -209,10 +265,18 @@ export class TestSuite {
 					}
 
 					for (const after of child.gatherAfters()) {
-						emitEvent({
-							type: "starting",
-							subject: after,
-						});
+						if (!this.filter(after)) {
+							emitEvent({
+								type: "skipping",
+								subject: after,
+							});
+							continue;
+						} else {
+							emitEvent({
+								type: "starting",
+								subject: after,
+							});
+						}
 						const maybeError = await runOrError(after.body);
 						if (maybeError != null) {
 							emitEvent({
@@ -228,10 +292,18 @@ export class TestSuite {
 
 			for (const after of describe.afterAlls) {
 				afterAllWork.push(async () => {
-					emitEvent({
-						type: "starting",
-						subject: after,
-					});
+					if (!this.filter(after)) {
+						emitEvent({
+							type: "skipping",
+							subject: after,
+						});
+						return;
+					} else {
+						emitEvent({
+							type: "starting",
+							subject: after,
+						});
+					}
 					const maybeError = await runOrError(after.body);
 					if (maybeError != null) {
 						emitEvent({
