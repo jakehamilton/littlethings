@@ -14,17 +14,17 @@
     "author": "Lily Skye <me@suchipi.com>",
     "exports": {
         ".": {
-            "default": "./dist/test-reporter.umd.js",
-            "import": "./dist/test-reporter.es.js",
-            "require": "./dist/test-reporter.cjs.js"
+            "default": "./dist/cjs/index.js",
+            "import": "./dist/es/index.js",
+            "require": "./dist/cjs/index.js"
         }
     },
-    "main": "./dist/test-reporter.umd.js",
-    "types": "./dist/index.d.ts",
+    "main": "./dist/cjs/index.js",
+    "types": "./dist/cjs/index.d.ts",
     "scripts": {
-        "build": "npm run build:lib && npm run build:types",
-        "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly"
+        "build": "npm run build:esm && npm run build:cjs",
+        "build:cjs": "tsc -p . --module commonjs --target es5 --outDir dist/cjs",
+        "build:esm": "tsc -p . --module es2015 --target es5 --outDir dist/esm"
     },
     "dependencies": {
         "@littlethings/test-core": "2.0.0",
@@ -33,8 +33,7 @@
         "pretty-print-error": "^1.1.0"
     },
     "devDependencies": {
-        "typescript": "^4.9.3",
-        "vite": "^3.2.5"
+        "typescript": "^4.9.3"
     },
     "publishConfig": {
         "access": "public"
