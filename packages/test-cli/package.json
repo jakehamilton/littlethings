@@ -21,7 +21,6 @@
         "build": "rm -rf ./dist/* && tsc -p . && chmod +x ./dist/cli.js && cp ./src/load-file.js ./dist/"
     },
     "dependencies": {
-        "@babel/highlight": "^7.16.10",
         "@littlethings/test-core": "^1.0.0",
         "clefairy": "^0.4.0",
         "code-preview-from-error": "^1.0.2",
