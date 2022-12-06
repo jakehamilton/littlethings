@@ -1,10 +1,9 @@
-import type { TestAPI, RunMode } from "./types";
+import type { TestAPI } from "./types";
 
 export class Describe {
 	type = "Describe" as const;
 
 	context: Array<string>;
-	runMode: RunMode;
 	body: (api: TestAPI) => void | Promise<void>;
 	parent: Describe | null = null;
 
@@ -20,17 +19,14 @@ export class Describe {
 
 	constructor({
 		context,
-		runMode = "NORMAL",
 		body,
 		rootDescribe,
 	}: {
 		context: Array<string>;
-		runMode?: RunMode;
 		body: (api: TestAPI) => void | Promise<void>;
 		rootDescribe?: Describe;
 	}) {
 		this.context = context;
-		this.runMode = runMode;
 		this.body = body;
 		this.rootDescribe = rootDescribe || this;
 
@@ -128,20 +124,16 @@ export class Test {
 
 	context: Array<string>;
 	body: () => void | Promise<void>;
-	runMode: RunMode;
 	parent: Describe | null = null;
 
 	constructor({
 		context,
-		runMode = "NORMAL",
 		body,
 	}: {
 		context: Array<string>;
-		runMode?: RunMode;
 		body: () => void | Promise<void>;
 	}) {
 		this.context = context;
-		this.runMode = runMode;
 		this.body = body;
 	}
 

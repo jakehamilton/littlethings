@@ -1,4 +1,4 @@
-import type { TestAPI, RunMode, TestEvent } from "./types";
+import type { TestAPI, TestEvent } from "./types";
 import { Test, Describe, LifecycleHook } from "./subjects";
 
 async function runOrError(

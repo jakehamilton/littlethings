@@ -15,9 +15,6 @@ export type TestAPI = {
 	readonly afterAll: (body: () => void | Promise<void>) => void;
 };
 
-// TODO: implement it.only, etc, and during suite assembly, set runmode for everything accordingly
-export type RunMode = "NORMAL" | "IGNORED" | "FOCUSED";
-
 export type TestEvent =
 	| {
 			type: "run_started";
