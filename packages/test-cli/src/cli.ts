@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import * as clefairy from "clefairy";
 import { TestEvent, TestSuite } from "@littlethings/test-core";
-import { currentSuite, setCurrentSuite } from "./current-suite";
+import { setCurrentSuite } from "./current-suite";
 import { getUsage } from "./usage";
 import { loadFile } from "./load-file";
 import testFilesMatcher from "./test-files-matcher";
@@ -57,7 +57,13 @@ clefairy.run(
 		let suite: TestSuite;
 
 		function onEvent(event: TestEvent) {
-			reportEvent(event, suite, verbose);
+			reportEvent({
+				event,
+				suite,
+				verbose,
+				writeStdout: (data) => process.stdout.write(data),
+				writeStderr: (data) => process.stderr.write(data),
+			});
 		}
 
 		suite = new TestSuite({ onEvent });
@@ -72,7 +78,7 @@ clefairy.run(
 				await loadFile(perTestSetupFile);
 			}
 
-			currentSuite.api.describe(
+			suite.api.describe(
 				path.relative(process.cwd(), file),
 				() => loadFile(file),
 				["file"]

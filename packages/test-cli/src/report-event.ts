@@ -1,16 +1,24 @@
 import kleur from "kleur";
-import { TestEvent, TestSuite } from "@littlethings/test-core";
+import type { TestEvent, TestSuite } from "@littlethings/test-core";
 import { formatError } from "pretty-print-error";
 import {
 	getLocationFromError,
 	codePreviewFromError,
 } from "code-preview-from-error";
 
-export default function reportEvent(
-	event: TestEvent,
-	suite: TestSuite,
-	verbose: boolean
-) {
+export default function reportEvent({
+	event,
+	suite,
+	verbose,
+	writeStdout,
+	writeStderr,
+}: {
+	event: TestEvent;
+	suite: TestSuite;
+	verbose: boolean;
+	writeStdout: (data: string) => void;
+	writeStderr: (data: string) => void;
+}) {
 	switch (event.type) {
 		case "starting": {
 			// Only print "starting" messages when --verbose or -v is used
@@ -24,20 +32,22 @@ export default function reportEvent(
 
 			const label = suite.state === "INITIAL" ? "LOADING" : "RUNNING";
 
-			console.log(
+			writeStdout(
 				kleur.dim([kleur.bold(label), contextString].join(" "))
 			);
+			writeStdout("\n");
 			break;
 		}
 
 		case "skipping": {
 			const contextString = event.subject.context.join(" ");
 
-			console.log(
+			writeStdout(
 				`${kleur.bold(kleur.yellow("SKIPPED"))} ${kleur.dim(
 					contextString
 				)}`
 			);
+			writeStdout("\n");
 			break;
 		}
 		case "result": {
@@ -46,20 +56,22 @@ export default function reportEvent(
 			const contextString = event.subject.context.join(" ");
 			switch (status) {
 				case "PASSED": {
-					console.log(
+					writeStdout(
 						`${kleur.bold(kleur.green(status))} ${kleur.dim(
 							contextString
 						)}`
 					);
+					writeStdout("\n");
 					break;
 				}
 				case "FAILED":
 				case "ERRORED": {
-					console.log(
+					writeStdout(
 						`${kleur.bold(kleur.red(status))} ${kleur.red(
 							contextString
 						)}`
 					);
+					writeStdout("\n");
 
 					let errorToExamine: any = event.error;
 
@@ -110,7 +122,8 @@ export default function reportEvent(
 						.split("\n")
 						.map((line) => "  " + line)
 						.join("\n");
-					console.error(indented);
+
+					writeStderr(indented + "\n");
 				}
 			}
 			break;
@@ -142,15 +155,15 @@ export default function reportEvent(
 				skipped: skipped.length === 0 ? kleur.dim : kleur.yellow,
 			};
 
-			process.stdout.write("\n");
+			writeStdout("\n");
 			Object.entries(categories).forEach(([key, value], index, all) => {
 				const message = `${value.length} ${key}`;
 				const colorFn = categoryColors[key];
-				process.stdout.write(colorFn(message));
+				writeStdout(colorFn(message));
 				if (index === all.length - 1) {
-					process.stdout.write(kleur.dim(".\n"));
+					writeStdout(kleur.dim(".\n"));
 				} else {
-					process.stdout.write(kleur.dim(", "));
+					writeStdout(kleur.dim(", "));
 				}
 			});
 		}

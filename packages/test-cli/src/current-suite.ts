@@ -1,6 +1,10 @@
 import { TestSuite } from "@littlethings/test-core";
 
-export let currentSuite: TestSuite;
+let currentSuite: TestSuite | null;
+
+export function getCurrentSuite(): TestSuite | null {
+	return currentSuite;
+}
 
 export function setCurrentSuite(suite: TestSuite) {
 	currentSuite = suite;
