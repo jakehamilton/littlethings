@@ -24,8 +24,7 @@
     "scripts": {
         "build": "npm run build:lib && npm run build:types",
         "build:lib": "vite build",
-        "build:types": "tsc -p . --emitDeclarationOnly",
-        "test": "vitest"
+        "build:types": "tsc -p . --emitDeclarationOnly"
     },
     "dependencies": {
         "@littlethings/test-core": "^2.0.0",
@@ -35,8 +34,7 @@
     },
     "devDependencies": {
         "typescript": "^4.5.5",
-        "vite": "^2.8.2",
-        "vitest": "^0.5.3"
+        "vite": "^2.8.2"
     },
     "publishConfig": {
         "access": "public"
