@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.0.6
+
+### Chores
+
+- updated lockfiles from running titan install
+
+### Notes
+
+Updated local dependencies.
+
 ## 1.0.5
 
 ### Fixes

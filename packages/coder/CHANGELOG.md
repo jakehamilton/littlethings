@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.5
+
+### Chores
+
+- updated lockfiles from running titan install
+
 ## 1.1.4
 
 ### Fixes

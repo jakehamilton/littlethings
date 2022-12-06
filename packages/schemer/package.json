@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/schemer",
-    "version": "1.4.5",
+    "version": "1.4.6",
     "description": "Generate TypeScript modules from JSON Schema.",
     "keywords": [
         "code",
@@ -36,7 +36,7 @@
         "test:coverage": "vitest --coverage"
     },
     "dependencies": {
-        "@littlethings/coder": "1.1.4",
+        "@littlethings/coder": "1.1.5",
         "camelcase": "^6.3.0",
         "json-schema": "^0.4.0"
     },

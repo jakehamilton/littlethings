@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/coder",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "A small and simple code generation tool.",
     "keywords": [
         "code",

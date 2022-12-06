@@ -27,7 +27,7 @@
         "build:types": "tsc -p . --emitDeclarationOnly"
     },
     "dependencies": {
-        "@littlethings/test-core": "^2.0.0",
+        "@littlethings/test-core": "2.0.0",
         "code-preview-from-error": "^1.0.2",
         "kleur": "^4.1.4",
         "pretty-print-error": "^1.1.0"

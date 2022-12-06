@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.6
+
+### Chores
+
+- updated lockfiles from running titan install
+
 ## 3.0.5
 
 ### Fixes
