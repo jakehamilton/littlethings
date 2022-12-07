@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.0.0
+
+### Features
+
+- **BREAKING CHANGE** add concurrent test running to littletest
+
+### Notes
+
+Updated local dependencies.
+
 ## 2.0.1
 
 ### Chores
