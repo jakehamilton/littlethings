@@ -1,5 +1,26 @@
 import type { TestAPI, TestEvent } from "./types";
-import { Describe, LifecycleHook, Test } from "./subjects";
+import {
+	Describe,
+	DescribeInfo,
+	LifecycleHook,
+	LifecycleHookInfo,
+	Subject,
+	SubjectInfo,
+	Test,
+	TestInfo,
+} from "./subjects";
 import { TestSuite } from "./test-suite";
 
-export { TestAPI, TestEvent, Describe, LifecycleHook, Test, TestSuite };
+export {
+	TestAPI,
+	TestEvent,
+	Describe,
+	DescribeInfo,
+	LifecycleHook,
+	LifecycleHookInfo,
+	Subject,
+	SubjectInfo,
+	Test,
+	TestInfo,
+	TestSuite,
+};

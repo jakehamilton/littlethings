@@ -5,7 +5,7 @@ import { TestSuite } from ".";
 vitest.test("basic functionality", async () => {
 	const s = new TestSuite({
 		filter(subject) {
-			return !subject.flags.has("skip");
+			return !subject.flags.includes("skip");
 		},
 	});
 	const { describe, it, beforeEach, beforeAll, afterEach, afterAll } = s.api;

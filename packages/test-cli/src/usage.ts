@@ -13,6 +13,7 @@ If [files] is omitted, littletest will search the current working directory
 Options:
   --setup-file, -r        File to load before all tests run
   --per-test-setup-file   File to load before each test runs
+  --concurrency           How many tests to run at once. [default=cpus-1]
   --help, -h              Show this help output
   --verbose, -v           Print additional output
 

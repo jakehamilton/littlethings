@@ -1,4 +1,4 @@
-import type { Test, Describe, LifecycleHook } from "./subjects";
+import type { TestInfo, DescribeInfo, LifecycleHookInfo } from "./subjects";
 
 export type TestAPI = {
 	readonly describe: (
@@ -45,20 +45,20 @@ export type TestEvent =
 	  }
 	| {
 			type: "starting";
-			subject: Test | Describe | LifecycleHook;
+			subject: TestInfo | DescribeInfo | LifecycleHookInfo;
 	  }
 	| {
 			type: "skipping";
-			subject: Test | Describe | LifecycleHook;
+			subject: TestInfo | DescribeInfo | LifecycleHookInfo;
 	  }
 	| {
 			type: "result";
-			subject: Test | LifecycleHook;
+			subject: TestInfo | LifecycleHookInfo;
 			status: "PASSED";
 	  }
 	| {
 			type: "result";
-			subject: Test | Describe | LifecycleHook;
+			subject: TestInfo | DescribeInfo | LifecycleHookInfo;
 			status: "ERRORED" | "FAILED";
-			error: Error;
+			error: { name: string; message: string; stack?: string };
 	  };

@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 import fs from "fs";
 import path from "path";
+import os from "os";
+import kleur from "kleur";
 import * as clefairy from "clefairy";
 import { TestEvent, TestSuite } from "@littlethings/test-core";
 import reportEvent from "@littlethings/test-reporter";
-import { setCurrentSuite } from "./current-suite";
+import { runJobs, inChildProcess } from "parallel-park";
 import { getUsage } from "./usage";
-import { loadFile } from "./load-file";
 import testFilesMatcher from "./test-files-matcher";
+
+const workerPath = require.resolve("./worker");
 
 function parsePath(filepath: string): string {
 	if (path.isAbsolute(filepath)) return filepath;
@@ -29,6 +32,7 @@ clefairy.run(
 		h: clefairy.optionalBoolean,
 		v: clefairy.optionalBoolean,
 		verbose: clefairy.optionalBoolean,
+		concurrency: clefairy.optionalNumber,
 	},
 	async (options, ...args) => {
 		const help = options.h || options.help;
@@ -54,38 +58,96 @@ clefairy.run(
 			);
 		}
 
-		let suite: TestSuite;
+		const concurrency = options.concurrency ?? os.cpus().length - 1;
 
-		function onEvent(event: TestEvent) {
-			reportEvent({
-				event,
-				suite,
-				verbose,
-				writeStdout: (data) => process.stdout.write(data),
-				writeStderr: (data) => process.stderr.write(data),
-			});
+		if (concurrency < 1) {
+			throw new Error(`Invalid concurrency value: ${concurrency}`);
 		}
 
-		suite = new TestSuite({ onEvent });
-		setCurrentSuite(suite);
-
-		if (setupFile) {
-			await loadFile(setupFile);
-		}
-
-		for (const file of filesToRun) {
-			if (perTestSetupFile) {
-				await loadFile(perTestSetupFile);
-			}
-
-			suite.api.describe(
-				path.relative(process.cwd(), file),
-				() => loadFile(file),
-				["file"]
+		if (verbose) {
+			console.log(
+				kleur.dim(
+					`Loading ${filesToRun.length} test files with concurrency set to: ${concurrency}`
+				)
 			);
 		}
 
-		await suite.assemble();
-		await suite.run();
+		let concurrencyGroups: Array<Array<string>> = Array(concurrency)
+			.fill(undefined)
+			.map(() => []);
+
+		let i = 0;
+		for (const file of filesToRun) {
+			concurrencyGroups[i].push(file);
+			i += 1;
+			if (i === concurrencyGroups.length) {
+				i = 0;
+			}
+		}
+
+		concurrencyGroups = concurrencyGroups.filter(
+			(array) => array.length > 0
+		);
+
+		if (verbose) {
+			console.log(
+				kleur.dim(
+					concurrencyGroups
+						.map((group, index) => {
+							return `Process ${index + 1} will run ${
+								group.length
+							} files`;
+						})
+						.join("\n")
+				)
+			);
+		}
+
+		const eventsByGroup = await runJobs<Array<string>, Array<TestEvent>>(
+			concurrencyGroups,
+			(filesFromGroup) =>
+				inChildProcess(
+					{
+						filesFromGroup,
+						verbose,
+						perTestSetupFile,
+						setupFile,
+						workerPath,
+					},
+					async ({
+						filesFromGroup,
+						verbose,
+						perTestSetupFile,
+						setupFile,
+						workerPath,
+					}) => {
+						const worker = require(workerPath);
+						const results = await worker.work({
+							files: filesFromGroup,
+							verbose,
+							perTestSetupFile,
+							setupFile,
+						});
+						return results;
+					}
+				),
+			{ concurrency }
+		);
+
+		const allEvents = eventsByGroup.flat(1);
+
+		const syntheticCompletionEvent = {
+			type: "run_finished" as const,
+			events: allEvents,
+		};
+		const placeholderSuite = new TestSuite();
+
+		reportEvent({
+			event: syntheticCompletionEvent,
+			suite: placeholderSuite,
+			verbose,
+			writeStdout: (data) => process.stdout.write(data),
+			writeStderr: (data) => process.stderr.write(data),
+		});
 	}
 );

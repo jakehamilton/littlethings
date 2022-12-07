@@ -12,6 +12,26 @@ async function runOrError(
 	}
 }
 
+function jsonifyError(error: Error) {
+	if (error == null) {
+		return {
+			name: "TypeError",
+			message: `Non-error value was thrown: ${error}`,
+			thrownValue: error,
+		};
+	}
+
+	const obj = {
+		name: error.name,
+		message: error.message,
+		stack: error.stack!,
+	};
+
+	Object.assign(obj, error);
+
+	return obj;
+}
+
 const CURRENT_API = Symbol("CURRENT_API");
 
 export class TestSuite {
@@ -98,7 +118,7 @@ export class TestSuite {
 					type: "result",
 					subject: describe,
 					status: "ERRORED",
-					error: maybeError,
+					error: jsonifyError(maybeError),
 				});
 			}
 
@@ -197,7 +217,7 @@ export class TestSuite {
 							type: "result",
 							subject: before,
 							status: "ERRORED",
-							error: maybeError,
+							error: jsonifyError(maybeError),
 						});
 					}
 				});
@@ -231,7 +251,7 @@ export class TestSuite {
 								type: "result",
 								subject: before,
 								status: "ERRORED",
-								error: maybeError,
+								error: jsonifyError(maybeError),
 							});
 						}
 					}
@@ -260,7 +280,7 @@ export class TestSuite {
 							type: "result",
 							subject: child,
 							status: "FAILED",
-							error: maybeError,
+							error: jsonifyError(maybeError),
 						});
 					}
 
@@ -283,7 +303,7 @@ export class TestSuite {
 								type: "result",
 								subject: after,
 								status: "ERRORED",
-								error: maybeError,
+								error: jsonifyError(maybeError),
 							});
 						}
 					}
@@ -310,7 +330,7 @@ export class TestSuite {
 							type: "result",
 							subject: after,
 							status: "ERRORED",
-							error: maybeError,
+							error: jsonifyError(maybeError),
 						});
 					}
 				});
@@ -338,7 +358,7 @@ export class TestSuite {
 
 		emitEvent({
 			type: "run_finished",
-			events: this.events,
+			events: [...this.events],
 		});
 
 		return this.events;

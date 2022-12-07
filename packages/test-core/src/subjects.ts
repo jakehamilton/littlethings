@@ -1,9 +1,20 @@
 import type { TestAPI } from "./types";
 
+// "Info" objects must be JSON-serializable
+
+export type Subject = Describe | LifecycleHook | Test;
+export type SubjectInfo = DescribeInfo | LifecycleHookInfo | TestInfo;
+
+export interface DescribeInfo {
+	type: "Describe";
+	flags: Array<string>;
+	context: Array<string>;
+}
+
 export class Describe {
 	type = "Describe" as const;
 
-	flags: Set<string>;
+	flags: Array<string>;
 	context: Array<string>;
 	body: (api: TestAPI) => void | Promise<void>;
 	parent: Describe | null = null;
@@ -32,7 +43,7 @@ export class Describe {
 		this.context = context;
 		this.body = body;
 		this.rootDescribe = rootDescribe || this;
-		this.flags = new Set(flags || []);
+		this.flags = Array.from(flags || []);
 
 		this.api = {
 			describe: (description, body, flags) => {
@@ -109,16 +120,28 @@ export class Describe {
 		};
 	}
 
+	toJSON(): DescribeInfo {
+		const { type, flags, context } = this;
+		return { type, flags, context };
+	}
+
 	runBody() {
 		return this.body(this.api);
 	}
+}
+
+export interface LifecycleHookInfo {
+	type: "LifecycleHook";
+	kind: "beforeEach" | "afterEach" | "beforeAll" | "afterAll";
+	flags: Array<string>;
+	context: Array<string>;
 }
 
 export class LifecycleHook {
 	type = "LifecycleHook" as const;
 	kind: "beforeEach" | "afterEach" | "beforeAll" | "afterAll";
 
-	flags: Set<string>;
+	flags: Array<string>;
 	context: Array<string>;
 	body: () => void | Promise<void>;
 	parent: Describe | null = null;
@@ -137,14 +160,25 @@ export class LifecycleHook {
 		this.context = context;
 		this.body = body;
 		this.kind = kind;
-		this.flags = new Set(flags || []);
+		this.flags = Array.from(flags || []);
 	}
+
+	toJSON(): LifecycleHookInfo {
+		const { type, kind, flags, context } = this;
+		return { type, kind, flags, context };
+	}
+}
+
+export interface TestInfo {
+	type: "Test";
+	flags: Array<string>;
+	context: Array<string>;
 }
 
 export class Test {
 	type = "Test" as const;
 
-	flags: Set<string>;
+	flags: Array<string>;
 	context: Array<string>;
 	body: () => void | Promise<void>;
 	parent: Describe | null = null;
@@ -160,7 +194,7 @@ export class Test {
 	}) {
 		this.context = context;
 		this.body = body;
-		this.flags = new Set(flags || []);
+		this.flags = Array.from(flags || []);
 	}
 
 	gatherBefores() {
@@ -184,5 +218,10 @@ export class Test {
 		}
 
 		return ancestors.map((describe) => describe.afterEaches).flat(1);
+	}
+
+	toJSON(): TestInfo {
+		const { type, flags, context } = this;
+		return { type, flags, context };
 	}
 }

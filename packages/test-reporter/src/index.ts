@@ -5,6 +5,62 @@ import {
 	getLocationFromError,
 	codePreviewFromError,
 } from "code-preview-from-error";
+import { SubjectInfo } from "@littlethings/test-core/dist/cjs/subjects";
+
+function errorInfo(
+	event: TestEvent & { type: "result"; status: "FAILED" | "ERRORED" }
+): string {
+	let errorToExamine: any = event.error;
+
+	if (
+		Array.isArray(errorToExamine.errors) &&
+		errorToExamine.errors.length > 0 &&
+		typeof errorToExamine.errors[0].location === "object" &&
+		errorToExamine.errors[0].location != null &&
+		typeof errorToExamine.errors[0].text === "string"
+	) {
+		// esbuild transform error; probably syntax error
+		const esbuildErr = errorToExamine.errors[0];
+		const loc = esbuildErr.location;
+
+		const syntheticError = new Error(esbuildErr.text);
+		syntheticError.stack =
+			esbuildErr.text +
+			"\n" +
+			`  at esbuildTransform (${loc.file}:${loc.line}:${loc.column})\n`;
+
+		errorToExamine = syntheticError;
+	}
+
+	let shouldShowPreview = true;
+	const loc = getLocationFromError(errorToExamine);
+	if (typeof loc.filePath === "string" && /node_modules/.test(loc.filePath)) {
+		shouldShowPreview = false;
+	}
+
+	let filePreview: string | null = null;
+	if (shouldShowPreview) {
+		filePreview = codePreviewFromError(errorToExamine);
+	}
+
+	const output =
+		(filePreview ? filePreview + "\n\n" : "") +
+		formatError(event.error)
+			.split("\n")
+			.map((line) => "  " + line)
+			.join("\n");
+
+	const indented = output
+		.split("\n")
+		.map((line) => "  " + line)
+		.join("\n");
+
+	return indented;
+}
+
+function summarize(subject: SubjectInfo) {
+	return subject.context.join(" ");
+}
 
 export default function reportEvent({
 	event,
@@ -24,7 +80,7 @@ export default function reportEvent({
 			// Only print "starting" messages when --verbose or -v is used
 			if (!verbose) break;
 
-			const contextString = event.subject.context.join(" ");
+			const contextString = summarize(event.subject);
 			if (contextString === "") {
 				// Don't report root describe
 				break;
@@ -33,97 +89,40 @@ export default function reportEvent({
 			const label = suite.state === "INITIAL" ? "LOADING" : "RUNNING";
 
 			writeStdout(
-				kleur.dim([kleur.bold(label), contextString].join(" "))
+				kleur.dim([kleur.bold(label), contextString].join(" ")) + "\n"
 			);
-			writeStdout("\n");
 			break;
 		}
 
 		case "skipping": {
-			const contextString = event.subject.context.join(" ");
-
 			writeStdout(
 				`${kleur.bold(kleur.yellow("SKIPPED"))} ${kleur.dim(
-					contextString
-				)}`
+					summarize(event.subject)
+				)}\n`
 			);
-			writeStdout("\n");
 			break;
 		}
 		case "result": {
 			const { status } = event;
 
-			const contextString = event.subject.context.join(" ");
 			switch (status) {
 				case "PASSED": {
 					writeStdout(
 						`${kleur.bold(kleur.green(status))} ${kleur.dim(
-							contextString
-						)}`
+							summarize(event.subject)
+						)}\n`
 					);
-					writeStdout("\n");
 					break;
 				}
 				case "FAILED":
 				case "ERRORED": {
 					writeStdout(
 						`${kleur.bold(kleur.red(status))} ${kleur.red(
-							contextString
-						)}`
+							summarize(event.subject)
+						)}\n` +
+							errorInfo(event) +
+							"\n"
 					);
-					writeStdout("\n");
-
-					let errorToExamine: any = event.error;
-
-					if (
-						Array.isArray(errorToExamine.errors) &&
-						errorToExamine.errors.length > 0 &&
-						typeof errorToExamine.errors[0].location === "object" &&
-						errorToExamine.errors[0].location != null &&
-						typeof errorToExamine.errors[0].text === "string"
-					) {
-						// esbuild transform error; probably syntax error
-						const esbuildErr = errorToExamine.errors[0];
-						const loc = esbuildErr.location;
-
-						const syntheticError = new Error(esbuildErr.text);
-						syntheticError.stack =
-							esbuildErr.text +
-							"\n" +
-							`  at esbuildTransform (${loc.file}:${loc.line}:${loc.column})\n`;
-
-						errorToExamine = syntheticError;
-					}
-
-					let shouldShowPreview = true;
-					const loc = getLocationFromError(errorToExamine);
-					if (
-						typeof loc.filePath === "string" &&
-						/node_modules/.test(loc.filePath)
-					) {
-						shouldShowPreview = false;
-					}
-
-					let filePreview: string | null = null;
-					if (shouldShowPreview) {
-						filePreview = codePreviewFromError(errorToExamine);
-					}
-
-					const output =
-						"\n" +
-						(filePreview ? filePreview + "\n\n" : "") +
-						formatError(event.error)
-							.split("\n")
-							.map((line) => "  " + line)
-							.join("\n") +
-						"\n";
-
-					const indented = output
-						.split("\n")
-						.map((line) => "  " + line)
-						.join("\n");
-
-					writeStderr(indented + "\n");
 				}
 			}
 			break;
@@ -132,14 +131,19 @@ export default function reportEvent({
 			const { events } = event;
 			const passed = events.filter(
 				(event) => event.type === "result" && event.status === "PASSED"
-			);
+			) as Array<TestEvent & { type: "result"; status: "PASSED" }>;
+
 			const failed = events.filter(
 				(event) => event.type === "result" && event.status === "FAILED"
-			);
+			) as Array<TestEvent & { type: "result"; status: "FAILED" }>;
+
 			const errored = events.filter(
 				(event) => event.type === "result" && event.status === "ERRORED"
-			);
-			const skipped = events.filter((event) => event.type === "skipping");
+			) as Array<TestEvent & { type: "result"; status: "ERRORED" }>;
+
+			const skipped = events.filter(
+				(event) => event.type === "skipping"
+			) as Array<TestEvent & { type: "skipping" }>;
 
 			const categories = {
 				passed,
@@ -166,6 +170,44 @@ export default function reportEvent({
 					writeStdout(kleur.dim(", "));
 				}
 			});
+
+			if (failed.length > 0) {
+				writeStderr("\n");
+
+				const sectionHeader = kleur.bgRed(
+					kleur.black("  Failed tests:  ".padEnd(80, " "))
+				);
+				writeStderr(sectionHeader + "\n");
+
+				for (const event of failed) {
+					reportEvent({
+						event,
+						suite,
+						verbose,
+						writeStderr,
+						writeStdout,
+					});
+				}
+			}
+
+			if (errored.length > 0) {
+				writeStderr("\n");
+
+				const sectionHeader = kleur.bgRed(
+					kleur.black("  Errored tests:  ".padEnd(80, " "))
+				);
+				writeStderr(sectionHeader + "\n");
+
+				for (const event of errored) {
+					reportEvent({
+						event,
+						suite,
+						verbose,
+						writeStderr,
+						writeStdout,
+					});
+				}
+			}
 		}
 	}
 }
