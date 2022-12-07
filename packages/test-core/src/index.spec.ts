@@ -87,6 +87,10 @@ vitest.test("basic functionality", async () => {
 				copy.events = `${event.events.length} Events`;
 			}
 
+			if (event.error && event.error.stack) {
+				event.error.stack = "<stack goes here>";
+			}
+
 			return copy;
 		})
 	);
@@ -158,7 +162,11 @@ vitest.test("basic functionality", async () => {
 		      "type": "starting",
 		    },
 		    {
-		      "error": [Error: no :)],
+		      "error": {
+		        "message": "no :)",
+		        "name": "Error",
+		        "stack": "<stack goes here>",
+		      },
 		      "status": "ERRORED",
 		      "subject": "Describe [\\"bad\\"]",
 		      "type": "result",
@@ -208,10 +216,19 @@ vitest.test("basic functionality", async () => {
 		      "type": "starting",
 		    },
 		    {
-		      "error": [AssertionError: The expression evaluated to a falsy value:
+		      "error": {
+		        "actual": false,
+		        "code": "ERR_ASSERTION",
+		        "expected": true,
+		        "generatedMessage": true,
+		        "message": "The expression evaluated to a falsy value:
 
 		  assert(2 + 2 === 4)
-		],
+		",
+		        "name": "AssertionError",
+		        "operator": "==",
+		        "stack": "<stack goes here>",
+		      },
 		      "status": "FAILED",
 		      "subject": "Test [\\"something\\",\\"fails\\"]",
 		      "type": "result",
@@ -229,7 +246,7 @@ vitest.test("basic functionality", async () => {
 		      "type": "starting",
 		    },
 		    {
-		      "events": "21 Events",
+		      "events": "20 Events",
 		      "type": "run_finished",
 		    },
 		  ],
