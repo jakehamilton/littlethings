@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.0
+
+### Features
+
+- add currentTest property to TestSuite
+
 ## 3.0.0
 
 ### Features

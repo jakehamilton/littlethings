@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.1
+
+### Notes
+
+Updated local dependencies.
+
 ## 3.0.0
 
 ### Features

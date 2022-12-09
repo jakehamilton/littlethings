@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.1.0
+
+### Features
+
+- add getCurrentTestInfo function
+
+### Notes
+
+Updated local dependencies.
+
 ## 3.0.0
 
 ### Features

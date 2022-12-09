@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/test-core",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "APIs for describing and running automated test suites",
     "keywords": [
         "test",
