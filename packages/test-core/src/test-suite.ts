@@ -44,6 +44,15 @@ export class TestSuite {
 	state: "INITIAL" | "ASSEMBLED" | "HAS_RUN" = "INITIAL";
 	events: Array<TestEvent> = [];
 
+	/**
+	 * The {@link Test} object for the currently-running test, or null if no test
+	 * is currently running.
+	 *
+	 * Note that this is always a Test within beforeEach/afterEach callbacks, but
+	 * always null within beforeAll/afterAll.
+	 */
+	currentTest: Test | null = null;
+
 	constructor({
 		onEvent = () => {},
 		filter = () => true,
@@ -231,6 +240,7 @@ export class TestSuite {
 
 				testWork.push(async () => {
 					this[CURRENT_API] = describe.api;
+					this.currentTest = child;
 
 					for (const before of child.gatherBefores()) {
 						if (!this.filter(before)) {
@@ -307,6 +317,8 @@ export class TestSuite {
 							});
 						}
 					}
+
+					this.currentTest = null;
 				});
 			}
 
