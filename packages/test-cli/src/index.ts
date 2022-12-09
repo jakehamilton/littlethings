@@ -1,4 +1,4 @@
-import type { TestAPI } from "@littlethings/test-core";
+import type { TestAPI, TestInfo } from "@littlethings/test-core";
 import { getCurrentSuite } from "./current-suite";
 
 // These are exported so that test files can do this:
@@ -62,4 +62,18 @@ export const afterAll: TestAPI["afterAll"] = (...args) => {
 		);
 	}
 	return currentSuite.api.afterAll(...args);
+};
+
+// get TestInfo for the currently-running test, if any
+export const getCurrentTestInfo = (): TestInfo | null => {
+	const currentSuite = getCurrentSuite();
+	if (currentSuite == null) {
+		return null;
+	}
+	const currentTest = currentSuite.currentTest;
+	if (currentTest != null) {
+		return currentTest.toJSON();
+	} else {
+		return null;
+	}
 };
