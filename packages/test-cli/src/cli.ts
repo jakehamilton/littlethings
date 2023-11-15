@@ -94,19 +94,37 @@ clefairy.run(
 				kleur.dim(
 					concurrencyGroups
 						.map((group, index) => {
-							return `Process ${index + 1} will run ${
-								group.length
-							} files`;
+							const processName =
+								concurrency === 1
+									? "Main process"
+									: `Subprocess ${index + 1}`;
+							return `${processName} will run ${group.length} files`;
 						})
 						.join("\n")
 				)
 			);
 		}
 
+		type WorkerRunner = <
+			Result extends any,
+			Inputs extends { [key: string]: any }
+		>(
+			inputs: Inputs,
+			mapper: (inputs: Inputs) => Promise<Result>
+		) => Promise<Result>;
+
+		// Don't spawn any child processes when concurrency is 1; instead, run them in the CLI process.
+		const runnerFunction: WorkerRunner =
+			concurrency === 1
+				? (inputs, mapper) => {
+						return mapper(inputs);
+				  }
+				: inChildProcess;
+
 		const eventsByGroup = await runJobs<Array<string>, Array<TestEvent>>(
 			concurrencyGroups,
 			(filesFromGroup) =>
-				inChildProcess(
+				runnerFunction(
 					{
 						filesFromGroup,
 						verbose,
