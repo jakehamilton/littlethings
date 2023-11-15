@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.2.0
+
+### Features
+
+- don't spawn subprocesses when concurrency is 1
+
+### Chores
+
+- bump clefairy dep
+
 ## 3.1.0
 
 ### Features
