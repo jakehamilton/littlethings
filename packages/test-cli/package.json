@@ -10,6 +10,14 @@
         "library",
         "suite"
     ],
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
     "license": "Apache-2.0",
     "author": "Lily Skye <me@suchipi.com>",
     "main": "./dist/index.js",

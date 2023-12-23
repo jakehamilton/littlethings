@@ -3,6 +3,14 @@
     "version": "0.0.1",
     "description": "The Neu Web.",
     "keywords": [],
+    "homepage": "https://github.com/jakehamilton/littlethings",
+    "bugs": {
+        "url": "https://github.com/jakehamilton/littlethings/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jakehamilton/littlethings.git"
+    },
     "license": "Apache-2.0",
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "exports": {
