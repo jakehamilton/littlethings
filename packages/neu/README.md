@@ -12,17 +12,16 @@ highly scalable, and highly maintainable web applications.
 
 ### Installation
 
-~~You can install Neu using [npm](https://www.npmjs.com/package/neu).~~
-An npm package is not currently available for Neu.
+You can install Neu using [npm](https://www.npmjs.com/package/neu).
 
 ```sh
-npm install neu
+npm install @littlethings/neu
 ```
 
 ### Create a Neu App
 
 ```ts
-import * as neu from "neu";
+import * as neu from "@littlethings/neu";
 
 type Drivers = {
 	dom: neu.DomDriver;
@@ -49,7 +48,7 @@ A Neu App is a function that takes in a set of sources (supplied by drivers) and
 a set of sinks (streams).
 
 ```ts
-import * as neu from "neu";
+import * as neu from "@littlethings/neu";
 
 type Drivers = {
 	dom: neu.DomDriver;
@@ -67,7 +66,7 @@ const app: neu.App<Drivers> = ({ dom }) => {
 To run a Neu App, call the `run` function with the drivers needed for your application.
 
 ```ts
-import * as neu from "neu";
+import * as neu from "@littlethings/neu";
 
 type Drivers = {
 	dom: neu.DomDriver;
@@ -89,7 +88,7 @@ returns a set of helpers. The streamed data comes directly from the Neu App's re
 the helpers are provided directly to the Neu App as a source.
 
 ```ts
-import * as neu from "neu";
+import * as neu from "@littlethings/neu";
 
 type MyData = number;
 type MyError = unknown;
