@@ -916,6 +916,20 @@ export const output = (
 			  }).split("\n")
 			: text.split("\n");
 
+		if (style.textWrap) {
+			let position = lines[0].length;
+
+			for (let i = 1; i < lines.length; i++) {
+				const line = lines[i];
+
+				if (line[0] === " " && text[position] !== "\n") {
+					lines[i] = line.substring(1);
+				}
+
+				position += lines[i].length;
+			}
+		}
+
 		for (let y = 0; y < lines.length; y++) {
 			if (
 				y + bounds.top < overflowBounds.top ||
