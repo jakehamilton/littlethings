@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.0.3
+
+### Fixes
+
+- types
+
+### Chores
+
+- separate tsconfig for demos
+
 ## 0.0.2
 
 ### Chores
