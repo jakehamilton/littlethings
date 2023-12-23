@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"strict": true,
+		"declaration": true,
+		"target": "es6",
+		"baseUrl": ".",
+		"module": "es2020",
+		"allowSyntheticDefaultImports": true,
+		"lib": ["dom", "es2017"],
+		"outDir": "dist",
+		"paths": {
+			"~/*": ["src/*"]
+		}
+	},
+	"include": ["src/**/*"]
+}

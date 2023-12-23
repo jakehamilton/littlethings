@@ -1,0 +1,9 @@
+# Nix
+.direnv
+
+# Node / Bun
+node_modules
+dist
+
+# macOS
+.DS_Store
