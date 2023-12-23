@@ -32,12 +32,12 @@ const kind = {
 		[LogKind.Fatal]: kleur.bold().bgWhite().red,
 	},
 	icons: {
-		[LogKind.Info]: "",
-		[LogKind.Warn]: "",
+		[LogKind.Info]: "󰋽",
+		[LogKind.Warn]: "",
 		[LogKind.Debug]: "",
 		[LogKind.Trace]: "﯎",
-		[LogKind.Error]: "",
-		[LogKind.Fatal]: "ﮊ",
+		[LogKind.Error]: "",
+		[LogKind.Fatal]: "󰚌",
 	},
 	loggers: {
 		[LogKind.Info]: stdout,
