@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/ui",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "private": true,
     "description": "A small, Preact-based UI library",
     "keywords": [
@@ -33,7 +33,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.15.0",
-        "@littlethings/log": "3.0.6",
+        "@littlethings/log": "3.0.7",
         "@mdx-js/preact": "^2.0.0-next.9",
         "@preact/preset-vite": "^2.1.0",
         "@storybook/addon-actions": "^6.4.0-alpha.33",

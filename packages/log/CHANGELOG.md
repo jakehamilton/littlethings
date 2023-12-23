@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.7
+
+### Fixes
+
+- update icons after mdi removal
+
 ## 3.0.6
 
 ### Chores
