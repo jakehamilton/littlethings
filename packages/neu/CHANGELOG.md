@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.0.5
+
+### Fixes
+
+- better text wrapping
+
 ## 0.0.4
 
 ### Fixes
