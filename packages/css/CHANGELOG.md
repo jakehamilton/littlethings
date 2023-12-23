@@ -1,10 +1,20 @@
 # Change Log
 
+## 1.1.0
+
+### Features
+
+-   add neu
+
+### Chores
+
+-   _(release)_: publish
+
 ## 1.0.7
 
 ### Chores
 
-- updated lockfiles from running titan install
+-   updated lockfiles from running titan install
 
 ## 1.0.6
 

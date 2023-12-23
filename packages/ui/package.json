@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/ui",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "private": true,
     "description": "A small, Preact-based UI library",
     "keywords": [
@@ -29,7 +29,7 @@
         "xbuild": "npm run clean && npm run build:lib && npm run build:types"
     },
     "dependencies": {
-        "@littlethings/css": "1.0.7"
+        "@littlethings/css": "1.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.15.0",
