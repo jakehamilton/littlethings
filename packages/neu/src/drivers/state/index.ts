@@ -12,7 +12,7 @@ export type StateAction<State> = {
 export type StateDriver<State> = Driver<
 	StateAction<State>,
 	unknown,
-	ReturnType<typeof helpers>
+	StateSource<State>
 >;
 
 export type StateSink<State> = {
