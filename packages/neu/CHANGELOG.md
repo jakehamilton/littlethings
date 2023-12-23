@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.0.4
+
+### Fixes
+
+- state source type
+
 ## 0.0.3
 
 ### Fixes
