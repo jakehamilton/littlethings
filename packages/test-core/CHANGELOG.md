@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.1
+
+### Chores
+
+- update metadata
+
 ## 3.1.0
 
 ### Features

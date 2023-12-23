@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.2.1
+
+### Chores
+
+- update metadata
+
+### Notes
+
+Updated local dependencies.
+
 ## 3.2.0
 
 ### Features

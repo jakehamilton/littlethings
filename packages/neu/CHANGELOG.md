@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.0.2
+
+### Chores
+
+- update metadata
+
 ## 0.0.1
 
 ### Fixes
