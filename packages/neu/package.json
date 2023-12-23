@@ -28,7 +28,7 @@
     "scripts": {
         "build": "npm run build:types && npm run build:lib",
         "build:lib": "vite build",
-        "build:types": "tsc --emitDeclarationOnly",
+        "build:types": "tsc --emitDeclarationOnly -p tsconfig.types.json",
         "dev": "vite dev",
         "prepublishOnly": "npm run build",
         "test": "bun test"
