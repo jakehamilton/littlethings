@@ -36,7 +36,7 @@ export type DotsProps = {
 	sine?: boolean;
 };
 
-export const Dots: neu.App<Drivers, { dom: neu.dom.VNodeStream }, DotsProps> = (
+export const Dots: neu.App<Drivers, neu.dom.DomSink, DotsProps> = (
 	{ theme },
 	{ invert = false, speed = 0.25, sine = false },
 ) => {

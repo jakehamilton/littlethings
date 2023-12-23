@@ -10,6 +10,8 @@ export type HistoryDriver = (source: Source<Path>) => {
 	navigation: () => Source<Location>;
 };
 
+export type HistorySink = {};
+
 const helpers: HistoryDriver = (source: Source<Path>) => {
 	return {
 		location: (): Source<Location> => {

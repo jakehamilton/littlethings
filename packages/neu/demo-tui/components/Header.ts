@@ -8,15 +8,18 @@ export type HeaderProps = {
 	scroll: neu.Source<number>;
 };
 
-export const Header: neu.App<Drivers, {}, HeaderProps> = (sources, props) => {
+export const Header: neu.App<Drivers, neu.tui.TuiSink, HeaderProps> = (
+	_sources,
+	props,
+) => {
 	const background$ = neu.pipe(
 		props.scroll,
-		neu.map((scroll) => (scroll > 8 ? "blackBright" : "transparent")),
+		neu.map((scroll: number) => (scroll > 8 ? "blackBright" : "transparent")),
 	);
 
 	const title$ = neu.pipe(
 		props.scroll,
-		neu.map((scroll) => {
+		neu.map((scroll: number) => {
 			if (scroll > 8) {
 				return neu.tui.box(
 					{

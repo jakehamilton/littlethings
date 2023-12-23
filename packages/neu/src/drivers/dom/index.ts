@@ -3,12 +3,16 @@ import { Signal, Sink, Source, Talkback } from "~/streams/interface";
 import { of } from "~/streams/sources/of";
 import { pipe } from "~/streams/util/pipe";
 
-import { VNode } from "./elements";
+import { VNode, VNodeStream } from "./elements";
 import { render } from "./render";
 
 export * from "./elements";
 
 export type DomDriver = Driver<VNode, unknown, ReturnType<typeof helpers>>;
+
+export type DomSink = {
+	dom: VNodeStream;
+};
 
 const helpers = <Root extends Element>(source: Source<Root>) => {
 	return {

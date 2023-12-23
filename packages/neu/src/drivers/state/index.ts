@@ -2,17 +2,33 @@ import { Driver } from "~/lifecycle/run";
 import { tap } from "~/streams/transformers/tap";
 import { pipe } from "~/streams/util/pipe";
 import { Signal, Source, Transformer } from "~/streams/interface";
+import { map } from "~/streams/transformers/map";
+
+export type StateAction<State> = {
+	key: keyof State;
+	value: State[keyof State];
+};
 
 export type StateDriver<State> = Driver<
-	State,
+	StateAction<State>,
 	unknown,
 	ReturnType<typeof helpers>
 >;
 
-export type DomSource<Store> = {
+export type StateSink<State> = {
+	state: Source<StateAction<State>>;
+};
+
+export type StateSource<Store> = {
 	write: <Key extends keyof Store>(
 		key: Key,
-	) => Transformer<Store[Key], Store[Key]>;
+	) => Transformer<
+		Store[Key],
+		{
+			key: Key;
+			value: Store[Key];
+		}
+	>;
 	select: <Key extends keyof Store>(key: Key) => Source<Store[Key]>;
 };
 
@@ -21,20 +37,16 @@ const helpers = <
 		[key: string]: any;
 	},
 >(
-	_store: Source<Store>,
 	state: Map<keyof Store, Store[keyof Store]>,
 	listeners: Map<string, Array<(value: any) => void>>,
-): DomSource<Store> => ({
+): StateSource<Store> => ({
 	write: (key) => (source) => {
 		return pipe(
 			source,
-			tap((value: Store[typeof key]) => {
-				state.set(key, value);
-
-				if (listeners.has(key as string)) {
-					listeners.get(key as string)!.forEach((listener) => listener(value));
-				}
-			}),
+			map((value: Store[typeof key]) => ({
+				key,
+				value,
+			})),
 		);
 	},
 	select: (key) => (type, sink) => {
@@ -75,11 +87,21 @@ export const driver =
 	>(
 		initial: Store,
 	) =>
-	(source: Source<Store>) => {
+	(source: Source<StateAction<Store>>) => {
 		const state = new Map<keyof Store, Store[keyof Store]>(
 			Object.entries(initial ?? {}),
 		);
 		const listeners = new Map<string, Array<(value: any) => void>>();
 
-		return helpers<Store>(source, state, listeners);
+		source(Signal.Start, (type, data) => {
+			if (type === Signal.Data) {
+				if (listeners.has(data.key as string)) {
+					listeners
+						.get(data.key as string)!
+						.forEach((listener) => listener(data.value));
+				}
+			}
+		});
+
+		return helpers<Store>(state, listeners);
 	};

@@ -26,9 +26,7 @@ const NeuClass = (theme: Theme) =>
 		textShadow: `0 0 5rem ${theme.accent.background}`,
 	});
 
-export const Hero: neu.App<Drivers, { dom: neu.dom.VNodeStream }> = ({
-	theme,
-}) => {
+export const Hero: neu.App<Drivers, neu.dom.DomSink> = ({ theme }) => {
 	return {
 		dom: neu.of(
 			neu.dom.div({ class: HeroClass }, [

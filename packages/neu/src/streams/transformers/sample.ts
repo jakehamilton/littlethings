@@ -3,7 +3,7 @@ import { Signal, Source, Talkback, Transformer } from "~/streams/interface";
 const empty = Symbol("empty");
 
 export const sample =
-	<Value>(signal: Source<Value>): Transformer<Value, Value> =>
+	<Value>(signal: Source<any>): Transformer<Value, Value> =>
 	(source) =>
 	(type, sink) => {
 		if (type !== Signal.Start) {

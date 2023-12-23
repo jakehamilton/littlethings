@@ -32,13 +32,10 @@ const DescriptionClass = (invert: boolean) =>
 		textAlign: "justify",
 	});
 
-export const Callout: neu.App<
-	Drivers,
-	{
-		dom: neu.dom.VNodeStream;
-	},
-	CalloutProps
-> = ({ theme }, { title, description, invert = false }) => {
+export const Callout: neu.App<Drivers, neu.dom.DomSink, CalloutProps> = (
+	{ theme },
+	{ title, description, invert = false },
+) => {
 	return {
 		dom: neu.of(
 			neu.dom.div({ class: CalloutClass(invert) }, [

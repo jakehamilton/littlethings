@@ -7,9 +7,7 @@ export type Props = {
 
 export const Router: neu.App<
 	{ history: neu.history.HistoryDriver },
-	{
-		dom: neu.dom.VNodeStream;
-	},
+	neu.dom.DomSink,
 	Props
 > = ({ history }, { routes, fallback }) => {
 	const vdom$ = neu.pipe(

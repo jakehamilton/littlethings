@@ -64,8 +64,8 @@ const _node =
 
 export const box = _node("box");
 export const text = (
-	props?: Record<string, any> | string | Array<string>,
-	children?: string | Array<string>,
+	props?: Record<string, any> | VNodeChildren,
+	children?: VNodeChildren,
 ) => {
 	const userProps =
 		typeof props === "string" || Array.isArray(props) ? {} : props;

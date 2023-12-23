@@ -1,9 +1,10 @@
 import { Signal, Source } from "~/streams/interface";
 
-import { VNode } from "./elements";
+import { VNodeElement, VNodeStream } from "./elements";
 import { TuiNode, render } from "./render";
 import { Dispose } from "~/streams/sinks/subscribe";
 import parseKeypress, { Key } from "./keypress";
+import { Driver } from "~/lifecycle/run";
 
 export * from "./render";
 export * from "./elements";
@@ -15,7 +16,11 @@ export type TuiSource = {
 	resize: (immediate?: boolean) => Source<{ columns: number; rows: number }>;
 };
 
-export type TuiDriver = (source: Source<VNode>) => TuiSource;
+export type TuiSink = {
+	tui: VNodeStream;
+};
+
+export type TuiDriver = Driver<VNodeElement, unknown, TuiSource>;
 
 export const driver =
 	(stdin: NodeJS.ReadStream, stdout: NodeJS.WriteStream): TuiDriver =>

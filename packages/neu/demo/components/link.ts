@@ -16,7 +16,10 @@ export type LinkProps = {
 	[key: string]: any;
 };
 
-export const Link: neu.App<Drivers, {}, LinkProps> = ({ theme }, props) => {
+export const Link: neu.App<Drivers, neu.dom.DomSink, LinkProps> = (
+	{ theme },
+	props,
+) => {
 	const { text, ...rest } = props;
 
 	return {

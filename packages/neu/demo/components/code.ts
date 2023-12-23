@@ -54,13 +54,10 @@ const CodeClass = (center: boolean) =>
 
 const PreClass = css({});
 
-export const Code: neu.App<
-	Drivers,
-	{
-		dom: neu.dom.VNodeStream;
-	},
-	CodeProps
-> = ({ theme }, { text, center = false }) => {
+export const Code: neu.App<Drivers, neu.dom.DomSink, CodeProps> = (
+	{ theme },
+	{ text, center = false },
+) => {
 	return {
 		dom: neu.of(
 			neu.dom.div({ class: RootClass(theme) }, [

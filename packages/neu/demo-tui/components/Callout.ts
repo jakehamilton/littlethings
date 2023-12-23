@@ -3,15 +3,18 @@ import * as neu from "~/index";
 import { Drivers } from "..";
 
 export type CalloutProps = {
-	title: neu.dom.VNode | neu.dom.VNodeStream;
-	description: neu.dom.VNode | neu.dom.VNodeStream;
+	title: neu.tui.VNode | neu.tui.VNodeStream;
+	description: neu.tui.VNode | neu.tui.VNodeStream;
 	invert?: boolean;
 };
 
-export const Callout: neu.App<Drivers, {}, CalloutProps> = (sources, props) => {
+export const Callout: neu.App<Drivers, neu.tui.TuiSink, CalloutProps> = (
+	sources,
+	props,
+) => {
 	const style$ = neu.pipe(
 		sources.tui.resize(true),
-		neu.map((size) => {
+		neu.map((size: { columns: number; rows: number }) => {
 			if (size.columns < 100) {
 				return {
 					marginRight: 0,

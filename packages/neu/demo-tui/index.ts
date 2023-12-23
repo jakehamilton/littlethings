@@ -5,6 +5,7 @@ import { Callout } from "./components/Callout";
 
 export type State = {
 	focus: string;
+	scroll: number;
 };
 
 export type Drivers = {
@@ -14,12 +15,12 @@ export type Drivers = {
 };
 
 const app: neu.App<Drivers> = (sources) => {
-	neu.pipe(
+	const exit$ = neu.pipe(
 		sources.tui.keypress(),
 		neu.filter(
 			(key: neu.tui.Key) => (key.name === "c" && key.ctrl) || key.name === "q",
 		),
-		neu.each(() => {
+		neu.to(() => {
 			process.exit(0);
 		}),
 	);
@@ -43,42 +44,53 @@ const app: neu.App<Drivers> = (sources) => {
 
 	const scrollUpState$ = neu.pipe(
 		neu.combine(main$, content$, scroll$),
-		neu.sample(scrollUp$),
-		neu.map(([main, content, scroll]) => {
-			const mainLayout = main.yoga.getComputedLayout();
-			const contentLayout = content.yoga.getComputedLayout();
+		neu.sample<[neu.tui.TuiNode, neu.tui.TuiNode, number]>(scrollUp$),
+		neu.map(
+			([main, content, scroll]: [neu.tui.TuiNode, neu.tui.TuiNode, number]) => {
+				const mainLayout = main.yoga.getComputedLayout();
+				const contentLayout = content.yoga.getComputedLayout();
 
-			if (mainLayout.height < contentLayout.height) return 0;
-			if (scroll - 1 < 0) return scroll;
+				if (mainLayout.height < contentLayout.height) return 0;
+				if (scroll - 1 < 0) return scroll;
 
-			return scroll - 1;
-		}),
+				return scroll - 1;
+			},
+		),
 		sources.state.write("scroll"),
 	);
 
 	const scrollDownState$ = neu.pipe(
 		neu.combine(size$, content$, scroll$),
-		neu.sample(scrollDown$),
-		neu.map(([size, content, scroll]) => {
-			const contentLayout = content.yoga.getComputedLayout();
+		neu.sample<[neu.UnwrapSource<typeof size$>, neu.tui.TuiNode, number]>(
+			scrollDown$,
+		),
+		neu.map(
+			([size, content, scroll]: [
+				neu.UnwrapSource<typeof size$>,
+				neu.tui.TuiNode,
+				number,
+			]) => {
+				const contentLayout = content.yoga.getComputedLayout();
 
-			if (size.rows >= contentLayout.height) return 0;
+				if (size.rows >= contentLayout.height) return 0;
 
-			const difference = contentLayout.height - size.rows;
+				const difference = contentLayout.height - size.rows;
 
-			if (scroll + 1 > difference) return difference;
+				if (scroll + 1 > difference) return difference;
 
-			return scroll + 1;
-		}),
+				return scroll + 1;
+			},
+		),
 		sources.state.write("scroll"),
 	);
 
 	const contentScroll$ = neu.pipe(
 		scroll$,
-		neu.map((scroll) => -scroll),
+		neu.map((scroll: number) => -scroll),
 	);
 
 	return {
+		effect: exit$,
 		state: neu.merge(scrollUpState$, scrollDownState$),
 		tui: neu.of(
 			neu.tui.box(

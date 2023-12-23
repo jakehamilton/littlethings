@@ -2,7 +2,7 @@ import * as neu from "~/index";
 
 import { Drivers } from "..";
 
-export const Hero: neu.App<Drivers> = () => {
+export const Hero: neu.App<Drivers, neu.tui.TuiSink> = () => {
 	return {
 		tui: neu.of(
 			neu.tui.box(
