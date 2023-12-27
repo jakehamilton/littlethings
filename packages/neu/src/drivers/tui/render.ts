@@ -12,6 +12,17 @@ import { Dispose, subscribe } from "~/streams/sinks/subscribe";
 
 import { VNode, VNodeStream } from "./elements";
 
+const hexToRgb = (hex: string) => {
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result
+		? {
+				r: parseInt(result[1], 16),
+				g: parseInt(result[2], 16),
+				b: parseInt(result[3], 16),
+		  }
+		: null;
+};
+
 const availableColors = [
 	"black",
 	"blackBright",
@@ -32,6 +43,45 @@ const availableColors = [
 	"gray",
 	"grey",
 ] as const;
+
+export type Color =
+	| typeof availableColors[number]
+	| "transparent"
+	| `#${string}`;
+
+const ANSI_ESC = "\u001B[";
+const ANSI_FOREGROUND_RESET = `${ANSI_ESC}39m`;
+const ANSI_BACKGROUND_RESET = `${ANSI_ESC}49m`;
+
+const color = (
+	text: string,
+	color: Omit<Color, "transparent">,
+	isBackground = false,
+) => {
+	if (color[0] === "#") {
+		// TODO: Support true color.
+		throw new Error("True color support is not implemented.");
+		const rgb = hexToRgb(color as string);
+
+		if (!rgb) {
+			throw new Error(`Invalid hex color: "${color}"`);
+		}
+
+		if (isBackground) {
+			return `${ANSI_ESC}38;2;${rgb.r};${rgb.g};${rgb.b};${text}${ANSI_BACKGROUND_RESET}`;
+		} else {
+			return `${ANSI_ESC}48;2;${rgb.r};${rgb.g};${rgb.b};${text}${ANSI_FOREGROUND_RESET}`;
+		}
+	} else {
+		if (isBackground) {
+			// @ts-expect-error
+			return colors[`bg${color[0].toUpperCase()}${color.substring(1)}`](text);
+		} else {
+			// @ts-expect-error
+			return colors[color](text);
+		}
+	}
+};
 
 const borders = {
 	line: {
@@ -84,21 +134,7 @@ const borders = {
 	},
 } as const;
 
-export type Color = typeof availableColors[number] | "transparent";
-
 let Yoga: typeof import("yoga-layout");
-
-// TODO: Support arbitrary hex colors.
-const hexToRgb = (hex: string) => {
-	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return result
-		? {
-				r: parseInt(result[1], 16),
-				g: parseInt(result[2], 16),
-				b: parseInt(result[3], 16),
-		  }
-		: null;
-};
 
 export type TuiNode = {
 	type: string;
@@ -140,7 +176,7 @@ const setProperty = (
 		if (key === "color" || key === "background") {
 			if (value === "transparent") {
 				delete node.props![key];
-			} else if (!availableColors.includes(value)) {
+			} else if (value[0] !== "#" && !availableColors.includes(value)) {
 				throw new Error(
 					`Invalid color "${value}", expected one of: ${availableColors.join(
 						", ",
@@ -236,6 +272,12 @@ const setProperty = (
 				yoga.setJustifyContent(Yoga.JUSTIFY_SPACE_BETWEEN);
 			} else if (value === "space-around") {
 				yoga.setJustifyContent(Yoga.JUSTIFY_SPACE_AROUND);
+			}
+		} else if (key === "display") {
+			if (value === "none") {
+				yoga.setDisplay(Yoga.DISPLAY_NONE);
+			} else if (value === "flex") {
+				yoga.setDisplay(Yoga.DISPLAY_FLEX);
 			}
 		} else if (key === "position") {
 			if (value === "absolute") {
@@ -350,14 +392,12 @@ export const create = (
 				return {
 					width: widestLine(node),
 					height:
-						style.overflow === "hidden"
+						style.overflow === "hidden" || style.overflow === "scroll"
 							? Math.min(textHeight, height)
 							: textHeight,
 				};
 			},
 		);
-
-		// parent.yoga.insertChild(element.yoga, parent.yoga.getChildCount());
 
 		return { element, unsubscribes: [] };
 	}
@@ -399,6 +439,8 @@ export const create = (
 	} else {
 		children = [];
 	}
+
+	element.children = Array.from({ length: children.length }, () => null);
 
 	for (let i = 0; i < children.length; i++) {
 		let child = children[i];
@@ -524,7 +566,10 @@ const getOverflowParentBoundingClientRect = (node: TuiNode) => {
 
 		parent = newParent;
 
-		if (parent.getOverflow() === Yoga.OVERFLOW_HIDDEN) {
+		if (
+			parent.getOverflow() === Yoga.OVERFLOW_HIDDEN ||
+			parent.getOverflow() === Yoga.OVERFLOW_SCROLL
+		) {
 			break;
 		}
 	}
@@ -625,6 +670,10 @@ export const output = (
 	overlay = false,
 	debug = false,
 ): Array<TuiNode> => {
+	if (node.props?.display === "none") {
+		return [];
+	}
+
 	if (!overlay && node.yoga.getPositionType() === Yoga.POSITION_TYPE_ABSOLUTE) {
 		return [node];
 	}
@@ -678,19 +727,11 @@ export const output = (
 
 				if (character.style) {
 					if (character.style.color) {
-						// @ts-expect-error
-						text = colors[character.style.color](text);
+						text = color(text, character.style.color, false);
 					}
 
 					if (character.style.background) {
-						text =
-							// @ts-expect-error
-							colors[
-								`bg${
-									character.style.background[0].toUpperCase() +
-									character.style.background.substring(1)
-								}`
-							](text);
+						text = color(text, character.style.background, true);
 					}
 
 					if (character.style.bold) {
@@ -749,7 +790,7 @@ export const output = (
 			}
 		}
 
-		if (style.border) {
+		if (style.border && style.border !== "none") {
 			const isTopOverflow = bounds.top < overflowBounds.top;
 			const isBottomOverflow =
 				bounds.top + bounds.height > overflowBounds.top + overflowBounds.height;
@@ -816,7 +857,7 @@ export const output = (
 
 			for (
 				let x = Math.max(bounds.left + 1, overflowBounds.left);
-				x < bounds.left + bounds.width - 1;
+				x < bounds.left + bounds.width - 1 && x < screen[0].length;
 				x++
 			) {
 				if (!isTopOverflow) {
@@ -849,7 +890,7 @@ export const output = (
 
 			for (
 				let y = Math.max(bounds.top + 1, overflowBounds.top);
-				y < bounds.top + bounds.height - 1;
+				y < bounds.top + bounds.height - 1 && y < screen.length;
 				y++
 			) {
 				if (!isLeftOverflow) {
@@ -975,6 +1016,7 @@ export const render = async (
 	stdout: NodeJS.WriteStream,
 	source: Source<any>,
 	register: (id: string, node: TuiNode) => Dispose,
+	debug = false,
 ) => {
 	Yoga = await loadYoga();
 
@@ -991,7 +1033,6 @@ export const render = async (
 	root.yoga.setHeight(stdout.rows);
 
 	let isFirstWrite = true;
-	let debug = false;
 
 	if (!debug) {
 		stdout.write(ansi.cursorHide);
@@ -1008,8 +1049,12 @@ export const render = async (
 	process.addListener("SIGINT", cleanup);
 	process.addListener("SIGTERM", cleanup);
 
-	const write = () => {
+	const measure = () => {
 		root.yoga.calculateLayout(stdout.columns, stdout.rows, Yoga.DIRECTION_LTR);
+	};
+
+	const write = () => {
+		measure();
 
 		const screen: ScreenOutput = Array.from({ length: stdout.rows }, () => {
 			return Array.from({ length: stdout.columns }, () => {
@@ -1061,4 +1106,6 @@ export const render = async (
 			write();
 		}
 	});
+
+	return measure;
 };

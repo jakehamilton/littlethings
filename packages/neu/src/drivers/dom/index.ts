@@ -8,6 +8,8 @@ import { render } from "./render";
 
 export * from "./elements";
 
+export * as history from "./history";
+
 export type DomDriver = Driver<VNode, unknown, ReturnType<typeof helpers>>;
 
 export type DomSink = {

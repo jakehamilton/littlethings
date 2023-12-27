@@ -1,11 +1,10 @@
 export * as dom from "~/drivers/dom";
 export * as state from "~/drivers/state";
-export * as history from "~/drivers/history";
 export * as tui from "~/drivers/tui";
 export * as effect from "~/drivers/effect";
+export * as theme from "~/drivers/theme";
 
 export * from "~/lifecycle/run";
-
 export * from "~/streams/interface";
 
 export { each } from "~/streams/sinks/each";

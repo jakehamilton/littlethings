@@ -9,6 +9,40 @@ import { Driver } from "~/lifecycle/run";
 export * from "./render";
 export * from "./elements";
 export * from "./keypress";
+export * from "./components";
+
+export * as history from "./history";
+
+export type Direction = "up" | "down" | "left" | "right";
+export type DirectionKeyName =
+	| "h"
+	| "j"
+	| "k"
+	| "l"
+	| "left"
+	| "right"
+	| "up"
+	| "down";
+export const isDirectionKeyName = (value: string): value is DirectionKeyName =>
+	["h", "j", "k", "l", "up", "down", "left", "right"].includes(value);
+export const directionKeyNameToDirection = (
+	name: DirectionKeyName,
+): Direction => {
+	switch (name) {
+		case "h":
+		case "left":
+			return "left";
+		case "j":
+		case "down":
+			return "down";
+		case "k":
+		case "up":
+			return "up";
+		case "l":
+		case "right":
+			return "right";
+	}
+};
 
 export type TuiSource = {
 	select: (id: string) => Source<TuiNode>;
@@ -20,14 +54,28 @@ export type TuiSink = {
 	tui: VNodeStream;
 };
 
+export type BlurSink = {
+	blur: Source<Direction>;
+};
+
 export type TuiDriver = Driver<VNodeElement, unknown, TuiSource>;
 
 export const driver =
-	(stdin: NodeJS.ReadStream, stdout: NodeJS.WriteStream): TuiDriver =>
+	({
+		stdin = process.stdin,
+		stdout = process.stdout,
+		debug = false,
+	}: {
+		stdin?: NodeJS.ReadStream;
+		stdout?: NodeJS.WriteStream;
+		debug?: boolean;
+	} = {}): TuiDriver =>
 	(source) => {
 		const nodes = new Map<string, TuiNode>();
 		const nodeListeners = new Map<string, Array<(node: TuiNode) => void>>();
 		const keypressListeners = Array<(key: Key) => void>();
+
+		let measure: null | (() => void) = null;
 
 		stdin.setRawMode(true);
 		stdin.setEncoding("utf8");
@@ -35,9 +83,13 @@ export const driver =
 		const register = (id: string, node: TuiNode): Dispose => {
 			nodes.set(id, node);
 
-			for (const listener of nodeListeners.get(id) ?? []) {
-				listener(node);
-			}
+			// TODO: Queue element selections to happen _after_ writing to the screen since elements are
+			// not measured before that point.
+			setTimeout(() => {
+				for (const listener of nodeListeners.get(id) ?? []) {
+					listener(node);
+				}
+			}, 0);
 
 			return () => {
 				nodes.delete(id);
@@ -52,7 +104,9 @@ export const driver =
 			}
 		});
 
-		render(stdin, stdout, source, register);
+		render(stdin, stdout, source, register, debug).then((result) => {
+			measure = result;
+		});
 
 		const helpers: TuiSource = {
 			select: (id) => (type, sink) => {

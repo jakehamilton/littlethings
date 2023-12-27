@@ -1,8 +1,7 @@
 import { Driver } from "~/lifecycle/run";
-import { tap } from "~/streams/transformers/tap";
-import { pipe } from "~/streams/util/pipe";
 import { Signal, Source, Transformer } from "~/streams/interface";
 import { map } from "~/streams/transformers/map";
+import { pipe } from "~/streams/util/pipe";
 
 export type StateAction<State> = {
 	key: keyof State;

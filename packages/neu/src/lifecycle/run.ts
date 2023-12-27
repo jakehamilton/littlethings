@@ -87,6 +87,19 @@ export function run<
 	const sources = app(drivers, props);
 
 	for (const key in rest) {
+		if (typeof sources[key] === "undefined") {
+			// console.warn(`App source "${key}" is undefined.`);
+			continue;
+		}
+
+		if (typeof sources[key] !== "function") {
+			throw new Error(
+				`Expected app source "${key}" to be a Source, but got "${typeof sources[
+					key
+				]}". Did you mean to use \`neu.of()\`?`,
+			);
+		}
+
 		// @ts-expect-error
 		sources[key]?.(Signal.Start, proxies[key].sink);
 	}

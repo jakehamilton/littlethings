@@ -13,5 +13,5 @@
 			"~/*": ["src/*"]
 		}
 	},
-	"include": ["src/**/*", "demo/**/*", "demo-tui/**/*"]
+	"include": ["src/**/*", "demos/**/*"]
 }

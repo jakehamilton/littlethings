@@ -1,5 +1,5 @@
 import { pipe } from "~/streams/util/pipe";
-import { Signal, Sink, Source } from "../../streams/interface";
+import { Signal, Sink, Source } from "~/streams/interface";
 import { map } from "~/streams/transformers/map";
 import { start } from "~/streams/transformers/start";
 

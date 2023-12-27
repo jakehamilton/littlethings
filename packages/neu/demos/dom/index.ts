@@ -75,7 +75,7 @@ export type State = {
 export type Drivers = {
 	dom: neu.dom.DomDriver;
 	state: neu.state.StateDriver<State>;
-	history: neu.history.HistoryDriver;
+	history: neu.dom.history.HistoryDriver;
 	theme: theme.ThemeDriver<Theme>;
 };
 
@@ -206,7 +206,7 @@ const main = async () => {
 			scroll: 0,
 		}),
 		dom: neu.dom.driver("#app"),
-		history: neu.history.driver(),
+		history: neu.dom.history.driver(),
 		theme: theme.driver<Theme>({
 			accent: {
 				foreground: "#eceff4",
