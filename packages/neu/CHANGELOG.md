@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.1.0
+
+### Features
+
+- init tui components, history, stories
+
+### Fixes
+
+- update types, add button story
+
 ## 0.0.5
 
 ### Fixes
