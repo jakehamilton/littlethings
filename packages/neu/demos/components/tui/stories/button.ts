@@ -2,10 +2,7 @@ import * as neu from "~/index";
 
 import { Drivers, State } from "..";
 
-export type ButtonStoryProps = {
-	text: string;
-	focus: neu.Source<boolean>;
-};
+export type ButtonStoryProps = neu.tui.ButtonProps & {};
 
 export const ButtonStory: neu.App<
 	Drivers,
@@ -15,8 +12,7 @@ export const ButtonStory: neu.App<
 	ButtonStoryProps
 > = (sources, props) => {
 	const button = neu.tui.Button(sources, {
-		text: props.text,
-		focus: props.focus,
+		...props,
 	});
 
 	const count$ = neu.pipe(

@@ -1,11 +1,9 @@
+import colors from "ansi-colors";
+import ansi from "ansi-escapes";
+import widestLine from "widest-line";
+import wrap from "wrap-ansi";
 // @ts-expect-error
 import { YogaNode, loadYoga } from "yoga-layout";
-import ansi from "ansi-escapes";
-import colors from "ansi-colors";
-import wrap from "wrap-ansi";
-import truncate from "cli-truncate";
-import stringWidth from "string-width";
-import widestLine from "widest-line";
 
 import { Signal, Source } from "~/streams/interface";
 import { Dispose, subscribe } from "~/streams/sinks/subscribe";
@@ -61,17 +59,17 @@ const color = (
 	if (color[0] === "#") {
 		// TODO: Support true color.
 		throw new Error("True color support is not implemented.");
-		const rgb = hexToRgb(color as string);
+		// const rgb = hexToRgb(color as string);
 
-		if (!rgb) {
-			throw new Error(`Invalid hex color: "${color}"`);
-		}
+		// if (!rgb) {
+		// 	throw new Error(`Invalid hex color: "${color}"`);
+		// }
 
-		if (isBackground) {
-			return `${ANSI_ESC}38;2;${rgb.r};${rgb.g};${rgb.b};${text}${ANSI_BACKGROUND_RESET}`;
-		} else {
-			return `${ANSI_ESC}48;2;${rgb.r};${rgb.g};${rgb.b};${text}${ANSI_FOREGROUND_RESET}`;
-		}
+		// if (isBackground) {
+		// 	return `${ANSI_ESC}38;2;${rgb.r};${rgb.g};${rgb.b};${text}${ANSI_BACKGROUND_RESET}`;
+		// } else {
+		// 	return `${ANSI_ESC}48;2;${rgb.r};${rgb.g};${rgb.b};${text}${ANSI_FOREGROUND_RESET}`;
+		// }
 	} else {
 		if (isBackground) {
 			// @ts-expect-error
