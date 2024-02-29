@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.8
+
+### Fixes
+
+- use mjs extension for esm output
+
 ## 3.0.7
 
 ### Fixes
