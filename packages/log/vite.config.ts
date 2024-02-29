@@ -5,7 +5,8 @@ export default defineConfig({
 		lib: {
 			name: "LittleLog",
 			entry: "./src/index.ts",
-			fileName: (format) => `littlelog.${format}.js`,
+			fileName: (format) =>
+				`littlelog.${format}.${format === "es" ? "m" : ""}js`,
 			formats: ["es", "umd", "cjs"],
 		},
 		rollupOptions: {
