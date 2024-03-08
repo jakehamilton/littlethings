@@ -1,4 +1,100 @@
 import { Source } from "~/streams/interface";
+import { Border, Color } from "./render";
+
+export enum VNodeType {
+	Root = "root",
+	Box = "box",
+	Text = "text",
+}
+
+export interface VNodeElementStyle {
+	color?: Color | Source<Color>;
+	background?: Color | Source<Color>;
+	width?: number | "auto" | Source<number | "auto">;
+	height?: number | "auto" | Source<number | "auto">;
+	overflow?:
+		| "hidden"
+		| "visible"
+		| "scroll"
+		| Source<"hidden" | "visible" | "scroll">;
+	flexDirection?: "row" | "column" | Source<"row" | "column">;
+	alignSelf?:
+		| "auto"
+		| "flex-start"
+		| "center"
+		| "flex-end"
+		| "stretch"
+		| "baseline"
+		| "space-between"
+		| "space-around"
+		| Source<
+				| "auto"
+				| "flex-start"
+				| "center"
+				| "flex-end"
+				| "stretch"
+				| "baseline"
+				| "space-between"
+				| "space-around"
+		  >;
+	alignContent?:
+		| "auto"
+		| "flex-start"
+		| "center"
+		| "flex-end"
+		| "stretch"
+		| "baseline"
+		| "space-between"
+		| "space-around"
+		| Source<
+				| "auto"
+				| "flex-start"
+				| "center"
+				| "flex-end"
+				| "stretch"
+				| "baseline"
+				| "space-between"
+				| "space-around"
+		  >;
+	justifyContent?:
+		| "flex-start"
+		| "center"
+		| "flex-end"
+		| "space-evenly"
+		| "space-between"
+		| "space-around"
+		| Source<
+				| "flex-start"
+				| "center"
+				| "flex-end"
+				| "space-evenly"
+				| "space-between"
+				| "space-around"
+		  >;
+	display?: "none" | "flex" | Source<"none" | "flex">;
+	position?: "relative" | "absolute" | Source<"relative" | "absolute">;
+	top?: number | `${number}%` | Source<number | `${number}%`>;
+	left?: number | `${number}%` | Source<number | `${number}%`>;
+	right?: number | `${number}%` | Source<number | `${number}%`>;
+	bottom?: number | `${number}%` | Source<number | `${number}%`>;
+	margin?: number | Source<number>;
+	marginTop?: number | Source<number>;
+	marginLeft?: number | Source<number>;
+	marginRight?: number | Source<number>;
+	marginBottom?: number | Source<number>;
+	padding?: number | Source<number>;
+	paddingTop?: number | Source<number>;
+	paddingLeft?: number | Source<number>;
+	paddingRight?: number | Source<number>;
+	paddingBottom?: number | Source<number>;
+	border?: Border | Source<Border>;
+	[key: string]: any;
+}
+
+export interface VNodeElementProps extends VNodeElementStyle {
+	style?: VNodeElementStyle | Source<VNodeElementStyle>;
+	[key: string]: any;
+}
 
 export type VNodeChildren =
 	| Array<VNode | VNodeStream | { tui: VNodeStream }>
@@ -6,8 +102,8 @@ export type VNodeChildren =
 	| VNode;
 
 export type VNodeElement = {
-	type: string;
-	props?: Record<string, any>;
+	type: VNodeType;
+	props?: VNodeElementProps;
 	children?: VNodeChildren;
 };
 
@@ -23,17 +119,17 @@ export const isVNodeElement = (value: any): value is VNode => {
 	return typeof value === "object" && value !== null && "type" in value;
 };
 
-export function node(type: string): VNodeElement;
-export function node(type: string, props: Record<string, any>): VNodeElement;
-export function node(type: string, children: VNodeChildren): VNodeElement;
+export function node(type: VNodeType): VNodeElement;
+export function node(type: VNodeType, props: VNodeElementProps): VNodeElement;
+export function node(type: VNodeType, children: VNodeChildren): VNodeElement;
 export function node(
-	type: string,
-	props: Record<string, any>,
+	type: VNodeType,
+	props: VNodeElementProps,
 	children: VNodeChildren,
 ): VNodeElement;
 export function node(
-	type: string,
-	props?: Record<string, any> | VNodeChildren,
+	type: VNodeType,
+	props?: VNodeElementProps | VNodeChildren,
 	children?: VNodeChildren,
 ): VNodeElement {
 	if (props === undefined) {
@@ -57,14 +153,14 @@ export function node(
 }
 
 const _node =
-	(type: string) =>
-	(props?: Record<string, any> | VNodeChildren, children?: VNodeChildren) =>
+	(type: VNodeType) =>
+	(props?: VNodeElementProps | VNodeChildren, children?: VNodeChildren) =>
 		// @ts-ignore
 		node(type, props, children);
 
-export const box = _node("box");
+export const box = _node(VNodeType.Box);
 export const text = (
-	props?: Record<string, any> | VNodeChildren,
+	props?: VNodeElementProps | VNodeChildren,
 	children?: VNodeChildren,
 ) => {
 	const userProps =

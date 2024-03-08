@@ -19,6 +19,7 @@ import { pipe } from "~/streams/util/pipe";
 import { share } from "~/streams/util/share";
 
 import { Direction, TuiDriver, TuiSink } from "..";
+import { concat } from "~/streams/transformers/concat";
 
 const calculateScroll = (
 	scroll: number,
@@ -235,6 +236,11 @@ export const List: App<
 							focused$,
 							map((focused) => focused === i),
 							start(i === 0),
+							concat<boolean, boolean>(props.focus),
+							map(
+								([itemFocus, listFocus]: [boolean, boolean]) =>
+									itemFocus && listFocus,
+							),
 						),
 					}),
 				),

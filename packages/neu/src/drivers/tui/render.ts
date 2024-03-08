@@ -8,8 +8,9 @@ import { YogaNode, loadYoga } from "yoga-layout";
 import { Signal, Source } from "~/streams/interface";
 import { Dispose, subscribe } from "~/streams/sinks/subscribe";
 
-import { VNode, VNodeStream } from "./elements";
+import { VNode, VNodeStream, VNodeType } from "./elements";
 
+// TODO: Support true color.
 const hexToRgb = (hex: string) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result
@@ -132,10 +133,12 @@ const borders = {
 	},
 } as const;
 
+export type Border = keyof typeof borders;
+
 let Yoga: typeof import("yoga-layout");
 
 export type TuiNode = {
-	type: string;
+	type: VNodeType;
 	parent: TuiNode | null;
 	props?: Record<string, any>;
 	yoga: YogaNode;
@@ -372,7 +375,7 @@ export const create = (
 
 	if (typeof node === "string") {
 		const element: TuiNode = {
-			type: "text",
+			type: VNodeType.Text,
 			parent,
 			yoga: Yoga.Node.create(),
 			children: [node],
@@ -1021,7 +1024,7 @@ export const render = async (
 	let unsubscribes: Array<Dispose> = [];
 
 	const root: TuiNode = {
-		type: "root",
+		type: VNodeType.Root,
 		parent: null,
 		yoga: Yoga.Node.create(),
 		children: [],

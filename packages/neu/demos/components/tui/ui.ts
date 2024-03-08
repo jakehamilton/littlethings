@@ -44,7 +44,6 @@ const Sidebar: neu.App<
 									color: focus
 										? palette.accent.background
 										: palette.foreground.normal,
-									// bold: focus,
 								}),
 							),
 						);

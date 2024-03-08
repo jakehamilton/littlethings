@@ -2,29 +2,30 @@ import { Driver } from "~/lifecycle/run";
 import { Signal, Source, Transformer } from "~/streams/interface";
 import { to } from "~/streams/transformers/to";
 import { pipe } from "~/streams/util/pipe";
+import { Color } from "../tui";
 
 export type DefaultThemePalette = {
 	accent: {
-		foreground: string;
-		background: string;
+		foreground: Color;
+		background: Color;
 	};
 
 	foreground: {
-		light: string;
-		normal: string;
-		dark: string;
+		light: Color;
+		normal: Color;
+		dark: Color;
 	};
 
 	background: {
-		light: string;
-		normal: string;
-		dark: string;
+		light: Color;
+		normal: Color;
+		dark: Color;
 	};
 };
 
 export type ThemePalette = {
 	[component: string]: {
-		[variant: string]: string;
+		[variant: string]: Color;
 	};
 };
 

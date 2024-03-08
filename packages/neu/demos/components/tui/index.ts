@@ -23,7 +23,9 @@ export type Drivers = {
 const app: neu.App<Drivers> = (sources) => {
 	const exit$ = neu.pipe(
 		sources.tui.keypress(),
-		neu.filter<tui.Key, tui.Key>((key) => key.name === "q" && key.shift),
+		neu.filter<neu.tui.Key, neu.tui.Key>(
+			(key) => key.name === "q" && key.shift,
+		),
 		neu.to(() => {
 			process.exit(0);
 		}),
@@ -116,7 +118,7 @@ neu.run<Drivers>({
 			dark: {
 				accent: {
 					foreground: "white",
-					background: "magenta",
+					background: "blue",
 				},
 				foreground: {
 					light: "white",
