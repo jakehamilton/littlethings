@@ -74,6 +74,9 @@ export class TestSuite {
 			it: (description, body, flags) => {
 				this[CURRENT_API].it(description, body, flags);
 			},
+			test: (description, body, flags) => {
+				this[CURRENT_API].test(description, body, flags);
+			},
 			beforeEach: (body, flags) => {
 				this[CURRENT_API].beforeEach(body, flags);
 			},

@@ -11,6 +11,11 @@ export type TestAPI = {
 		body: () => void | Promise<void>,
 		flags?: Array<string>
 	) => void;
+	readonly test: (
+		description: string,
+		body: () => void | Promise<void>,
+		flags?: Array<string>
+	) => void;
 	readonly beforeEach: (
 		body: () => void | Promise<void>,
 		flags?: Array<string>

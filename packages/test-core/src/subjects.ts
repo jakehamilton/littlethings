@@ -65,6 +65,15 @@ export class Describe {
 				child.parent = this;
 				this.children.push(child);
 			},
+			test: (description, body, flags) => {
+				const child = new Test({
+					context: this.context.concat(description),
+					body,
+					flags,
+				});
+				child.parent = this;
+				this.children.push(child);
+			},
 			beforeEach: (body, flags) => {
 				this.beforeEaches.push(
 					new LifecycleHook({

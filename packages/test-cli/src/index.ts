@@ -24,6 +24,16 @@ export const it: TestAPI["it"] = (...args) => {
 	return currentSuite.api.it(...args);
 };
 
+export const test: TestAPI["test"] = (...args) => {
+	const currentSuite = getCurrentSuite();
+	if (currentSuite == null) {
+		throw new Error(
+			"There is no active test suite to attach this 'test' onto"
+		);
+	}
+	return currentSuite.api.test(...args);
+};
+
 export const beforeEach: TestAPI["beforeEach"] = (...args) => {
 	const currentSuite = getCurrentSuite();
 	if (currentSuite == null) {
