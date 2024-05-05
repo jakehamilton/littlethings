@@ -16,19 +16,21 @@ const workerPath = require.resolve("./worker");
 
 function parsePath(filepath: string): string {
 	if (path.isAbsolute(filepath)) {
-		const ret = filepath;
-		debug("parsePath:", filepath, "->", ret);
-		return ret;
+		debug("parsePath:", filepath, "->", filepath);
+		return filepath;
 	}
 
 	const absoluteFromCwd = path.resolve(process.cwd(), filepath);
 	if (fs.existsSync(absoluteFromCwd)) {
 		debug("parsePath:", filepath, "->", absoluteFromCwd);
 		return absoluteFromCwd;
+	} else {
+		throw new Error(
+			`No such file: ${JSON.stringify(
+				filepath
+			)}. If you are using a glob, make sure it is NOT wrapped in quotes!`
+		);
 	}
-
-	debug("parsePath:", filepath, "->", absoluteFromCwd);
-	return filepath;
 }
 
 clefairy.run(
