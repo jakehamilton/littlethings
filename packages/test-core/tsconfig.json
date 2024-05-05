@@ -3,10 +3,13 @@
 		"outDir": "./dist",
 		"moduleResolution": "node",
 		"strict": true,
+		"noImplicitAny": false,
 		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
 		"declaration": true,
 		"lib": ["ESNext"],
-		"target": "ES2015"
+		"target": "ES2018",
+		"module": "CommonJS"
 	},
 	"include": ["src/**/*"],
 	"exclude": ["src/**/*.spec.ts"]
