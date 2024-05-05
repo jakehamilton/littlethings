@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.3.1
+
+### Fixes
+
+- fix incorrect debug message and make error clearer when file doesn't exist
+
 ## 3.3.0
 
 ### Features
