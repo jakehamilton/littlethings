@@ -4,22 +4,30 @@ import path from "path";
 import os from "os";
 import kleur from "kleur";
 import * as clefairy from "clefairy";
+import makeDebug from "debug";
 import { TestEvent, TestSuite } from "@littlethings/test-core";
 import reportEvent from "@littlethings/test-reporter";
 import { runJobs, inChildProcess } from "parallel-park";
 import { getUsage } from "./usage";
 import testFilesMatcher from "./test-files-matcher";
 
+const debug = makeDebug("@littlethings/test:test-cli/cli.ts");
 const workerPath = require.resolve("./worker");
 
 function parsePath(filepath: string): string {
-	if (path.isAbsolute(filepath)) return filepath;
+	if (path.isAbsolute(filepath)) {
+		const ret = filepath;
+		debug("parsePath:", filepath, "->", ret);
+		return ret;
+	}
 
 	const absoluteFromCwd = path.resolve(process.cwd(), filepath);
 	if (fs.existsSync(absoluteFromCwd)) {
+		debug("parsePath:", filepath, "->", absoluteFromCwd);
 		return absoluteFromCwd;
 	}
 
+	debug("parsePath:", filepath, "->", absoluteFromCwd);
 	return filepath;
 }
 
@@ -35,6 +43,9 @@ clefairy.run(
 		concurrency: clefairy.optionalNumber,
 	},
 	async (options, ...args) => {
+		debug("input options:", options);
+		debug("positional args (input files):", args);
+
 		const help = options.h || options.help;
 		if (help) {
 			console.log(getUsage());
@@ -49,6 +60,9 @@ clefairy.run(
 		let filesToRun = args.map(parsePath);
 
 		if (filesToRun.length === 0) {
+			debug(
+				"no input files specified; looking for files with test-like names/paths"
+			);
 			filesToRun = await testFilesMatcher.findMatches(process.cwd());
 		}
 
@@ -58,11 +72,15 @@ clefairy.run(
 			);
 		}
 
+		debug(`going to run ${filesToRun.length} test files`);
+
 		const concurrency = options.concurrency ?? os.cpus().length - 1;
 
 		if (concurrency < 1) {
 			throw new Error(`Invalid concurrency value: ${concurrency}`);
 		}
+
+		debug("using concurrency:", concurrency);
 
 		if (verbose) {
 			console.log(
@@ -105,6 +123,25 @@ clefairy.run(
 			);
 		}
 
+		if (debug.enabled) {
+			debug(
+				`Concurrency groups:\n${concurrencyGroups
+					.map((group, index) => {
+						const processName =
+							concurrency === 1
+								? "Main process"
+								: `Subprocess ${index + 1}`;
+						return [
+							`${processName} (${group.length} file${
+								group.length === 1 ? "" : "s"
+							}):`,
+							...group.map((file) => "- " + file),
+						].join("\n");
+					})
+					.join("\n")}`
+			);
+		}
+
 		type WorkerRunner = <
 			Result extends any,
 			Inputs extends { [key: string]: any }
@@ -123,8 +160,13 @@ clefairy.run(
 
 		const eventsByGroup = await runJobs<Array<string>, Array<TestEvent>>(
 			concurrencyGroups,
-			(filesFromGroup) =>
-				runnerFunction(
+			(filesFromGroup, index, length) => {
+				debug(
+					`starting concurrency group ${
+						index + 1
+					} of ${length} (we're allowed to have up to ${concurrency} running at a time)`
+				);
+				return runnerFunction(
 					{
 						filesFromGroup,
 						verbose,
@@ -148,12 +190,14 @@ clefairy.run(
 						});
 						return results;
 					}
-				),
+				);
+			},
 			{ concurrency }
 		);
 
 		const allEvents = eventsByGroup.flat(1);
 
+		debug("dispatching run_finished event");
 		const syntheticCompletionEvent = {
 			type: "run_finished" as const,
 			events: allEvents,
