@@ -10,8 +10,8 @@ export enum VNodeType {
 export interface VNodeElementStyle {
 	color?: Color | Source<Color>;
 	background?: Color | Source<Color>;
-	width?: number | "auto" | Source<number | "auto">;
-	height?: number | "auto" | Source<number | "auto">;
+	width?: number | "auto" | `${number}%` | Source<number | "auto">;
+	height?: number | "auto" | `${number}%` | Source<number | "auto">;
 	overflow?:
 		| "hidden"
 		| "visible"
@@ -169,8 +169,8 @@ export const text = (
 		typeof props === "string" || Array.isArray(props) ? props : children;
 
 	const propsWithDefault = {
-		width: "auto",
-		height: "auto",
+		width: "auto" as const,
+		height: "auto" as const,
 		...userProps,
 	};
 

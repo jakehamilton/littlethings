@@ -133,7 +133,7 @@ const borders = {
 	},
 } as const;
 
-export type Border = keyof typeof borders;
+export type Border = keyof typeof borders | "none";
 
 let Yoga: typeof import("yoga-layout");
 
