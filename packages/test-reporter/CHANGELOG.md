@@ -1,5 +1,17 @@
 # Change Log
 
+## 3.0.3
+
+### Chores
+
+- _(test)_: Change compilation target of test-core and test-reporter from ES5 to ES2018
+
+- fix test-reporter build script not working
+
+### Notes
+
+Updated local dependencies.
+
 ## 3.0.2
 
 ### Chores

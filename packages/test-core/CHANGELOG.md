@@ -1,5 +1,15 @@
 # Change Log
 
+## 3.2.0
+
+### Features
+
+- make 'test' an alias for 'it'
+
+### Chores
+
+- _(test)_: Change compilation target of test-core and test-reporter from ES5 to ES2018
+
 ## 3.1.1
 
 ### Chores

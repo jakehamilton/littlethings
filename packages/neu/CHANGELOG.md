@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.2.0
+
+### Features
+
+- tui node props types
+
+### Chores
+
+- _(neu)_: Fix type errors
+
 ## 0.1.0
 
 ### Features

@@ -1,5 +1,17 @@
 # Change Log
 
+## 3.3.0
+
+### Features
+
+- _(test)_: add debugging logging to CLI
+
+- make 'test' an alias for 'it'
+
+### Notes
+
+Updated local dependencies.
+
 ## 3.2.1
 
 ### Chores

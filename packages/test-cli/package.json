@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/test",
-    "version": "3.2.1",
+    "version": "3.3.0",
     "description": "A barebones zeroconf testing library",
     "keywords": [
         "test",
@@ -29,8 +29,8 @@
         "build": "rm -rf ./dist/* && tsc -p . && chmod +x ./dist/cli.js && cp ./src/load-file.js ./dist/"
     },
     "dependencies": {
-        "@littlethings/test-core": "3.1.1",
-        "@littlethings/test-reporter": "3.0.2",
+        "@littlethings/test-core": "3.2.0",
+        "@littlethings/test-reporter": "3.0.3",
         "clefairy": "^1.0.0",
         "debug": "^4.3.4",
         "esbuild-register": "^3.4.1",
