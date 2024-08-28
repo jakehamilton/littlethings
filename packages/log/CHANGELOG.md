@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.9
+
+### Fixes
+
+- export types in exports field
+
 ## 3.0.8
 
 ### Fixes

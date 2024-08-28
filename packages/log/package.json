@@ -1,6 +1,6 @@
 {
     "name": "@littlethings/log",
-    "version": "3.0.8",
+    "version": "3.0.9",
     "description": "A simple logging utility.",
     "homepage": "https://github.com/jakehamilton/littlethings",
     "bugs": {
