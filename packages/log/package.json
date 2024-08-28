@@ -14,9 +14,10 @@
     "author": "Jake Hamilton <jake.hamilton@hey.com>",
     "exports": {
         ".": {
-            "import": "./dist/littlelog.es.js",
+            "import": "./dist/littlelog.es.mjs",
             "require": "./dist/littlelog.cjs.js",
-            "default": "./dist/littlelog.umd.js"
+            "default": "./dist/littlelog.umd.js",
+            "types": "./dist/index.d.ts"
         }
     },
     "main": "./dist/littlelog.cjs.js",
