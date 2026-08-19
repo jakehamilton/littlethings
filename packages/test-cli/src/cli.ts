@@ -213,5 +213,13 @@ clefairy.run(
 			writeStdout: (data) => process.stdout.write(data),
 			writeStderr: (data) => process.stderr.write(data),
 		});
+
+		if (
+			allEvents.some(
+				(event) => event.type === "result" && event.status !== "PASSED"
+			)
+		) {
+			process.exitCode = 1;
+		}
 	}
 );
