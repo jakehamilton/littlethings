@@ -5,6 +5,10 @@ on:
         branches:
             - "main"
 
+permissions:
+    id-token: write
+    contents: write
+
 jobs:
     release:
         runs-on: ubuntu-latest
@@ -13,6 +17,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
             FORCE_COLOR: "1"
+            NPM_CONFIG_DANGEROUSLY_ALLOW_ALL_SCRIPTS: "true"
         steps:
             - name: Turnstyle
               uses: softprops/turnstyle@v1
@@ -33,17 +38,11 @@ jobs:
                   git checkout "${GITHUB_REF:11}"
                   git pull --ff-only
                   git fetch origin +refs/tags/*:refs/tags/*
-            - name: Configure Node
-              uses: actions/setup-node@v1
+            - uses: actions/setup-node@v6
               with:
-                  node-version: "17.x"
-            - name: Configure NPM
-              run: |
-                  npm i -g npm@8
-                  npm config set registry https://registry.npmjs.org/
-                  npm config set //registry.npmjs.org/:_authToken=\${NPM_TOKEN}
-            - name: Check Authentication with Registry
-              run: npm whoami
+                  node-version: "24"
+                  registry-url: "https://registry.npmjs.org"
+                  package-manager-cache: false # never use caching in release builds
             - name: Install Dependencies
               run: npm install --no-save
             - name: Bootstrap
