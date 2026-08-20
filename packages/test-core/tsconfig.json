@@ -9,7 +9,8 @@
 		"declaration": true,
 		"lib": ["ESNext"],
 		"target": "ES2018",
-		"module": "CommonJS"
+		"module": "CommonJS",
+		"skipLibCheck": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["src/**/*.spec.ts"]
